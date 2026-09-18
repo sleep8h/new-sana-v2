@@ -1,0 +1,33 @@
+{
+  "name": "sana-vue-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode development",
+    "dev:prod": "vite --mode production",
+    "build:test": "vite build --mode development",
+    "build:prod": "vite build --mode production",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "pinia": "^3.0.3",
+    "swiper": "^12.0.2",
+    "vant": "^4.9.21",
+    "vconsole": "^3.15.1",
+    "vue": "^3.5.18",
+    "vue-danmaku": "^2.0.5",
+    "vue-i18n": "^11.1.11",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@vant/auto-import-resolver": "^1.3.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "postcss-pxtorem": "^6.1.0",
+    "sass-embedded": "^1.92.0",
+    "unplugin-auto-import": "^20.3.0",
+    "unplugin-vue-components": "^30.0.0",
+    "vite": "^7.1.2"
+  }
+}
