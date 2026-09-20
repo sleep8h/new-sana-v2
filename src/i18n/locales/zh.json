@@ -3,6 +3,8 @@
     "loading": "加载中",
     "noData": "暂无数据",
     "networkError": "网络异常，请稍后重试",
+    "cancel": "取消",
+    "ok": "确定",
     "record": "记录"
   },
   "calendar": {
@@ -743,5 +745,32 @@
     "ruleA6_2": "（2）Receive Birthday Gift ranking：根据每月收到birthday gift 累计金币排行",
     "ruleQ7": "7、本次活动最终解释权归官方所有，与苹果公司无关",
     "test": "测试"
+  },
+  "coinAgent": {
+    "title": "金币代理",
+    "recharge": "充值",
+    "record": "记录",
+    "subAgent": "子代理",
+    "userNickname": "用户昵称",
+    "account": "账号",
+    "accountPlaceholder": "请输入账号",
+    "amount": "数量",
+    "amountPlaceholder": "请输入数量",
+    "confirm": "确定",
+    "tradeTime": "交易时间",
+    "cancelTrade": "取消交易",
+    "cancelled": "已撤销",
+    "remove": "移除",
+    "addSubAgent": "添加子代理",
+    "enterId": "请输入ID",
+    "sendInvite": "发送邀请",
+    "cancelConfirm": "是否撤销这笔金币数量的交易？",
+    "transferConfirm": "是否向ID:{uid}，昵称:{nickname}，转账{amount}金币？",
+    "removeConfirm": "是否移除子代理 {nickname}？",
+    "customTitle": "常用金额",
+    "customPlaceholder": "请输入金额",
+    "customLimit": "请先删除一些常用金额",
+    "customDuplicate": "该常用金额已存在",
+    "addCustom": "添加常用金额"
   }
 }

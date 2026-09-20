@@ -3,6 +3,8 @@
     "loading": "Loading",
     "noData": "No Data",
     "networkError": "Network error, please try again later",
+    "cancel": "Cancel",
+    "ok": "OK",
     "record": "Record"
   },
   "calendar": {
@@ -726,5 +728,32 @@
     "ruleA6_2": "(2) Receive Birthday Gift Ranking: Based on the cumulative gold coins of birthday gifts received each month.",
     "ruleQ7": "7. The final interpretation of this event belongs to the official organizer, and has nothing to do with Apple Inc.",
     "test": "test"
+  },
+  "coinAgent": {
+    "title": "Coin Agent",
+    "recharge": "Recharge",
+    "record": "Record",
+    "subAgent": "Sub Agent",
+    "userNickname": "User Nickname",
+    "account": "Account",
+    "accountPlaceholder": "Enter account",
+    "amount": "Amount",
+    "amountPlaceholder": "Enter amount",
+    "confirm": "Confirm",
+    "tradeTime": "Trade Time",
+    "cancelTrade": "Cancel Trade",
+    "cancelled": "Cancelled",
+    "remove": "Remove",
+    "addSubAgent": "Add Sub Agent",
+    "enterId": "Enter ID",
+    "sendInvite": "Send Invite",
+    "cancelConfirm": "Are you sure you want to cancel this coin transaction?",
+    "transferConfirm": "Are you sure you want to transfer {amount} coins to ID:{uid}, Nickname:{nickname}?",
+    "removeConfirm": "Are you sure you want to remove sub agent {nickname}?",
+    "customTitle": "Common Amount",
+    "customPlaceholder": "Enter amount",
+    "customLimit": "Please delete some common amounts first",
+    "customDuplicate": "This common amount already exists",
+    "addCustom": "Add Common Amount"
   }
 }

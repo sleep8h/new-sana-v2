@@ -3,6 +3,8 @@
     "loading": "Carregando",
     "noData": "Nenhum dado",
     "networkError": "Erro de rede, por favor tente novamente mais tarde",
+    "cancel": "Cancelar",
+    "ok": "OK",
     "record": "Registro"
   },
   "calendar": {
@@ -726,5 +728,32 @@
     "ruleA6_2": "(2) Classificação de Recebimento de Presentes de Aniversário: Com base no total de moedas de ouro de presentes de aniversário recebidos a cada mês.",
     "ruleQ7": "7. A interpretação final deste evento pertence ao organizador oficial e não tem nada a ver com a Apple Inc.",
     "test": "teste"
+  },
+  "coinAgent": {
+    "title": "Agente de Moedas",
+    "recharge": "Recarregar",
+    "record": "Registro",
+    "subAgent": "Subagente",
+    "userNickname": "Apelido do Usuário",
+    "account": "Conta",
+    "accountPlaceholder": "Digite a conta",
+    "amount": "Quantidade",
+    "amountPlaceholder": "Digite a quantidade",
+    "confirm": "Confirmar",
+    "tradeTime": "Hora da Transação",
+    "cancelTrade": "Cancelar Transação",
+    "cancelled": "Cancelado",
+    "remove": "Remover",
+    "addSubAgent": "Adicionar Subagente",
+    "enterId": "Digite o ID",
+    "sendInvite": "Enviar Convite",
+    "cancelConfirm": "Tem certeza de que deseja cancelar esta transação de moedas?",
+    "transferConfirm": "Tem certeza de que deseja transferir {amount} moedas para ID:{uid}, Apelido:{nickname}?",
+    "removeConfirm": "Tem certeza de que deseja remover o subagente {nickname}?",
+    "customTitle": "Valor Comum",
+    "customPlaceholder": "Digite o valor",
+    "customLimit": "Exclua primeiro alguns valores comuns",
+    "customDuplicate": "Este valor comum já existe",
+    "addCustom": "Adicionar Valor Comum"
   }
 }

@@ -3,6 +3,8 @@
     "loading": "Loading",
     "noData": "No Data",
     "networkError": "Network error, please try again later",
+    "cancel": "İptal",
+    "ok": "Tamam",
     "record": "Record"
   },
   "calendar": {
@@ -726,5 +728,32 @@
     "ruleA6_2": "(2) Doğum Günü Hediyesi Alma Sıralaması: Her ay alınan doğum günü hediyelerinin toplam altın miktarına göre.",
     "ruleQ7": "7. Bu etkinliğin nihai yorum hakkı resmi organizatöre aittir ve Apple Inc. ile ilgisi yoktur.",
     "test": "test"
+  },
+  "coinAgent": {
+    "title": "Coin Agent",
+    "recharge": "Şarj Et",
+    "record": "Kayıt",
+    "subAgent": "Alt Temsilci",
+    "userNickname": "Kullanıcı Takma Adı",
+    "account": "Hesap",
+    "accountPlaceholder": "Hesap girin",
+    "amount": "Miktar",
+    "amountPlaceholder": "Miktar girin",
+    "confirm": "Onayla",
+    "tradeTime": "İşlem Saati",
+    "cancelTrade": "İşlemi İptal Et",
+    "cancelled": "İptal Edildi",
+    "remove": "Kaldır",
+    "addSubAgent": "Alt Temsilci Ekle",
+    "enterId": "ID girin",
+    "sendInvite": "Davet Gönder",
+    "cancelConfirm": "Bu coin işlemini iptal etmek istediğinizden emin misiniz?",
+    "transferConfirm": "ID:{uid}, Takma Ad:{nickname} olan kullanıcıya {amount} coin transfer etmek istediğinizden emin misiniz?",
+    "removeConfirm": "{nickname} alt temsilcisini kaldırmak istediğinizden emin misiniz?",
+    "customTitle": "Sık Kullanılan Miktar",
+    "customPlaceholder": "Miktar girin",
+    "customLimit": "Lütfen önce bazı sık kullanılan miktarları silin",
+    "customDuplicate": "Bu sık kullanılan miktar zaten mevcut",
+    "addCustom": "Sık Kullanılan Miktar Ekle"
   }
 }

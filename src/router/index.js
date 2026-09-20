@@ -5,9 +5,7 @@ const routes = [
     path: "/",
     name: "Home",
     // component: () => import('../views/home/index.vue')
-    // component: () => import("../views/activity/dragonsWealth/index.vue"),
-    // component: () => import("../views/p/liveStreamingTask/index.vue"),
-    component: () => import("../views/activity/birthday/index.vue"),
+    component: () => import("../views/p/coinAgent/index.vue"),
   },
   {
     path: "/:pathMatch(.*)*",
@@ -120,6 +118,12 @@ const routes = [
     path: "/activity/birthday/index",
     name: "ActivityBirthdayIndex",
     component: () => import("../views/activity/birthday/index.vue"),
+  },
+  // 金币代理
+  {
+    path: "/p/coinAgent/index",
+    name: "coinAgentIndex",
+    component: () => import("../views/p/coinAgent/index.vue"),
   },
 ];
 
