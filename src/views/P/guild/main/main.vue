@@ -12,7 +12,7 @@
         <!-- 公会主信息 -->
         <div class="guild-mainInfo">
           <div class="guild-cover">
-            <img :src="list.masterAvatar || defaultSana" alt="" />
+            <img :src="list.masterAvatar" alt="" />
           </div>
           <div class="guild-info">
             <div class="guild-id">{{ t("guild.main.agencyId") }}：{{ list.guildId || 0 }}</div>
@@ -213,8 +213,6 @@ const router = useRouter();
 const { t } = useI18n();
 
 // 响应式数据
-const defaultSana = ref("http://apitest.sanalive.online/asset/image/sana_icon.png");
-
 import cycleRewardIcon from "@/assets/p/guild/main/icon/Weekly-bonus@2x.png";
 import memberIcomeIcon from "@/assets/p/guild/main/icon/Member-income@2x.png";
 import inviteMemberIcon from "@/assets/p/guild/main/icon/Invite-members@2x.png";

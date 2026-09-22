@@ -12,7 +12,7 @@
           <!-- 公会长 -->
           <div class="guild-box">
             <div class="guild-cover">
-              <img :src="agentData?.coverPicUrl || defaultPic" alt="" />
+              <img :src="agentData?.coverPicUrl" alt="" />
               <div class="guild-border"></div>
             </div>
             <div class="guild-name">{{ agentData?.guildName || "Sana GuildName" }}</div>
@@ -139,7 +139,6 @@ import customTable from "@/components/customTable/customTable.vue";
 
 const agentData = ref({});
 const anchorData = ref({});
-const defaultPic = ref("http://apitest.sanalive.online/asset/image/sana_icon.png");
 const columns = [t("guild.main.in-column1"), t("guild.main.in-column2"), t("guild.main.in-column3")];
 
 onMounted(() => {

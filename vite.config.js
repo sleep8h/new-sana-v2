@@ -71,7 +71,7 @@ export default defineConfig({
     proxy: {
       // 规则1：代理所有以 /api 开头的请求
       "/api": {
-        target: "http://apitest.sanalive.online", // 目标服务器地址
+        target: "https://apitest.makilive.com", // 目标服务器地址
         changeOrigin: true, // 改写请求源为目标域名
         rewrite: (path) => path.replace(/^\/api/, ""), // 移除路径中的 /api
         secure: false, // 避免SSL证书验证（对HTTPS目标）
@@ -79,7 +79,7 @@ export default defineConfig({
       // 规则2：自定义路径代理（根据需求添加）
       "/h5doings": {
         // ✅ 与请求路径一致
-        target: "http://apitest.sanalive.online",
+        target: "https://apitest.makilive.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/h5doings/, ""), // 按需重写
       },

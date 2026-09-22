@@ -1,5 +1,11 @@
 import request from './request'
 
+const buildQueryString = (params = {}) => {
+  return Object.entries(params)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
+};
+
 /**
  * GET请求
  * @param {string} url - 请求地址
@@ -79,3 +85,18 @@ export function postFormData(url, formData, config = {}) {
     ...config
   })
 } 
+
+
+// x-www-form-urlencoded 格式 POST 请求
+export const postUrlEncoded = async (url, data = {}, config = {}) => {
+  const encodedData = buildQueryString(data);
+  return request({
+    url,
+    method: 'post',
+    data: encodedData,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    ...config
+  })
+};
