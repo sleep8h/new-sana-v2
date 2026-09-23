@@ -786,7 +786,7 @@
     "superiorAgent": "上级代理",
     "unbind": "解除绑定",
     "noSuperior": "暂无上级代理",
-    "unbindConfirm": "是否解除与上级代理 {nickname} 的绑定关系？",
+    "unbindConfirm": "解除绑定关系，你会失去交易货币的权限。",
     "unbindSuccess": "解除绑定成功"
   }
 }

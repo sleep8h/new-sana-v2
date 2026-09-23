@@ -6,7 +6,7 @@
         <div class="form-row" v-if="targetUser.uid">
           <div class="user-info">
             <img class="avatar" :src="targetUser.avatar" />
-            <div class="nickname">{{ targetUser.nickname || t("coinAgent.userNickname") }}</div>
+            <div class="nickname">{{ targetUser.nick || t("coinAgent.userNickname") }}</div>
           </div>
         </div>
         <!-- 账号输入行 -->
@@ -102,7 +102,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { postForm, postUrlEncoded } from "@/utils/http.js";
 import { useMainStore } from "@/pinia/index.js";
@@ -113,16 +113,20 @@ const emit = defineEmits(["updateBalance"]);
 const store = useMainStore();
 const { t } = useI18n();
 
-// ==================== 变量声明 ====================
-// 表单数据：账号与充值金额
-const form = ref({ account: "", amount: "" });
-
+// ==================== 常量 ====================
 // 固定快捷金额选项
 const fixedAmounts = [1000, 10000, 50000, 100000, 500000];
 
 // 自定义金额上限与最大自定义数量
 const MAX_QUICK_AMOUNT = 100000000;
 const MAX_CUSTOM_AMOUNTS = 5;
+
+// localStorage 缓存 key
+const CUSTOM_AMOUNTS_KEY = "coinAgent_customAmounts";
+
+// ==================== 变量声明 ====================
+// 表单数据：账号与充值金额
+const form = ref({ account: "", amount: "" });
 
 // 用户自定义的快捷金额数组
 const customAmounts = ref([]);
@@ -258,6 +262,35 @@ const removeCustomAmount = (indexInAll) => {
   const customIdx = indexInAll - fixedLen;
   if (customIdx >= 0) {
     customAmounts.value.splice(customIdx, 1);
+    persistCustomAmounts();
+  }
+};
+
+/**
+ * 从 localStorage 读取自定义快捷金额
+ */
+const loadCustomAmounts = () => {
+  try {
+    const saved = localStorage.getItem(CUSTOM_AMOUNTS_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        customAmounts.value = parsed.filter((v) => typeof v === "number" && v > 0);
+      }
+    }
+  } catch (e) {
+    console.error("加载自定义快捷金额失败", e);
+  }
+};
+
+/**
+ * 保存自定义快捷金额到 localStorage
+ */
+const persistCustomAmounts = () => {
+  try {
+    localStorage.setItem(CUSTOM_AMOUNTS_KEY, JSON.stringify(customAmounts.value));
+  } catch (e) {
+    console.error("保存自定义快捷金额失败", e);
   }
 };
 
@@ -272,6 +305,7 @@ const saveCustomAmounts = () => {
       return showToast(t("coinAgent.customDuplicate"));
     }
     customAmounts.value.push(val);
+    persistCustomAmounts();
   }
   customInputValue.value = "";
   dialogType.value = "";
@@ -397,6 +431,11 @@ const confirmTransfer = async () => {
     console.error(e);
   }
 };
+
+// ==================== 生命周期 ====================
+onMounted(() => {
+  loadCustomAmounts();
+});
 </script>
 
 <style scoped lang="scss">

@@ -1,11 +1,11 @@
 <template>
   <div class="superior-content">
     <!-- 有上级代理时显示代理信息卡片 -->
-    <div v-if="parentInfo" class="superior-card">
-      <img class="superior-avatar" :src="parentInfo.avatar" />
+    <div v-if="parentInfo?.uid" class="superior-card">
+      <img class="superior-avatar" :src="parentInfo?.avatar || ''" />
       <div class="superior-info">
-        <div class="superior-nickname">{{ parentInfo.nick }}</div>
-        <div class="superior-meta">{{ t("coinAgent.idLabel", { number: item.erbanNo }) }}</div>
+        <div class="superior-nickname">{{ parentInfo?.nick }}</div>
+        <div class="superior-meta">{{ t("coinAgent.idLabel", { number: parentInfo?.erbanNo }) }}</div>
       </div>
       <!-- 解除绑定按钮 -->
       <div class="unbind-btn" @click="showUnbindDialog">{{ t("coinAgent.unbind") }}</div>
@@ -69,7 +69,7 @@ const fetchParent = async () => {
       ticket: store.ticket,
     });
     if (res.code === 200) {
-      parentInfo.value = res.data || null;
+      parentInfo.value = res.data || {};
     } else {
       showToast(res.message || t("common.requestFail"));
     }
@@ -90,7 +90,7 @@ const confirmUnbind = async () => {
     });
     if (res.code === 200) {
       dialogType.value = "";
-      parentInfo.value = null;
+      parentInfo.value = [];
       showToast(t("coinAgent.unbindSuccess"));
     } else {
       showToast(res.message || t("common.requestFail"));
@@ -108,13 +108,24 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .superior-content {
+  width: 351px;
+  height: calc(100% - 61px);
+  background: #FFFFFF;
+  border-radius: 12px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;
   .superior-card {
+    padding: 0 16px 0 12px;
     display: flex;
     align-items: center;
-    background: #fff;
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
+    width: 319px;
+    height: 93px;
+    background: #F9FBFC;
+    border-radius: 6px 6px 6px 6px;
+    border: 1px solid #E8EAF2;
+    margin: 0 auto 8px;
 
     .superior-avatar {
       width: 44px;

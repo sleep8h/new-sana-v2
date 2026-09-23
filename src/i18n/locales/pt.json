@@ -769,7 +769,7 @@
     "superiorAgent": "Agente Superior",
     "unbind": "Desvincular",
     "noSuperior": "Nenhum agente superior",
-    "unbindConfirm": "Tem certeza de que deseja desvincular do agente superior {nickname}?",
+    "unbindConfirm": "Desvincular fará com que você perca a permissão para negociar moedas.",
     "unbindSuccess": "Desvinculado com sucesso"
   }
 }

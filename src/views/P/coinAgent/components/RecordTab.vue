@@ -202,17 +202,17 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   .list{
-    width: 351px;
-    height: calc(100% - 61px);
-    background: #FFFFFF;
-    border-radius: 12px;
-    margin: 0 auto;
-    padding: 16px;
-    box-sizing: border-box;
-    overflow-y: auto;
-    &::v-deep(.van-pull-refresh){
-      height: 100%;
-    }
+      width: 351px;
+      height: calc(100% - 61px);
+      background: #FFFFFF;
+      border-radius: 12px;
+      margin: 0 auto;
+      padding: 16px;
+      box-sizing: border-box;
+      &::v-deep(.van-pull-refresh){
+        height: 100%;
+        overflow-y: auto;
+      }
     .record-list {
       width: 100%;
       .record-item {
@@ -249,10 +249,14 @@ onMounted(() => {
         }
   
         .record-right {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          align-items: flex-end;
           .record-amount {
             font-weight: bold;
             font-size: 24px;
-            text-align: center;
+            text-align: end;
             &.positive {
               color: #219653;
             }
@@ -280,6 +284,7 @@ onMounted(() => {
             font-weight: 500;
             font-size: 12px;
             color: #828282;
+            text-align: end;
           }
         }
       }

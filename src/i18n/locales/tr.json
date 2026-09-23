@@ -769,7 +769,7 @@
     "superiorAgent": "Üst Temsilci",
     "unbind": "Bağlantıyı Kaldır",
     "noSuperior": "Üst temsilci yok",
-    "unbindConfirm": "{nickname} üst temsilcisiyle bağlantıyı kaldırmak istediğinizden emin misiniz?",
+    "unbindConfirm": "Bağlantıyı kaldırmak, coin ticareti izninizi kaybetmenize neden olacaktır.",
     "unbindSuccess": "Bağlantı başarıyla kaldırıldı"
   }
 }

@@ -17,8 +17,8 @@
       <div class="tab-item" :class="{ active: activeTab === 'record' }" @click="activeTab = 'record'">
         {{ t("coinAgent.record") }}
       </div>
-      <div class="tab-item" :class="{ active: activeTab === 'subAgent' }" @click="activeTab = 'subAgent'">
-        {{ agentRole === "subAgent" ? t("coinAgent.superiorAgent") : t("coinAgent.subAgent") }}
+      <div v-if="hasParent" class="tab-item" :class="{ active: activeTab === 'subAgent' }" @click="activeTab = 'subAgent'">
+        {{ hasParent === 'parent' ? t("coinAgent.superiorAgent") : t("coinAgent.subAgent") }}
       </div>
     </div>
 
@@ -26,11 +26,8 @@
     <div class="content-container">
       <RechargeTab v-if="activeTab === 'recharge'" @updateBalance="onUpdateBalance" />
       <RecordTab v-if="activeTab === 'record'" />
-      <!-- 子代理角色显示上级代理组件，主代理角色显示子代理组件 -->
-      <!-- <SuperiorAgentTab v-if="activeTab === 'subAgent' && agentRole === 'sub'" />
-      <SubAgentTab v-if="activeTab === 'subAgent' && agentRole === 'parent'" /> -->
-      <!-- <SuperiorAgentTab v-if="activeTab === 'subAgent'" /> -->
-      <SubAgentTab v-if="activeTab === 'subAgent'" />
+      <SubAgentTab v-if="activeTab === 'subAgent' && hasParent === 'sub'" />
+      <SuperiorAgentTab v-if="activeTab === 'subAgent' && hasParent === 'parent'" />
     </div>
 
     <div class="bottom-bg"></div>
@@ -59,8 +56,8 @@ const activeTab = ref("recharge");
 // 用户信息
 const userInfo = ref({});
 
-// 代理角色：'parent' = 主代理(有下级), 'sub' = 子代理(有上级), '' = 普通代理
-const agentRole = ref("");
+// 是否有上级代理 上级代理parent
+const hasParent = ref('');
 
 // ==================== 方法 ====================
 /**
@@ -114,7 +111,6 @@ const fetchAgentRole = async () => {
     if (res.code === 200) {
       // data 有值说明有上级，是子代理；无值说明没上级，是主代理（或普通代理）
       userInfo.value = res.data
-      agentRole.value = res.data ? "sub" : "parent";
     } else {
       showToast(res.message);
       goBack();
@@ -124,9 +120,26 @@ const fetchAgentRole = async () => {
   }
 };
 
+const fetchParent = async () => {
+  try {
+    const res = await postForm("/agency/subAgent/parent", {
+      uid: store.uid,
+      ticket: store.ticket,
+    });
+    if (res.code === 200) {
+      hasParent.value = res.data?.uid > 0 ? 'parent' : 'sub';
+    } else {
+      showToast(res.message || t("common.requestFail"));
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 // ==================== 生命周期 ====================
 onMounted(() => {
   fetchAgentRole();
+  fetchParent();
 });
 </script>
 

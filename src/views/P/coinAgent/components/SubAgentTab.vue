@@ -29,7 +29,6 @@
     <!-- 弹窗：移除子代理确认 -->
     <div v-if="dialogType === 'remove'" class="dialog-mask" @click.self="closeDialog">
       <div class="dialog-box">
-        <div class="dialog-title">{{ t("coinAgent.removeConfirmTitle", { nickname: currentItem.nick }) }}</div>
         <div class="dialog-text">{{ t("coinAgent.removeConfirm") }}</div>
         <div class="dialog-btns">
           <button class="dialog-btn cancel" @click="closeDialog">{{ t("common.cancel") }}</button>

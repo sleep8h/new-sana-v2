@@ -769,7 +769,7 @@
     "superiorAgent": "Superior Agent",
     "unbind": "Unbind",
     "noSuperior": "No superior agent",
-    "unbindConfirm": "Are you sure you want to unbind from superior agent {nickname}?",
+    "unbindConfirm": "Unbinding will cause you to lose the permission to trade coins.",
     "unbindSuccess": "Unbound successfully"
   }
 }
