@@ -5,7 +5,7 @@ const routes = [
     path: "/",
     name: "Home",
     // component: () => import('../views/home/index.vue')
-    component: () => import("../views/p/coinAgent/index.vue"),
+    component: () => import("../views/activity/celebrityGifts/index.vue"),
   },
   {
     path: "/:pathMatch(.*)*",
@@ -22,32 +22,38 @@ const routes = [
     name: "NavRouter",
     component: () => import("../views/home/nav-router.vue"),
   },
+  // 公会
   {
     path: "/guild",
     name: "Guild",
     component: () => import("../views/p/guild/main/main.vue"),
     children: [],
   },
+  // 公会搜索
   {
     path: "/guild/search",
     name: "GuildSearch",
     component: () => import("../views/p/guild/search/search.vue"),
   },
+  // 公会主播
   {
     path: "/guild/anchor",
     name: "GuildAnchor",
     component: () => import("../views/p/guild/anchor/anchor.vue"),
   },
+  // 邀请奖励
   {
     path: "/single/invite-reward",
     name: "InviteReward",
     component: () => import("../views/p/inviteReward/index.vue"),
   },
+  // 邀请奖励记录
   {
     path: "/single/invite-reward/record",
     name: "InviteRewardRecord",
     component: () => import("../views/p/inviteReward/record.vue"),
   },
+  // vip特权
   {
     path: "/single/vip-privilege",
     name: "VipPrivilege",
@@ -124,6 +130,12 @@ const routes = [
     path: "/p/coinAgent/index",
     name: "coinAgentIndex",
     component: () => import("../views/p/coinAgent/index.vue"),
+  },
+  // 名人礼物对战活动
+  {
+    path: "/activity/celebrity-gifts/index",
+    name: "ActivityCelebrityGiftsIndex",
+    component: () => import("../views/activity/celebrityGifts/index.vue"),
   },
 ];
 

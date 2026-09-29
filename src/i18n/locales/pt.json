@@ -771,5 +771,37 @@
     "noSuperior": "Nenhum agente superior",
     "unbindConfirm": "Desvincular fará com que você perca a permissão para negociar moedas.",
     "unbindSuccess": "Desvinculado com sucesso"
+  },
+  "celebrityGifts": {
+    "title": "Batalha de Presentes de Celebridades",
+    "titleAr": "Batalha de Presentes de Celebridades",
+    "gifts": "Presentes",
+    "ranking": "Ranking",
+    "rule": "Regras",
+    "activityRule": "Regras da Atividade",
+    "support": "Apoiar",
+    "goSupport": "Apoiar Agora",
+    "supportSuccess": "Apoiado com sucesso",
+    "chooseTip": "Escolha uma celebridade para apoiar primeiro",
+    "contribution": "Contribuição",
+    "myItems": "Meus Itens",
+    "todayRank": "Hoje",
+    "yesterdayRank": "Ontem",
+    "totalRank": "Total",
+    "rankReward": "Prêmios do Ranking",
+    "hallOfFame": "Hall da Fama",
+    "contributionRank": "Ranking de Contribuição",
+    "topSupporters": "Maiores Apoiadores",
+    "noRank": "Sem ranking ainda",
+    "richesRoad": "Caminho da Fortuna",
+    "target": "Meta",
+    "rewardPreview": "Prêmios",
+    "ruleList": [
+      "1. Durante a atividade, envie presentes para a celebridade que você apoia para ganhar contribuição. 1 diamante = 1 contribuição.",
+      "2. A celebridade com a maior contribuição total vence a batalha. Os apoiadores do lado vencedor recebem recompensas extras.",
+      "3. Alcance a meta de presentes de cada fase para desbloquear as recompensas da fase. As recompensas serão enviadas para sua mochila em até 3 dias úteis após o término da atividade.",
+      "4. Os 3 maiores contribuintes do ranking são exibidos no trono e entram para o Hall da Fama.",
+      "5. O organizador reserva-se o direito de interpretação final desta atividade. Esta atividade não é afiliada à Apple Inc."
+    ]
   }
 }

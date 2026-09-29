@@ -771,5 +771,37 @@
     "noSuperior": "Üst temsilci yok",
     "unbindConfirm": "Bağlantıyı kaldırmak, coin ticareti izninizi kaybetmenize neden olacaktır.",
     "unbindSuccess": "Bağlantı başarıyla kaldırıldı"
+  },
+  "celebrityGifts": {
+    "title": "Ünlü Hediye Savaşı",
+    "titleAr": "Ünlü Hediye Savaşı",
+    "gifts": "Hediyeler",
+    "ranking": "Sıralama",
+    "rule": "Kurallar",
+    "activityRule": "Etkinlik Kuralları",
+    "support": "Destekle",
+    "goSupport": "Destek Ol",
+    "supportSuccess": "Destek başarılı",
+    "chooseTip": "Lütfen önce destekleyeceğiniz bir ünlü seçin",
+    "contribution": "Katkı",
+    "myItems": "Öğelerim",
+    "todayRank": "Bugün",
+    "yesterdayRank": "Dün",
+    "totalRank": "Toplam",
+    "rankReward": "Sıralama Ödülleri",
+    "hallOfFame": "Şöhret Salonu",
+    "contributionRank": "Katkı Sıralaması",
+    "topSupporters": "En Çok Destekleyenler",
+    "noRank": "Henüz sıralama yok",
+    "richesRoad": "Zenginlik Yolu",
+    "target": "Hedef",
+    "rewardPreview": "Ödüller",
+    "ruleList": [
+      "1. Etkinlik sırasında desteklediğiniz ünlüye hediye göndererek katkı kazanırsınız. 1 elmas = 1 katkı.",
+      "2. Savaşı toplam katkısı daha yüksek olan ünlü kazanır. Kazanan tarafın destekçileri ek ödüller alır.",
+      "3. Her aşamanın hediye hedefine ulaşıldığında aşama ödülleri açılır. Ödüller, etkinlik sona erdikten sonra 3 iş günü içinde çantanıza gönderilir.",
+      "4. Sıralamadaki ilk 3 katkı sahibi tahtta gösterilir ve Şöhret Salonuna girer.",
+      "5. Düzenleyici bu etkinliğin nihai yorum hakkını saklı tutar. Bu etkinlik Apple Inc. ile bağlantılı değildir."
+    ]
   }
 }

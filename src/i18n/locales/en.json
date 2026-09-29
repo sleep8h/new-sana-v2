@@ -771,5 +771,37 @@
     "noSuperior": "No superior agent",
     "unbindConfirm": "Unbinding will cause you to lose the permission to trade coins.",
     "unbindSuccess": "Unbound successfully"
+  },
+  "celebrityGifts": {
+    "title": "Celebrity Gift Battle",
+    "titleAr": "Celebrity Gift Battle",
+    "gifts": "Gifts",
+    "ranking": "Ranking",
+    "rule": "Rules",
+    "activityRule": "Activity Rules",
+    "support": "Support",
+    "goSupport": "Go Support",
+    "supportSuccess": "Supported successfully",
+    "chooseTip": "Please choose a celebrity to support first",
+    "contribution": "Contribution",
+    "myItems": "My Items",
+    "todayRank": "Today",
+    "yesterdayRank": "Yesterday",
+    "totalRank": "Total",
+    "rankReward": "Ranking Rewards",
+    "hallOfFame": "Hall of Fame",
+    "contributionRank": "Contribution Rank",
+    "topSupporters": "Top Supporters",
+    "noRank": "No ranking yet",
+    "richesRoad": "Riches Road",
+    "target": "Target",
+    "rewardPreview": "Rewards",
+    "ruleList": [
+      "1. During the event, send gifts to your supported celebrity to earn contribution. 1 diamond = 1 contribution.",
+      "2. The celebrity with the higher total contribution wins the battle. Supporters of the winning side receive extra rewards.",
+      "3. Reach the gift target of each stage to unlock stage rewards. Rewards will be sent to your bag within 3 working days after the event ends.",
+      "4. The top 3 contributors on the ranking are displayed on the throne and enter the Hall of Fame.",
+      "5. The organizer reserves the final right of interpretation for this event. This event is not affiliated with Apple Inc."
+    ]
   }
 }

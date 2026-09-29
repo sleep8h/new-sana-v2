@@ -788,5 +788,37 @@
     "noSuperior": "暂无上级代理",
     "unbindConfirm": "解除绑定关系，你会失去交易货币的权限。",
     "unbindSuccess": "解除绑定成功"
+  },
+  "celebrityGifts": {
+    "title": "名人礼物对战",
+    "titleAr": "名人礼物对战",
+    "gifts": "礼物",
+    "ranking": "排名",
+    "rule": "规则",
+    "activityRule": "活动规则",
+    "support": "应援",
+    "goSupport": "去应援",
+    "supportSuccess": "应援成功",
+    "chooseTip": "请先选择要应援的名人",
+    "contribution": "贡献值",
+    "myItems": "我的道具",
+    "todayRank": "今日",
+    "yesterdayRank": "昨日",
+    "totalRank": "累计",
+    "rankReward": "榜单奖励",
+    "hallOfFame": "名人堂",
+    "contributionRank": "贡献榜",
+    "topSupporters": "应援贡献榜",
+    "noRank": "暂未上榜",
+    "richesRoad": "财富之路",
+    "target": "目标",
+    "rewardPreview": "奖励一览",
+    "ruleList": [
+      "1. 活动期间，向你支持的名人赠送礼物即可获得贡献值，1钻石=1贡献值。",
+      "2. 活动结束时总贡献值更高的名人阵营获胜，获胜阵营的支持者可获得额外奖励。",
+      "3. 达成各阶段礼物目标即可解锁阶段奖励，奖励将在活动结束后3个工作日内发放至背包。",
+      "4. 贡献榜前三名用户将登上王座展示，并入选名人堂。",
+      "5. 本次活动最终解释权归主办方所有，活动与苹果公司无关。"
+    ]
   }
 }
