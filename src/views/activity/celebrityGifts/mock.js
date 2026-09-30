@@ -15,16 +15,6 @@ export const USE_MOCK = true;
 // 倒计时剩余时间：44天19小时38分29秒（与设计稿一致，单位毫秒，与接口 timeOut 字段约定一致）
 const mockTimeOut = (44 * 24 * 60 * 60 + 19 * 60 * 60 + 38 * 60 + 29) * 1000;
 
-// 礼物色板（无礼物图片时用 CSS 礼物盒占位，按 color 取色）
-export const GIFT_THEMES = [
-  { base: "#e8b33b", deep: "#9a6b14", ribbon: "#fff0c0" },
-  { base: "#4f8ff7", deep: "#1d4fae", ribbon: "#dfeeff" },
-  { base: "#b360f2", deep: "#6a23a4", ribbon: "#f2ddff" },
-  { base: "#35c98e", deep: "#147a52", ribbon: "#dcfff0" },
-  { base: "#f45757", deep: "#a81818", ribbon: "#ffe0e0" },
-  { base: "#ff9d3d", deep: "#c25e00", ribbon: "#fff0d8" },
-];
-
 const mockGift = (giftId, name, nameAr, value, color, url = "") => ({
   giftId,
   rewardName: name,
@@ -150,12 +140,86 @@ export const mockRank = {
   },
 };
 
+// 名人礼物榜（/celebrityRank）：按收到礼物价值排序的名人榜单
+const celebrityNames = [
+  ["SANA Star A", "نجم سنا أ"],
+  ["Luna Queen", "ملا لونا"],
+  ["Aurora", "أورورا"],
+  ["Nova Knight", "نوفا نايت"],
+  ["Crimson Rose", "وردة قرمزية"],
+  ["Golden Voice", "صوت ذهبي"],
+  ["Moon Diva", "مون ديفا"],
+  ["Starlight", "ضوء النجمة"],
+];
+const celebrityScores = [
+  1827650, 1532000, 1305920, 980450, 742100, 601500, 488300, 321700,
+];
+
+const makeCelebrityRankList = () =>
+  celebrityScores.map((integral, i) => ({
+    index: i + 1,
+    uid: 9001001 + i,
+    nick: celebrityNames[i][0],
+    nickAr: celebrityNames[i][1],
+    avatar: defaultAvatar,
+    integral,
+    country: countryPool[i % countryPool.length],
+  }));
+
+export const mockCelebrityRank = {
+  list: makeCelebrityRankList(),
+  self: null,
+};
+
 // 名人堂（历届 TOP1）
 export const mockHallOfFame = [
   { uid: 8000000, nick: "Olivia 1000", avatar: defaultAvatar, integral: 9284500, period: "Season 1" },
   { uid: 8000016, nick: "Amir 1015", avatar: defaultAvatar, integral: 8720300, period: "Season 2" },
   { uid: 8000005, nick: "Ava 1004", avatar: defaultAvatar, integral: 7905200, period: "Season 3" },
 ];
+
+// 上周 TOP1 数据（/lastWeekTop）
+export const mockLastWeekTop = {
+  celebrity: {
+    uid: 9001001,
+    nick: "ROSE&JACK",
+    nickAr: "روز وجاك",
+    avatar: defaultAvatar,
+    integral: 991112390,
+  },
+  supporter: {
+    uid: 8000001,
+    nick: "ROSE&JACK",
+    avatar: defaultAvatar,
+    integral: 991112390,
+  },
+};
+
+// 我的名人礼物（/myGift）
+export const mockMyGift = {
+  hasGift: true,
+  uid: 9000162,
+  image: defaultAvatar,
+  weeklyLevel: 1,
+  monthlyTask: "0/40",
+  state: "VALID",
+};
+
+// 没有名人礼物的空状态
+export const mockMyGiftEmpty = {
+  hasGift: false,
+};
+
+// 等级列表（/levelList）
+export const mockLevelList = {
+  list: [
+    { level: "LV1", coin: "100K", active: true },
+    { level: "LV2", coin: "100K", active: false },
+    { level: "LV3", coin: "100K", active: false },
+    { level: "LV4", coin: "100K", active: false },
+    { level: "LV5", coin: "100K", active: false },
+  ],
+};
 
 /**
  * 请求兜底：

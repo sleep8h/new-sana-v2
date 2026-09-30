@@ -1,48 +1,26 @@
 <!-- Celebrity Gift Battle 活动主页 -->
 <template>
   <div class="page">
-    <div class="nav-div">
-      <div class="nav-back" :class="{ 'nav-back-ar': store.language === 'ar' }" @click="back">
-        <img v-if="store.language !== 'ar'" src="@/assets/common/left-black-icon@2x.png" alt="" />
-        <img v-else src="@/assets/common/right-black-icon@2x.png" alt="" />
-      </div>
-      <div class="nav-title">{{ $t("celebrityGifts.title") }}</div>
-    </div>
-
     <div class="page-content">
+      <!-- 头图区域 -->
       <div class="bg-top">
-        <!-- 光晕 -->
-        <div class="spotlight spotlight-l"></div>
-        <div class="spotlight spotlight-r"></div>
-
-        <!-- 皇冠 -->
-        <div class="crown">
-          <span class="gem gem-l"></span>
-          <span class="gem gem-m"></span>
-          <span class="gem gem-r"></span>
-        </div>
-
-        <!-- 标题 -->
-        <div class="title-block">
-          <div class="title-en">CELEBRITY</div>
-          <div class="title-en title-en-big">GIFT BATTLE</div>
-          <div class="title-ar" v-if="store.language === 'ar'">{{ $t("celebrityGifts.titleAr") }}</div>
-        </div>
-
-        <!-- 奖杯 -->
-        <div class="trophy">
-          <div class="trophy-handle trophy-handle-l"></div>
-          <div class="trophy-handle trophy-handle-r"></div>
-          <div class="trophy-cup">
-            <span>SANA</span>
-          </div>
-          <div class="trophy-stem"></div>
-          <div class="trophy-base"></div>
-        </div>
-
-        <!-- 倒计时 -->
-        <div class="time">
-          <CountDownCelebrity :time="countDownTime || 0" :key="countDownTime" format="DD:HH:MM:SS" />
+        <!-- 背景层 -->
+        <div class="bg-media">
+          <img
+            v-if="bgImage"
+            class="bg-img"
+            src="@/assets/activity/celebrityGifts/top1_bg.png"
+            alt=""
+          />
+          <video
+            v-else
+            class="bg-video"
+            src="@/assets/activity/celebrityGifts/top1_bg.mp4"
+            autoplay
+            loop
+            muted
+            playsinline
+          ></video>
         </div>
 
         <!-- 规则入口 -->
@@ -51,26 +29,83 @@
           <span>{{ $t("celebrityGifts.rule") }}</span>
         </div>
 
+        <!-- 上周 TOP1 展示区 -->
+        <div class="last-week-top">
+          <!-- 左边：上周名人礼物 TOP1 -->
+          <div class="top-card" @click="openUserPage(lastWeekCelebrity)">
+            <div class="top-avatar-wrap">
+              <img
+                class="top-avatar"
+                :src="lastWeekCelebrity?.avatar || defaultAvatar"
+                alt=""
+              />
+              <img
+                class="avatar-frame"
+                src="@/assets/activity/celebrityGifts/avatarFrame1.png"
+                alt=""
+              />
+            </div>
+            <div class="top-info">
+              <div class="top-name text-hide">{{ lastWeekCelebrity?.nick || "-" }}</div>
+              <div class="top-score">{{ formatNumber(lastWeekCelebrity?.integral) }}</div>
+            </div>
+          </div>
+
+          <!-- 右边：上周 Top Supporter TOP1 -->
+          <div class="top-card top-card-right" @click="openUserPage(lastWeekSupporter)">
+            <div class="top-avatar-wrap">
+              <img
+                class="top-avatar"
+                :src="lastWeekSupporter?.avatar || defaultAvatar"
+                alt=""
+              />
+              <img
+                class="avatar-frame"
+                src="@/assets/activity/celebrityGifts/avatarFrame2.png"
+                alt=""
+              />
+            </div>
+            <div class="top-info">
+              <div class="top-name text-hide">{{ lastWeekSupporter?.nick || "-" }}</div>
+              <div class="top-score">
+                <span class="coin-icon"></span>
+                {{ formatNumber(lastWeekSupporter?.integral) }}
+              </div>
+            </div>
+          </div>
+        </div>
+  
         <!-- tab -->
         <div class="tab-list">
           <div
             v-for="item in tabList"
             :key="item.value"
-            class="tab-item"
-            :class="{ 'tab-item-show': curTab === item.value }"
-            @click="tabChange(item)"
+            class="tab-wrapper"
           >
-            <span>{{ item.text }}</span>
+            <div
+              class="tab-item"
+              :class="{ 'tab-item-show': curTab === item.value }"
+              @click="tabChange(item)"
+            >
+              <span>{{ item.text }}</span>
+            </div>
           </div>
         </div>
       </div>
 
+
+      <!-- 内容区 -->
       <div class="content">
-        <giftBattle v-if="curTab === 1" />
-        <rank v-if="curTab === 2" />
+        <celebrityGift v-if="curTab === 1" />
+        <topCekebrityGift v-if="curTab === 2" />
+        <topSupporter v-if="curTab === 3" />
       </div>
 
-      <RuleToast v-model:isShow="rulesShow" :rewardGroups="rewardGroups" @close="rulesShow = false" />
+      <RuleToast
+        v-model:isShow="rulesShow"
+        :rewardGroups="rewardGroups"
+        @close="rulesShow = false"
+      />
     </div>
   </div>
 </template>
@@ -80,11 +115,13 @@ import { ref, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { get } from "@/utils/http.js";
 import { useMainStore } from "@/pinia/index.js";
+import defaultAvatar from "@/assets/common/user-avatar-default.png";
 import CountDownCelebrity from "./components/CountDownCelebrity.vue";
 import RuleToast from "./components/ruleToast.vue";
-import giftBattle from "./giftBattle.vue";
-import rank from "./rank.vue";
-import { withMock, mockInfo } from "./mock.js";
+import celebrityGift from "./celebrityGift.vue";
+import topCekebrityGift from "./topCekebrityGift.vue";
+import topSupporter from "./topSupporter.vue";
+import { withMock, mockInfo, mockLastWeekTop } from "./mock.js";
 
 const store = useMainStore();
 const { t } = useI18n();
@@ -93,25 +130,40 @@ const curTab = ref(1);
 const countDownTime = ref(0);
 const rulesShow = ref(false);
 const rewardGroups = ref([]);
+const bgImage = ref(false); // true=用背景图 false=用背景视频
+
+// 上周 TOP1 数据
+const lastWeekCelebrity = ref(null);
+const lastWeekSupporter = ref(null);
 
 const tabList = [
   { text: t("celebrityGifts.gifts"), value: 1 },
-  { text: t("celebrityGifts.ranking"), value: 2 },
+  { text: t("celebrityGifts.topCelebrityGift"), value: 2 },
+  { text: t("celebrityGifts.topSupporter"), value: 3 },
 ];
 
 const tabChange = (item) => {
   curTab.value = item.value;
 };
 
-const back = () => {
+const goTab = (val) => {
+  curTab.value = val;
+};
+
+// 打开用户个人主页
+const openUserPage = (user) => {
+  if (!user || !user.uid) return;
+  const params = { uid: user.uid };
   if (store.os === "android") {
-    WebViewJavascriptBridge.backToFront(null, null);
+    WebViewJavascriptBridge.openUserPage(JSON.stringify(params));
   } else if (store.os === "ios") {
-    window.webkit.messageHandlers.backToFront.postMessage(null);
+    window.webkit.messageHandlers.openUserPage.postMessage(params);
   } else {
-    window.history.back();
+    console.log("打开用户主页", params);
   }
 };
+
+const formatNumber = (num) => Number(num || 0).toLocaleString("en-US");
 
 const getActivityInfo = async () => {
   const data = await withMock(
@@ -127,325 +179,275 @@ const getActivityInfo = async () => {
   rewardGroups.value = data.rewardGroups || [];
 };
 
+// 获取上周 TOP1 数据
+const getLastWeekTop = async () => {
+  const data = await withMock(
+    () =>
+      get("/h5doings/activity/celebrityGift2026/lastWeekTop", {
+        uid: store.uid,
+        ticket: store.ticket,
+        language: store.language,
+      }),
+    mockLastWeekTop,
+  );
+  lastWeekCelebrity.value = data.celebrity || null;
+  lastWeekSupporter.value = data.supporter || null;
+};
+
 onMounted(() => {
   getActivityInfo();
+  getLastWeekTop();
 });
 </script>
 
 <style lang="scss" scoped>
 .page {
-  width: 100vw;
-  min-height: 100vh;
+  position: relative;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
-  padding-top: 94px;
-  background: #1c0306;
-  font-family:
-    PingFangSC,
-    PingFang SC,
-    Avenir,
-    Helvetica,
-    Arial,
-    sans-serif;
-
-  .nav-div {
-    width: 100%;
-    height: 94px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 9999;
-    box-sizing: border-box;
-    padding: 44px 16px 0 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .nav-back {
-      position: absolute;
-      top: 53px;
-      left: 16px;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      > img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .nav-back-ar {
-      left: 0;
-      right: 16px;
-    }
-    .nav-title {
-      width: calc(100vw - 96px);
-      text-align: center;
-      font-weight: bold;
-      font-size: 19px;
-      color: #ffe0a0;
-    }
-  }
+  background: #000000;
+  font-family: PingFangSC, PingFang SC, Avenir, Helvetica, Arial, sans-serif;
 
   .page-content {
-    width: 100%;
-    min-height: calc(100vh - 94px);
-    background:
-      radial-gradient(circle at 50% -10%, #6d1018 0%, #3a070c 38%, #1c0306 78%);
-    overflow-x: hidden;
-  }
-
-  .bg-top {
     position: relative;
-    width: 375px;
-    height: 468px;
-    margin: 0 auto;
-    overflow: hidden;
-    background:
-      radial-gradient(ellipse at 50% 8%, rgba(255, 190, 110, 0.28) 0%, transparent 45%),
-      linear-gradient(180deg, #4a0a10 0%, #2a0509 55%, #1c0306 100%);
-    border-bottom: 1px solid rgba(242, 205, 99, 0.25);
-
-    // 两侧幕布光
-    .spotlight {
-      position: absolute;
-      top: -40px;
-      width: 150px;
-      height: 340px;
-      opacity: 0.55;
-      filter: blur(2px);
-    }
-    .spotlight-l {
-      left: -46px;
-      background: linear-gradient(200deg, rgba(180, 30, 30, 0.55) 0%, transparent 70%);
-    }
-    .spotlight-r {
-      right: -46px;
-      background: linear-gradient(160deg, rgba(180, 30, 30, 0.55) 0%, transparent 70%);
-    }
-
-    // 皇冠
-    .crown {
-      position: absolute;
-      top: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 38px;
-      background: linear-gradient(180deg, #fff3c4 0%, #f3c54b 55%, #b07a1c 100%);
-      clip-path: polygon(0 100%, 0 32%, 16% 58%, 32% 8%, 50% 58%, 68% 8%, 84% 58%, 100% 32%, 100% 100%);
-      filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.6));
-      .gem {
-        position: absolute;
-        bottom: 9px;
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #d81f2a;
-        border: 1px solid #8a0b12;
-      }
-      .gem-l {
-        left: 12px;
-      }
-      .gem-m {
-        left: 50%;
-        transform: translateX(-50%);
-        background: #ffe680;
-        border-color: #b07a1c;
-      }
-      .gem-r {
-        right: 12px;
-      }
-    }
-
-    // 标题
-    .title-block {
-      position: absolute;
-      top: 56px;
-      left: 0;
+    z-index: 1;
+    width: 100%;
+    height: auto;
+    overflow-x: hidden;
+    
+    .bg-top {
+      position: relative;
       width: 100%;
-      text-align: center;
-      .title-en {
-        font-family: LogoSCUnboundedSans, sans-serif;
-        font-size: 22px;
-        line-height: 26px;
-        letter-spacing: 1px;
-        background-image: linear-gradient(180deg, #fff3c4 0%, #f3c54b 55%, #a9741c 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
-      }
-      .title-en-big {
-        font-size: 30px;
-        line-height: 36px;
-        letter-spacing: 2px;
-      }
-      .title-ar {
-        margin-top: 2px;
-        font-weight: bold;
-        font-size: 16px;
-        color: #f3c54b;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-      }
-    }
-
-    // 奖杯
-    .trophy {
-      position: absolute;
-      top: 132px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 150px;
-      height: 150px;
-      .trophy-cup {
+      height: 760px;
+      margin: 0 auto;
+      overflow: hidden;
+      .bg-media {
         position: absolute;
         top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 96px;
-        height: 78px;
-        border-radius: 10px 10px 46px 46px;
-        background:
-          radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.55) 0%, transparent 42%),
-          linear-gradient(180deg, #fff0b8 0%, #f3c54b 45%, #b07a1c 100%);
-        border: 2px solid #8a5a14;
-        box-shadow:
-          inset 0 -8px 14px rgba(120, 70, 10, 0.55),
-          0 6px 14px rgba(0, 0, 0, 0.55);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        > span {
-          font-family: LogoSCUnboundedSans, sans-serif;
-          font-weight: bold;
-          font-size: 24px;
-          color: #7a4a10;
-          text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
-        }
-      }
-      .trophy-handle {
-        position: absolute;
-        top: 14px;
-        width: 26px;
-        height: 44px;
-        border: 5px solid #d69f2e;
+        left: 0;
+        width: 100%;
+        height: 760px;
         z-index: 0;
+        pointer-events: none;
+
+        .bg-img,
+        .bg-video {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+        }
       }
-      .trophy-handle-l {
-        left: 6px;
-        border-right: none;
-        border-radius: 22px 0 0 22px;
-      }
-      .trophy-handle-r {
-        right: 6px;
-        border-left: none;
-        border-radius: 0 22px 22px 0;
-      }
-      .trophy-stem {
+      // 规则
+      .rules {
         position: absolute;
-        top: 78px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 18px;
-        height: 26px;
-        background: linear-gradient(180deg, #f3c54b 0%, #a9741c 100%);
-        border-left: 2px solid #8a5a14;
-        border-right: 2px solid #8a5a14;
-      }
-      .trophy-base {
-        position: absolute;
-        top: 102px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 74px;
-        height: 16px;
-        border-radius: 4px;
-        background: linear-gradient(180deg, #f3c54b 0%, #8a5a14 100%);
-        border: 2px solid #6a470f;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-      }
-    }
-
-    // 倒计时
-    .time {
-      position: absolute;
-      top: 292px;
-      left: 0;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    // 规则
-    .rules {
-      position: absolute;
-      top: 296px;
-      right: 12px;
-      height: 28px;
-      padding: 0 10px;
-      border-radius: 14px;
-      border: 1px solid rgba(242, 205, 99, 0.7);
-      background: rgba(40, 6, 10, 0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      font-size: 12px;
-      color: #f7d264;
-      .rules-icon {
-        width: 16px;
-        height: 16px;
-        margin-right: 3px;
-        border-radius: 50%;
-        border: 1px solid #f7d264;
-        font-size: 11px;
-        line-height: 14px;
-        text-align: center;
-      }
-    }
-
-    // tab
-    .tab-list {
-      position: absolute;
-      bottom: 8px;
-      left: 0;
-      width: 100%;
-      padding: 0 24px;
-      display: flex;
-      justify-content: space-between;
-      .tab-item {
-        width: 150px;
-        height: 44px;
-        border-radius: 22px;
-        border: 1px solid rgba(242, 205, 99, 0.65);
-        background: linear-gradient(180deg, #5e1118 0%, #33060b 100%);
-        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+        top: 460px;
+        right: 12px;
+        height: 28px;
+        padding: 0 10px;
+        border-radius: 14px;
+        border: 1px solid rgba(242, 205, 99, 0.7);
+        background: rgba(40, 6, 10, 0.7);
         display: flex;
         justify-content: center;
         align-items: center;
-        > span {
-          font-weight: bold;
-          font-size: 16px;
-          color: #d8b46a;
+        font-weight: bold;
+        font-size: 12px;
+        color: #f7d264;
+        cursor: pointer;
+        .rules-icon {
+          width: 16px;
+          height: 16px;
+          margin-right: 3px;
+          border-radius: 50%;
+          border: 1px solid #f7d264;
+          font-size: 11px;
+          line-height: 14px;
+          text-align: center;
         }
       }
-      .tab-item-show {
-        border-color: #f7d264;
-        background: linear-gradient(180deg, #f4423f 0%, #a30d14 100%);
-        box-shadow:
-          inset 0 1px 0 rgba(255, 220, 160, 0.5),
-          0 4px 10px rgba(0, 0, 0, 0.45);
-        > span {
-          color: #ffe9b0;
-          text-shadow: 0 1px 2px rgba(60, 0, 0, 0.6);
+
+
+      // 上周 TOP1 展示区
+      .last-week-top {
+        position: absolute;
+        top: 517px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 11px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        z-index: 2;
+        
+        .top-card {
+          position: relative;
+          width: 117px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          cursor: pointer;
+    
+          .top-avatar-wrap {
+            position: relative;
+            width: 78px;
+            height: 110px;
+            z-index: 1;
+
+            .top-avatar {
+              position: relative;
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              z-index: 1;
+            }
+
+            .avatar-frame {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 78px;
+              height: 110px;
+              z-index: 2;
+              pointer-events: none;
+            }
+          }
+    
+          .top-info {
+            margin-top: 5px;
+            width: 117px;
+            height: 41px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: url("@/assets/activity/celebrityGifts/topTextBg.png") no-repeat center center;
+            background-size: cover;
+            .top-name {
+              background: linear-gradient(180deg, #E4BE6E 19.05%, #ECB25F 85.71%);
+              -webkit-background-clip: text;
+              background-clip: text;
+              color: transparent;
+              font-weight: bold;
+              font-size: 14px; 
+              line-height: 22px;
+              margin-bottom: -5px;
+            }
+            .top-score {
+              font-weight: bold;
+              font-size: 11px;
+              line-height: 18px;
+              background: linear-gradient(180deg, #E4BE6E 19.05%, #ECB25F 85.71%);
+              -webkit-background-clip: text;
+              background-clip: text;
+              color: transparent;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              .coin-icon {
+                background: url("@/assets/activity/celebrityGifts/goldLeafIcon.png") no-repeat center center;
+                background-size: cover;
+                display: inline-block;
+                width: 13px;
+                height: 11px;
+                margin-inline-end: 4px;
+              }
+            }
+          }
+        }
+
+        .top-card-right {
+          .top-avatar-wrap{
+            width: 114px;
+            height: 110px;
+            .top-avatar{
+              width: 80px;
+              height: 80px;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+
+            .avatar-frame{
+              width: 114px;
+              height: 110px;
+            }
+          }
+        }
+      }
+    
+      // tab
+      .tab-list {
+        position: absolute;
+        width: 100%;
+        height: 70px;
+        top: 676px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2;
+        .tab-wrapper {
+          width: 125px;
+          height: 70px;
+          flex-shrink: 0;
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+        }
+
+        .tab-item {
+          width: 124px;
+          height: 67px;
+          background: url("@/assets/activity/celebrityGifts/tabHide.png") no-repeat center center;
+          background-size: cover;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          box-sizing: border-box;
+          padding: 5px 20px 0;
+          margin-top: 1px;
+          > span {
+            font-weight: bold;
+            font-size: 11px;
+            line-height: 14px;
+            color: #FFF09D;
+            text-align: center;
+          }
+        }
+
+        .tab-item-show {
+          width: 128px;
+          height: 70px;
+          padding-top: 6px;
+          background: url("@/assets/activity/celebrityGifts/tabShow.png") no-repeat center center;
+          background-size: cover;
+          margin-top: 0;
+          > span {
+            font-size: 12px;
+            color: #470000;
+          }
         }
       }
     }
+    .content {
+      position: relative;
+      width: 100%;
+      background: #000000;
+      z-index: 2;
+    }
   }
+}
 
-  .content {
-    width: 100%;
-    padding-top: 10px;
-  }
+.text-hide {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

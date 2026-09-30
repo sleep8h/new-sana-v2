@@ -15,8 +15,7 @@
           <div class="preview-row" v-for="group in rewardGroups" :key="group.id">
             <div class="gifts">
               <div class="gift-item" v-for="gift in group.gifts" :key="gift.giftId">
-                <giftBox :color="gift.color" :gift-url="gift.rewardUrl" :size="34" />
-                <div class="gift-name text-hide">{{ giftName(gift) }}</div>
+                <reward :gift="gift" :size="34" :show-value="false" />
               </div>
             </div>
             <div class="support-tag">{{ $t("celebrityGifts.support") }}</div>
@@ -32,7 +31,7 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMainStore } from "@/pinia/index.js";
-import giftBox from "./giftBox.vue";
+import reward from "./reward.vue";
 
 const store = useMainStore();
 const { tm, rt } = useI18n();
@@ -56,8 +55,6 @@ const ruleList = computed(() => {
   if (Array.isArray(arr)) return arr.map((k) => rt(k));
   return [];
 });
-
-const giftName = (gift) => (store.language === "ar" ? gift.rewardNameAr || gift.rewardName : gift.rewardName);
 
 const closeModal = () => {
   emit("update:isShow", false);

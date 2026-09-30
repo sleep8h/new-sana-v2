@@ -1,4 +1,4 @@
-<!-- 排名页：名人堂 + TOP3 王座 + 贡献榜 -->
+<!-- 名人礼物榜：按收到礼物价值排序的名人榜单 -->
 <template>
   <div class="celebrity-rank">
     <!-- 榜单切换 -->
@@ -16,30 +16,32 @@
 
     <!-- TOP3 王座 -->
     <div class="podium">
-      <div class="podium-side" v-if="top2">
-        <div class="shield">
-          <img :src="top2.avatar" alt="" />
+      <div class="podium-empty" v-if="celebrityList.length === 0">{{ $t("celebrityGifts.noRank") }}</div>
+      <template v-else>
+        <div class="podium-side" v-if="top2">
+          <div class="shield">
+            <img :src="top2.avatar" alt="" />
+          </div>
+          <div class="podium-name text-hide">{{ celebrityName(top2) }}</div>
+          <div class="podium-score">{{ formatNumber(top2.integral) }}</div>
         </div>
-        <div class="podium-name text-hide">{{ top2.nick }}</div>
-        <div class="podium-score">{{ formatNumber(top2.integral) }}</div>
-      </div>
-      <div class="podium-center" v-if="top1">
-        <div class="crown-badge"></div>
-        <div class="top-frame">
-          <img :src="top1.avatar" alt="" />
+        <div class="podium-center" v-if="top1">
+          <div class="crown-badge"></div>
+          <div class="top-frame">
+            <img :src="top1.avatar" alt="" />
+          </div>
+          <div class="podium-name text-hide">{{ celebrityName(top1) }}</div>
+          <div class="podium-score center-score">{{ formatNumber(top1.integral) }}</div>
+          <div class="chair"></div>
         </div>
-        <div class="podium-name text-hide">{{ top1.nick }}</div>
-        <div class="podium-score center-score">{{ formatNumber(top1.integral) }}</div>
-        <div class="chair"></div>
-      </div>
-      <div class="podium-side" v-if="top3">
-        <div class="shield shield-bronze">
-          <img :src="top3.avatar" alt="" />
+        <div class="podium-side" v-if="top3">
+          <div class="shield shield-bronze">
+            <img :src="top3.avatar" alt="" />
+          </div>
+          <div class="podium-name text-hide">{{ celebrityName(top3) }}</div>
+          <div class="podium-score">{{ formatNumber(top3.integral) }}</div>
         </div>
-        <div class="podium-name text-hide">{{ top3.nick }}</div>
-        <div class="podium-score">{{ formatNumber(top3.integral) }}</div>
-      </div>
-      <div class="podium-empty" v-if="rankList.length === 0">{{ $t("celebrityGifts.noRank") }}</div>
+      </template>
     </div>
 
     <!-- 榜单奖励一览 -->
@@ -48,11 +50,7 @@
         <span>{{ $t("celebrityGifts.rankReward") }}</span>
       </div>
       <div class="strip-list">
-        <div class="strip-item" v-for="gift in rewardGifts" :key="gift.giftId">
-          <giftBox :color="gift.color" :gift-url="gift.rewardUrl" :size="42" />
-          <div class="strip-name text-hide">{{ giftName(gift) }}</div>
-          <div class="strip-value">x{{ gift.rewardValue }}</div>
-        </div>
+        <reward v-for="gift in rewardGifts" :key="gift.giftId" :gift="gift" :size="42" />
       </div>
     </div>
 
@@ -76,27 +74,12 @@
       </div>
     </div>
 
-    <!-- 贡献榜 -->
+    <!-- 名人榜列表 -->
     <div class="panel rank-list-panel">
       <div class="panel-title">
-        <span>{{ $t("celebrityGifts.contributionRank") }}</span>
+        <span>{{ $t("celebrityGifts.celebrityGiftRank") }}</span>
       </div>
-      <div class="rank-item" v-for="item in rankList.slice(3)" :key="item.uid">
-        <div class="sort">{{ item.index }}</div>
-        <img class="avatar" :src="item.avatar" alt="" />
-        <div class="name text-hide">{{ item.nick }}</div>
-        <div class="country">{{ item.country }}</div>
-        <div class="score">{{ formatNumber(item.integral) }}</div>
-      </div>
-      <div class="empty" v-if="rankList.length <= 3">{{ $t("celebrityGifts.noRank") }}</div>
-    </div>
-
-    <!-- 我的排名（底部固定） -->
-    <div class="my-bar" :class="{ 'my-bar-ar': store.language === 'ar' }" v-if="myInfo">
-      <div class="sort">{{ myInfo.index === 0 || myInfo.index > 999 ? "999+" : myInfo.index }}</div>
-      <img class="my-avatar" :src="myInfo.avatar" alt="" />
-      <div class="my-name text-hide">{{ myInfo.nick }}</div>
-      <div class="my-score">{{ formatNumber(myInfo.integral) }}</div>
+      <senderTop :list="celebrityList.slice(3)" />
     </div>
   </div>
 </template>
@@ -104,12 +87,11 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
-import { showToast } from "vant";
-import "vant/es/toast/style";
 import { get } from "@/utils/http.js";
 import { useMainStore } from "@/pinia/index.js";
-import giftBox from "./components/giftBox.vue";
-import { withMock, mockRank, mockHallOfFame, mockRewardGroups } from "./mock.js";
+import reward from "./components/reward.vue";
+import senderTop from "./components/senderTop.vue";
+import { withMock, mockCelebrityRank, mockHallOfFame, mockRewardGroups } from "./mock.js";
 
 const store = useMainStore();
 const { t } = useI18n();
@@ -121,41 +103,37 @@ const tabList = [
   { text: t("celebrityGifts.totalRank"), value: 3 },
 ];
 
-const rankList = ref([]);
-const myInfo = ref(null);
+const celebrityList = ref([]);
 const hallOfFame = ref([]);
 
-const top1 = computed(() => rankList.value[0] || null);
-const top2 = computed(() => rankList.value[1] || null);
-const top3 = computed(() => rankList.value[2] || null);
+const top1 = computed(() => celebrityList.value[0] || null);
+const top2 = computed(() => celebrityList.value[1] || null);
+const top3 = computed(() => celebrityList.value[2] || null);
 
-// 榜单奖励取第一档分组的礼物展示
 const rewardGifts = computed(() => mockRewardGroups[0]?.gifts || []);
 
-const giftName = (g) => (store.language === "ar" ? g.rewardNameAr || g.rewardName : g.rewardName);
-
+const celebrityName = (c) => (store.language === "ar" ? c.nickAr || c.nick : c.nick);
 const formatNumber = (num) => Number(num || 0).toLocaleString("en-US");
 
 const tabChange = async (item) => {
   curTab.value = item.value;
-  rankList.value = [];
-  await getRank();
+  celebrityList.value = [];
+  await getCelebrityRank();
 };
 
-const getRank = async () => {
+const getCelebrityRank = async () => {
   const data = await withMock(
     () =>
-      get("/h5doings/activity/celebrityGift2026/rank", {
+      get("/h5doings/activity/celebrityGift2026/celebrityRank", {
         uid: store.uid,
         size: 100,
         type: curTab.value,
         ticket: store.ticket,
         language: store.language,
       }),
-    mockRank,
+    mockCelebrityRank,
   );
-  rankList.value = data.list || [];
-  myInfo.value = data.self || null;
+  celebrityList.value = data.list || [];
 };
 
 const getHallOfFame = async () => {
@@ -172,7 +150,7 @@ const getHallOfFame = async () => {
 };
 
 onMounted(async () => {
-  await getRank();
+  await getCelebrityRank();
   await getHallOfFame();
 });
 </script>
@@ -180,7 +158,7 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .celebrity-rank {
   width: 100%;
-  padding: 0 12px 86px;
+  padding: 0 12px 20px;
   color: #ffe9c7;
 
   .sub-tabs {
@@ -381,22 +359,6 @@ onMounted(async () => {
     .strip-list {
       display: flex;
       justify-content: space-around;
-      .strip-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .strip-name {
-          max-width: 80px;
-          margin-top: 4px;
-          font-size: 11px;
-          line-height: 15px;
-          color: #ffdf9a;
-        }
-        .strip-value {
-          font-size: 10px;
-          color: #f2cd63;
-        }
-      }
     }
   }
 
@@ -467,131 +429,6 @@ onMounted(async () => {
           color: #f7d264;
         }
       }
-    }
-  }
-
-  .rank-list-panel {
-    .rank-item {
-      display: flex;
-      align-items: center;
-      height: 46px;
-      margin-bottom: 8px;
-      padding: 0 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(231, 183, 64, 0.4);
-      background: linear-gradient(90deg, rgba(74, 13, 19, 0.85) 0%, rgba(30, 5, 9, 0.85) 100%);
-      .sort {
-        width: 24px;
-        height: 24px;
-        margin-right: 8px;
-        border-radius: 6px;
-        background: rgba(242, 205, 99, 0.16);
-        font-weight: bold;
-        font-size: 12px;
-        line-height: 24px;
-        text-align: center;
-        color: #e9c889;
-      }
-      .avatar {
-        width: 32px;
-        height: 32px;
-        margin-right: 8px;
-        border-radius: 50%;
-        border: 1px solid #e7b740;
-        object-fit: cover;
-      }
-      .name {
-        flex: 1;
-        font-size: 13px;
-        color: #ffe9c7;
-      }
-      .country {
-        margin-right: 8px;
-        padding: 0 5px;
-        height: 16px;
-        border-radius: 3px;
-        border: 1px solid rgba(242, 205, 99, 0.5);
-        font-size: 9px;
-        line-height: 14px;
-        color: #e9c889;
-      }
-      .score {
-        max-width: 96px;
-        font-weight: bold;
-        font-size: 13px;
-        color: #f7d264;
-        text-align: right;
-      }
-    }
-    .empty {
-      height: 80px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 13px;
-      color: #e9c889;
-    }
-  }
-
-  .my-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 20;
-    width: 100%;
-    height: 62px;
-    padding: 8px 14px;
-    display: flex;
-    align-items: center;
-    border-top: 1px solid rgba(242, 205, 99, 0.55);
-    background: linear-gradient(180deg, #5a1018 0%, #2a060a 100%);
-    .sort {
-      min-width: 38px;
-      height: 24px;
-      padding: 0 6px;
-      margin-right: 8px;
-      border-radius: 6px;
-      background: rgba(242, 205, 99, 0.16);
-      font-weight: bold;
-      font-size: 12px;
-      line-height: 24px;
-      text-align: center;
-      color: #f7d264;
-    }
-    .my-avatar {
-      width: 40px;
-      height: 40px;
-      margin-right: 8px;
-      border-radius: 50%;
-      border: 1px solid #f2cd63;
-      object-fit: cover;
-    }
-    .my-name {
-      flex: 1;
-      font-weight: bold;
-      font-size: 13px;
-      color: #ffffff;
-    }
-    .my-score {
-      max-width: 120px;
-      font-weight: bold;
-      font-size: 15px;
-      color: #f7d264;
-      text-align: right;
-    }
-  }
-  .my-bar-ar {
-    direction: rtl;
-    .sort {
-      margin-right: 0;
-      margin-left: 8px;
-    }
-    .my-avatar {
-      margin-right: 0;
-      margin-left: 8px;
-    }
-    .my-name {
-      text-align: right;
     }
   }
 }
