@@ -1,0 +1,1 @@
+import{_ as t,a,o as s,b as o}from"./index-FnnbuGAd.js";const n={},r={class:"about"};function c(i,e){return s(),a("div",r,[...e[0]||(e[0]=[o("h1",null,"Welcome to the About Page",-1),o("p",null,"This page provides information about the application.",-1)])])}const p=t(n,[["render",c]]);export{p as default};
