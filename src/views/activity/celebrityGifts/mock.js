@@ -64,10 +64,7 @@ export const mockRewardGroups = [
     title: "Legend Throne",
     titleAr: "عرش الأسطورة",
     target: "20,000,000",
-    gifts: [
-      mockGift(110, "Throne Gift", "هدية العرش", 1, 3),
-      mockGift(111, "Flame Gift", "هدية اللهب", 9, 4),
-    ],
+    gifts: [mockGift(110, "Throne Gift", "هدية العرش", 1, 3), mockGift(111, "Flame Gift", "هدية اللهب", 9, 4)],
   },
 ];
 
@@ -94,7 +91,15 @@ export const mockInfo = {
   // 王座奖励（中间大奖 + 左右两个奖励位）
   thronePrizes: [
     { giftId: 102, rewardName: "Sapphire", rewardNameAr: "ياقوت أزرق", rewardValue: 5, color: 1, rewardUrl: "" },
-    { giftId: 101, rewardName: "Golden Crown", rewardNameAr: "التاج الذهبي", rewardValue: 1, color: 0, rewardUrl: "", center: true },
+    {
+      giftId: 101,
+      rewardName: "Golden Crown",
+      rewardNameAr: "التاج الذهبي",
+      rewardValue: 1,
+      color: 0,
+      rewardUrl: "",
+      center: true,
+    },
     { giftId: 103, rewardName: "Amethyst", rewardNameAr: "جمشت", rewardValue: 10, color: 2, rewardUrl: "" },
   ],
   userInfo: {
@@ -108,13 +113,27 @@ export const mockInfo = {
 };
 
 const namePool = [
-  "Olivia", "Liam", "Emma", "Noah", "Ava", "Ethan", "Sophia", "Mason",
-  "Isabella", "Lucas", "Mia", "Leo", "Charlotte", "Amir", "Yara", "Omar",
+  "Olivia",
+  "Liam",
+  "Emma",
+  "Noah",
+  "Ava",
+  "Ethan",
+  "Sophia",
+  "Mason",
+  "Isabella",
+  "Lucas",
+  "Mia",
+  "Leo",
+  "Charlotte",
+  "Amir",
+  "Yara",
+  "Omar",
 ];
 const countryPool = ["US", "BR", "TR", "EG", "SA", "IN", "ID", "PK"];
 const scores = [
-  9284500, 6113200, 4820900, 3355500, 2842100, 2110320, 1870640, 1425380,
-  1103210, 905600, 761200, 548900, 402300, 315600, 208900, 120500,
+  9284500, 6113200, 4820900, 3355500, 2842100, 2110320, 1870640, 1425380, 1103210, 905600, 761200, 548900, 402300,
+  315600, 208900, 120500,
 ];
 
 const makeRankList = () =>
@@ -151,9 +170,7 @@ const celebrityNames = [
   ["Moon Diva", "مون ديفا"],
   ["Starlight", "ضوء النجمة"],
 ];
-const celebrityScores = [
-  1827650, 1532000, 1305920, 980450, 742100, 601500, 488300, 321700,
-];
+const celebrityScores = [1827650, 1532000, 1305920, 980450, 742100, 601500, 488300, 321700];
 
 const makeCelebrityRankList = () =>
   celebrityScores.map((integral, i) => ({
@@ -202,6 +219,8 @@ export const mockMyGift = {
   image: defaultAvatar,
   weeklyLevel: 1,
   monthlyTask: "0/40",
+  monthlyTaskNum1: 0,
+  monthlyTaskNum2: 40,
   state: "VALID",
 };
 

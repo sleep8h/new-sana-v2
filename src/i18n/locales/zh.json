@@ -602,7 +602,7 @@
     "activeDays": "活跃天数",
     "diamondReward": "奖励(钻石)"
   },
-   "birthday": {
+  "birthday": {
     "title": "生日特权",
     "rule": "规则",
     "time": "活动时间:5月25日-6月3日(GMT+3)",
@@ -802,6 +802,15 @@
     "supportSuccess": "应援成功",
     "chooseTip": "请先选择要应援的名人",
     "contribution": "贡献值",
+    "myCelebrityGift": "我的名人礼物",
+    "id": "ID: {number}",
+    "weeklyLevel": "周等级: {level}",
+    "monthlyTask": "月度任务: {num1}/{num2}",
+    "sate": "状态: {state}",
+    "valid": "有效",
+    "invalid": "无效",
+    "myGiftTip": "*你的名人礼物每月需被送出40个，才能继续展示至下一周，否则会自动下架（首次上架的礼物除外）。快去号召好友支持你的名人礼物吧！",
+    "noGiftTip": "抱歉，您尚未拥有专属名人礼物。当你的财富等级达到48级时，可联系我们的工作人员进行礼物定制。",
     "myItems": "我的道具",
     "todayRank": "今日",
     "yesterdayRank": "昨日",
@@ -810,6 +819,8 @@
     "hallOfFame": "名人堂",
     "contributionRank": "贡献榜",
     "celebrityGiftRank": "名人礼物榜",
+    "celebrityGiftLevel": "名人礼物等级",
+    "levelTip": "每周名人礼物被送出的个数越多，你所能获得的相应等级与奖励也就越高",
     "topSupporters": "应援贡献榜",
     "noRank": "暂未上榜",
     "richesRoad": "财富之路",

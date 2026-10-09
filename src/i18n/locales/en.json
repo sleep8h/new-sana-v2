@@ -585,7 +585,7 @@
     "activeDays": "Active Days",
     "diamondReward": "Reward (Diamonds)"
   },
-   "birthday": {
+  "birthday": {
     "title": "Birthday Privilege",
     "rule": "Rule",
     "time": "Event Time: May 25 - June 3 (GMT+3)",
@@ -785,6 +785,15 @@
     "supportSuccess": "Supported successfully",
     "chooseTip": "Please choose a celebrity to support first",
     "contribution": "Contribution",
+    "myCelebrityGift": "My Celebrity Gift",
+    "id": "ID: {number}",
+    "weeklyLevel": "WEEKLY LEVEL: {level}",
+    "monthlyTask": "MONTHLY TASK: {num1}/{num2}",
+    "sate": "SATE: {state}",
+    "valid": "Valid",
+    "invalid": "Invalid",
+    "myGiftTip": "*Your celebrity gift needs to be sent 40 times per month to continue showing next week, otherwise it will be automatically removed (except for the first listing). Go call on friends to support your celebrity gift!",
+    "noGiftTip": "Sorry, you don't have an exclusive celebrity gift yet. When your wealth level reaches 48, you can contact our staff for gift customization.",
     "myItems": "My Items",
     "todayRank": "Today",
     "yesterdayRank": "Yesterday",
@@ -793,6 +802,8 @@
     "hallOfFame": "Hall of Fame",
     "contributionRank": "Contribution Rank",
     "celebrityGiftRank": "Celebrity Gift Rank",
+    "celebrityGiftLevel": "Celebrity Gift Level",
+    "levelTip": "The more celebrity gifts sent out each week, the higher the corresponding level and rewards you can obtain",
     "topSupporters": "Top Supporters",
     "noRank": "No ranking yet",
     "richesRoad": "Riches Road",
