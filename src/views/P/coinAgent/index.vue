@@ -17,8 +17,13 @@
       <div class="tab-item" :class="{ active: activeTab === 'record' }" @click="activeTab = 'record'">
         {{ t("coinAgent.record") }}
       </div>
-      <div v-if="hasParent" class="tab-item" :class="{ active: activeTab === 'subAgent' }" @click="activeTab = 'subAgent'">
-        {{ hasParent === 'parent' ? t("coinAgent.superiorAgent") : t("coinAgent.subAgent") }}
+      <div
+        v-if="hasParent"
+        class="tab-item"
+        :class="{ active: activeTab === 'subAgent' }"
+        @click="activeTab = 'subAgent'"
+      >
+        {{ hasParent === "parent" ? t("coinAgent.superiorAgent") : t("coinAgent.subAgent") }}
       </div>
     </div>
 
@@ -57,7 +62,7 @@ const activeTab = ref("recharge");
 const userInfo = ref({});
 
 // 是否有上级代理 上级代理parent
-const hasParent = ref('');
+const hasParent = ref("");
 
 // ==================== 方法 ====================
 /**
@@ -104,16 +109,15 @@ const goBack = () => {
 const fetchAgentRole = async () => {
   try {
     const res = await postForm("/agency/getPermission", {
-    // const res = await postForm("/agency/subAgent/parent", {
+      // const res = await postForm("/agency/subAgent/parent", {
       uid: store.uid,
       ticket: store.ticket,
     });
     if (res.code === 200) {
       // data 有值说明有上级，是子代理；无值说明没上级，是主代理（或普通代理）
-      userInfo.value = res.data
+      userInfo.value = res.data;
     } else {
       showToast(res.message);
-      goBack();
     }
   } catch (e) {
     console.error(e);
@@ -127,7 +131,7 @@ const fetchParent = async () => {
       ticket: store.ticket,
     });
     if (res.code === 200) {
-      hasParent.value = res.data?.uid > 0 ? 'parent' : 'sub';
+      hasParent.value = res.data?.uid > 0 ? "parent" : "sub";
     } else {
       showToast(res.message || t("common.requestFail"));
     }
@@ -152,9 +156,11 @@ onMounted(() => {
   color: #fff;
   overflow-y: auto;
   box-sizing: border-box;
-  background: #F9F9F9;
+  background: #f9f9f9;
   position: relative;
-  font-family: Source Han Sans SC, Source Han Sans SC;
+  font-family:
+    Source Han Sans SC,
+    Source Han Sans SC;
 
   .header-banner {
     position: relative;
