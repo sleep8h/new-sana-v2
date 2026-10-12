@@ -6,12 +6,7 @@
       <div class="bg-top">
         <!-- 背景层 -->
         <div class="bg-media">
-          <img
-            v-if="bgImage"
-            class="bg-img"
-            src="@/assets/activity/celebrityGifts/top1_bg.png"
-            alt=""
-          />
+          <img v-if="bgImage" class="bg-img" src="@/assets/activity/celebrityGifts/top1_bg.png" alt="" />
           <video
             v-else
             class="bg-video"
@@ -34,16 +29,8 @@
           <!-- 左边：上周名人礼物 TOP1 -->
           <div class="top-card" @click="openUserPage(lastWeekCelebrity)">
             <div class="top-avatar-wrap">
-              <img
-                class="top-avatar"
-                :src="lastWeekCelebrity?.avatar || defaultAvatar"
-                alt=""
-              />
-              <img
-                class="avatar-frame"
-                src="@/assets/activity/celebrityGifts/avatarFrame1.png"
-                alt=""
-              />
+              <img class="top-avatar" :src="lastWeekCelebrity?.avatar || defaultAvatar" alt="" />
+              <img class="avatar-frame" src="@/assets/activity/celebrityGifts/avatarFrame1.png" alt="" />
             </div>
             <div class="top-info">
               <div class="top-name text-hide">{{ lastWeekCelebrity?.nick || "-" }}</div>
@@ -54,16 +41,8 @@
           <!-- 右边：上周 Top Supporter TOP1 -->
           <div class="top-card top-card-right" @click="openUserPage(lastWeekSupporter)">
             <div class="top-avatar-wrap">
-              <img
-                class="top-avatar"
-                :src="lastWeekSupporter?.avatar || defaultAvatar"
-                alt=""
-              />
-              <img
-                class="avatar-frame"
-                src="@/assets/activity/celebrityGifts/avatarFrame2.png"
-                alt=""
-              />
+              <img class="top-avatar" :src="lastWeekSupporter?.avatar || defaultAvatar" alt="" />
+              <img class="avatar-frame" src="@/assets/activity/celebrityGifts/avatarFrame2.png" alt="" />
             </div>
             <div class="top-info">
               <div class="top-name text-hide">{{ lastWeekSupporter?.nick || "-" }}</div>
@@ -74,25 +53,16 @@
             </div>
           </div>
         </div>
-  
+
         <!-- tab -->
         <div class="tab-list">
-          <div
-            v-for="item in tabList"
-            :key="item.value"
-            class="tab-wrapper"
-          >
-            <div
-              class="tab-item"
-              :class="{ 'tab-item-show': curTab === item.value }"
-              @click="tabChange(item)"
-            >
+          <div v-for="item in tabList" :key="item.value" class="tab-wrapper">
+            <div class="tab-item" :class="{ 'tab-item-show': curTab === item.value }" @click="tabChange(item)">
               <span>{{ item.text }}</span>
             </div>
           </div>
         </div>
       </div>
-
 
       <!-- 内容区 -->
       <div class="content">
@@ -101,11 +71,7 @@
         <topSupporter v-if="curTab === 3" />
       </div>
 
-      <RuleToast
-        v-model:isShow="rulesShow"
-        :rewardGroups="rewardGroups"
-        @close="rulesShow = false"
-      />
+      <RuleToast v-model:isShow="rulesShow" :rewardGroups="rewardGroups" @close="rulesShow = false" />
     </div>
   </div>
 </template>
@@ -207,7 +173,13 @@ onMounted(() => {
   height: 100%;
   box-sizing: border-box;
   background: #000000;
-  font-family: PingFangSC, PingFang SC, Avenir, Helvetica, Arial, sans-serif;
+  font-family:
+    PingFangSC,
+    PingFang SC,
+    Avenir,
+    Helvetica,
+    Arial,
+    sans-serif;
 
   .page-content {
     position: relative;
@@ -215,13 +187,14 @@ onMounted(() => {
     width: 100%;
     height: auto;
     overflow-x: hidden;
-    
+
     .bg-top {
       position: relative;
       width: 100%;
       height: 760px;
       margin: 0 auto;
       overflow: hidden;
+      background: #000000;
       .bg-media {
         position: absolute;
         top: 0;
@@ -267,7 +240,6 @@ onMounted(() => {
         }
       }
 
-
       // 上周 TOP1 展示区
       .last-week-top {
         position: absolute;
@@ -281,7 +253,7 @@ onMounted(() => {
         justify-content: space-between;
         align-items: flex-start;
         z-index: 2;
-        
+
         .top-card {
           position: relative;
           width: 117px;
@@ -289,7 +261,7 @@ onMounted(() => {
           flex-direction: column;
           align-items: center;
           cursor: pointer;
-    
+
           .top-avatar-wrap {
             position: relative;
             width: 78px;
@@ -315,7 +287,7 @@ onMounted(() => {
               pointer-events: none;
             }
           }
-    
+
           .top-info {
             margin-top: 5px;
             width: 117px;
@@ -328,12 +300,12 @@ onMounted(() => {
             background: url("@/assets/activity/celebrityGifts/topTextBg.png") no-repeat center center;
             background-size: cover;
             .top-name {
-              background: linear-gradient(180deg, #E4BE6E 19.05%, #ECB25F 85.71%);
+              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
               -webkit-background-clip: text;
               background-clip: text;
               color: transparent;
               font-weight: bold;
-              font-size: 14px; 
+              font-size: 14px;
               line-height: 22px;
               margin-bottom: -5px;
             }
@@ -341,7 +313,7 @@ onMounted(() => {
               font-weight: bold;
               font-size: 11px;
               line-height: 18px;
-              background: linear-gradient(180deg, #E4BE6E 19.05%, #ECB25F 85.71%);
+              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
               -webkit-background-clip: text;
               background-clip: text;
               color: transparent;
@@ -361,10 +333,10 @@ onMounted(() => {
         }
 
         .top-card-right {
-          .top-avatar-wrap{
+          .top-avatar-wrap {
             width: 114px;
             height: 110px;
-            .top-avatar{
+            .top-avatar {
               width: 80px;
               height: 80px;
               top: 50%;
@@ -372,14 +344,14 @@ onMounted(() => {
               transform: translate(-50%, -50%);
             }
 
-            .avatar-frame{
+            .avatar-frame {
               width: 114px;
               height: 110px;
             }
           }
         }
       }
-    
+
       // tab
       .tab-list {
         position: absolute;
@@ -417,7 +389,7 @@ onMounted(() => {
             font-weight: bold;
             font-size: 11px;
             line-height: 14px;
-            color: #FFF09D;
+            color: #fff09d;
             text-align: center;
           }
         }

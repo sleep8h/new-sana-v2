@@ -49,38 +49,47 @@
 
       <!-- 等级奖励路线 -->
       <div class="level-road">
-        <div class="level-item" v-for="(item, index) in levelList" :key="index">
+        <div class="level-item" v-for="(item, index) in levelList" :key="index" @click="goToSlide(index)">
           <div class="level-coin">
             <span class="coin-icon"></span>
             <span class="coin-num">{{ item.coin }}</span>
           </div>
-          <div class="level-badge" :class="{ 'level-active': item.active }">
-            {{ item.level }}
+          <div class="level-badge" :class="{ 'level-active': rewardPage === index }">
+            <div :class="'level' + (index + 1)"></div>
           </div>
+        </div>
+        <div class="level-badge-bg">
+          <div class="progress-bg"></div>
         </div>
       </div>
 
       <!-- 奖励展示 -->
       <div class="reward-showcase">
-        <div class="reward-arrow left" @click="prevReward"></div>
-        <Swiper
-          :initial-slide="rewardPage"
-          :slides-per-view="1"
-          ref="rewardSwiper"
-          :space-between="0"
-          @slideChange="onRewardChange"
-          style="height: 100%"
-        >
-          <SwiperSlide v-for="(reward, index) in allRewards" :key="index">
-            <div class="reward-item">
-              <div class="reward-frame">
-                <img :src="reward.image || defaultRewardImg" alt="" />
+        <div class="reward-arrow-left" @click="prevReward"></div>
+        <div class="swiper-box">
+          <Swiper
+            :initial-slide="rewardPage"
+            :slides-per-view="1"
+            :slides-per-group="1"
+            ref="rewardSwiper"
+            :space-between="0"
+            :speed="300"
+            @slideChange="onRewardChange"
+            style="height: 100%; width: 238.5px"
+          >
+            <SwiperSlide v-for="(rewardGroup, index) in allRewards" :key="index">
+              <div class="reward-group">
+                <div v-for="(reward, idx) in rewardGroup" :key="idx" class="reward-item">
+                  <div class="reward-frame">
+                    <img :src="reward.image || defaultRewardImg" alt="" />
+                  </div>
+                  <div class="reward-name">{{ reward.name }}</div>
+                </div>
               </div>
-              <div class="reward-name">{{ reward.name }}</div>
-            </div>
-          </SwiperSlide>
-        </Swiper>
-        <div class="reward-arrow right" @click="nextReward"></div>
+            </SwiperSlide>
+          </Swiper>
+        </div>
+        <div class="reward-arrow-right" @click="nextReward"></div>
       </div>
     </div>
   </div>
@@ -114,14 +123,37 @@ const rewardPage = ref(0);
 const rewardSwiper = ref(null);
 
 const allRewards = ref([
-  { name: "HEADWEAR*7", image: "" },
-  { name: "BADGE*7", image: "" },
-  { name: "FRAME*7", image: "" },
-  { name: "THEME*7", image: "" },
+  [
+    { name: "HEADWEAR*1", image: "" },
+    { name: "BADGE*1", image: "" },
+  ],
+  [
+    { name: "FRAME*2", image: "" },
+    { name: "THEME*2", image: "" },
+  ],
+  [
+    { name: "HEADWEAR*3", image: "" },
+    { name: "BADGE*3", image: "" },
+  ],
+  [
+    { name: "FRAME*4", image: "" },
+    { name: "FRAME*4", image: "" },
+  ],
+  [
+    { name: "FRAME*5", image: "" },
+    { name: "THEME*5", image: "" },
+  ],
 ]);
 
 const onRewardChange = (swiper) => {
   rewardPage.value = swiper.activeIndex;
+};
+
+const goToSlide = (index) => {
+  rewardPage.value = index;
+  if (rewardSwiper.value && rewardSwiper.value.$el.swiper) {
+    rewardSwiper.value.$el.swiper.slideTo(index, 300);
+  }
 };
 
 const prevReward = () => {
@@ -288,6 +320,7 @@ onMounted(async () => {
 
   // 名人礼物等级
   .level-panel {
+    position: relative;
     width: 100%;
     height: 507px;
     background: url("@/assets/activity/celebrityGifts/celebrityGiftLevelBg.png") no-repeat center center;
@@ -307,56 +340,111 @@ onMounted(async () => {
     }
 
     .level-road {
-      position: absolute;
+      width: 100%;
+      height: 82px;
+      position: relative;
       top: 163px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      padding: 0 8px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 0 15px;
 
       .level-item {
+        position: relative;
+        z-index: 3;
+        height: 82px;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        gap: 6px;
+        align-items: flex-start;
+        gap: 25px 0;
 
         .level-coin {
+          width: 69px;
+          height: 25px;
           display: flex;
+          justify-content: flex-start;
           align-items: center;
-          gap: 4px;
 
           .coin-icon {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: linear-gradient(180deg, #f2cd63 0%, #c1892b 100%);
+            width: 24px;
+            height: 20px;
+            background: url("@/assets/activity/celebrityGifts/goldLeafIcon.png") no-repeat center center;
+            background-size: cover;
           }
 
           .coin-num {
             font-weight: bold;
-            font-size: 11px;
-            color: #f7d264;
+            font-size: 15px;
+            line-height: 18px;
+            background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
           }
         }
 
         .level-badge {
-          width: 36px;
-          height: 20px;
-          border-radius: 10px;
-          background: linear-gradient(180deg, #8a8a8a 0%, #555555 100%);
+          width: 34px;
+          height: 32px;
+          border-radius: 50%;
+          background: url("@/assets/activity/celebrityGifts/orangeCircleIcon.png") no-repeat center center;
+          background-size: cover;
           display: flex;
           justify-content: center;
           align-items: center;
-          font-weight: bold;
-          font-size: 10px;
-          color: #fff;
-
-          &.level-active {
-            background: linear-gradient(180deg, #f2cd63 0%, #c1892b 100%);
-            color: #5c1503;
+          .level1 {
+            width: 25px;
+            height: 15px;
+            background: url("@/assets/activity/celebrityGifts/levelBadge1.png") no-repeat center center;
+            background-size: cover;
           }
+          .level2 {
+            width: 25px;
+            height: 15px;
+            background: url("@/assets/activity/celebrityGifts/levelBadge2.png") no-repeat center center;
+            background-size: cover;
+          }
+          .level3 {
+            width: 25px;
+            height: 15px;
+            background: url("@/assets/activity/celebrityGifts/levelBadge3.png") no-repeat center center;
+            background-size: cover;
+          }
+          .level4 {
+            width: 25px;
+            height: 15px;
+            background: url("@/assets/activity/celebrityGifts/levelBadge4.png") no-repeat center center;
+            background-size: cover;
+          }
+          .level5 {
+            width: 25px;
+            height: 15px;
+            background: url("@/assets/activity/celebrityGifts/levelBadge5.png") no-repeat center center;
+            background-size: cover;
+          }
+          &.level-active {
+            transform: scale(1.2);
+            transition: transform 0.3s ease;
+          }
+        }
+      }
+      .level-badge-bg {
+        width: 345px;
+        height: 18px;
+        position: absolute;
+        top: 57px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        background: #2b2b2b;
+        border-radius: 9px;
+        .progress-bg {
+          width: 100%;
+          height: 100%;
+          border-radius: 9px;
+          background: url("@/assets/activity/celebrityGifts/level-badge-bg.png") no-repeat center center;
+          background-size: cover;
         }
       }
     }
@@ -366,63 +454,90 @@ onMounted(async () => {
       top: 275px;
       left: 50%;
       transform: translateX(-50%);
+      width: 100%;
+      height: 171px;
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 37px;
 
-      .reward-arrow {
-        width: 28px;
-        height: 28px;
+      .reward-arrow-left,
+      .reward-arrow-right {
+        position: absolute;
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.15);
+        top: 61px;
+        left: 20px;
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
         flex-shrink: 0;
-
-        span {
-          font-size: 14px;
-          color: #f2cd63;
-        }
-
+        background: url("@/assets/activity/celebrityGifts/arrow-left.png") no-repeat center center;
+        background-size: cover;
         &:active {
           transform: scale(0.9);
         }
       }
-
-      .swiper {
-        flex: 1;
-
-        .reward-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 8px;
-
-          .reward-frame {
-            width: 80px;
-            height: 100px;
-            border-radius: 40px 40px 8px 8px;
-            border: 2px solid #e7b740;
-            background: linear-gradient(180deg, rgba(103, 16, 24, 0.8) 0%, rgba(43, 6, 10, 0.9) 100%);
+      .reward-arrow-right {
+        position: absolute;
+        top: 61px;
+        left: auto;
+        right: 20px;
+        background: url("@/assets/activity/celebrityGifts/arrow-right.png") no-repeat center center;
+        background-size: cover;
+      }
+      .swiper-box {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 238.5px;
+        height: 171px;
+        overflow: hidden;
+        .swiper {
+          width: 238.5px;
+          .reward-group {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-
-            img {
-              width: 60px;
-              height: 60px;
-              object-fit: cover;
-            }
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 37.5px;
+            height: 171px;
           }
 
-          .reward-name {
-            font-size: 11px;
-            color: #ffdf9a;
-            text-align: center;
+          .reward-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            width: 100.5px;
+            height: 171px;
+
+            .reward-frame {
+              width: 100.5px;
+              height: 147px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              overflow: hidden;
+              background: url("@/assets/activity/celebrityGifts/goldTrophyIllustration.png") no-repeat center center;
+              background-size: cover;
+              img {
+                width: 75px;
+                height: 75px;
+                object-fit: cover;
+              }
+            }
+
+            .reward-name {
+              height: 18px;
+              line-height: 18px;
+              font-size: 12px;
+              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+            }
           }
         }
       }
