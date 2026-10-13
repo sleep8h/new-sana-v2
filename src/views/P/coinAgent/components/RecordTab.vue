@@ -17,12 +17,14 @@
               <div class="record-nickname">{{ item.nick }}</div>
               <!-- 目标用户ID与交易时间 -->
               <div class="record-meta">{{ t("coinAgent.idLabel", { number: item.erbanNo }) }}</div>
-              <div class="record-meta">{{ t("coinAgent.timeLabel", { time: formatTimestamp(item.createTime, 'YYYY-MM-DD HH:mm:ss') }) }}</div>
+              <div class="record-meta">
+                {{ t("coinAgent.timeLabel", { time: formatTimestamp(item.createTime, "YYYY-MM-DD HH:mm:ss") }) }}
+              </div>
             </div>
             <div class="record-right">
               <!-- 交易金额，正数为绿色，负数为红色 -->
               <div class="record-amount" dir="ltr" :class="item.purpleDiamondNum < 0 ? 'positive' : 'negative'">
-                {{ item.purpleDiamondNum < 0 ? '-' : '+' }}{{ formatNumber(item.purpleDiamondNum) || 0 }}
+                {{ item.purpleDiamondNum < 0 ? "-" : "+" }}{{ formatNumber(item.purpleDiamondNum) || 0 }}
               </div>
               <!-- 可撤销时显示撤销按钮，否则显示已撤销文字 -->
               <div v-if="item.recordType === 1 && item.status === 1" class="cancel-btn" @click="showCancelDialog(item)">
@@ -40,7 +42,10 @@
     <!-- 弹窗：撤销交易确认 -->
     <div v-if="dialogType === 'cancel'" class="dialog-mask" @click.self="closeDialog">
       <div class="dialog-box">
-        <div class="dialog-text" v-html="t('coinAgent.cancelConfirm', { amount: formatNumber(currentItem.purpleDiamondNum) })"></div>
+        <div
+          class="dialog-text"
+          v-html="t('coinAgent.cancelConfirm', { amount: formatNumber(currentItem.purpleDiamondNum) })"
+        ></div>
         <div class="dialog-btns">
           <button class="dialog-btn cancel" @click="closeDialog">{{ t("common.cancel") }}</button>
           <button class="dialog-btn confirm" @click="confirmCancel">{{ t("common.ok") }}</button>
@@ -63,7 +68,6 @@ const { t } = useI18n();
 // ==================== 变量声明 ====================
 // 充值记录列表
 const recordList = ref([]);
-
 
 // 每页条数
 const pageSize = 10;
@@ -126,7 +130,7 @@ const fetchRecords = async (isRefresh = false) => {
     const res = await postForm("/agency/record/list", {
       uid: store.uid,
       ticket: store.ticket,
-      lastRecordId: recordList.value[recordList.value.length - 1]?.recordId || '',
+      lastRecordId: isRefresh ? "" : recordList.value[recordList.value.length - 1]?.recordId || "",
       pageSize: pageSize,
     });
     if (res.code === 200) {
@@ -170,7 +174,7 @@ const onRefresh = () => {
 
 /**
  * 确认撤销交易，调用撤销接口
- * 成功后刷新记录列表
+ * 成功后只修改当前记录状态，不重新请求数据
  */
 const confirmCancel = async () => {
   try {
@@ -181,7 +185,12 @@ const confirmCancel = async () => {
     });
     if (res.code === 200) {
       dialogType.value = "";
-      fetchRecords(true);
+      // 只修改当前记录的状态为已撤销
+      const target = recordList.value.find((item) => item.recordId === currentItem.value.recordId);
+      if (target) {
+        target.status = 2;
+      }
+      currentItem.value = {};
       showToast(t("coinAgent.cancelSuccess"));
     } else {
       showToast(res.message || t("common.requestFail"));
@@ -201,26 +210,26 @@ onMounted(() => {
 .record-content {
   width: 100%;
   height: 100%;
-  .list{
-      width: 351px;
-      height: calc(100% - 61px);
-      background: #FFFFFF;
-      border-radius: 12px;
-      margin: 0 auto;
-      padding: 16px;
-      box-sizing: border-box;
-      &::v-deep(.van-pull-refresh){
-        height: 100%;
-        overflow-y: auto;
-      }
+  .list {
+    width: 351px;
+    height: calc(100% - 61px);
+    background: #ffffff;
+    border-radius: 12px;
+    margin: 0 auto;
+    padding: 16px;
+    box-sizing: border-box;
+    &::v-deep(.van-pull-refresh) {
+      height: 100%;
+      overflow-y: auto;
+    }
     .record-list {
       width: 100%;
       .record-item {
         width: 319px;
         height: 93px;
-        background: #F9FBFC;
+        background: #f9fbfc;
         border-radius: 6px 6px 6px 6px;
-        border: 1px solid #E8EAF2;
+        border: 1px solid #e8eaf2;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -239,7 +248,7 @@ onMounted(() => {
             font-weight: bold;
             color: #333;
           }
-  
+
           .record-meta {
             font-weight: bold;
             font-size: 12px;
@@ -247,7 +256,7 @@ onMounted(() => {
             margin-top: 2px;
           }
         }
-  
+
         .record-right {
           display: flex;
           flex-direction: column;
@@ -260,27 +269,28 @@ onMounted(() => {
             &.positive {
               color: #219653;
             }
-  
+
             &.negative {
-              color: #EB5757;
+              color: #eb5757;
             }
           }
-  
+
           .cancel-btn {
             margin-top: 12px;
             min-width: 67px;
-            padding: 0 22px;
-            height: 22px;
+            padding: 0 2px;
+            text-align: center;
+            min-height: 22px;
             border-radius: 4px 4px 4px 4px;
-            border: 1px solid #F2994A;
+            border: 1px solid #f2994a;
             font-weight: bold;
             font-size: 12px;
-            color: #F2994A;
+            color: #f2994a;
             display: flex;
             justify-content: center;
             align-items: center;
           }
-          .text-btn{
+          .text-btn {
             font-weight: 500;
             font-size: 12px;
             color: #828282;
@@ -293,7 +303,7 @@ onMounted(() => {
   .empty-state {
     width: 351px;
     height: calc(100% - 61px);
-    background: #FFFFFF;
+    background: #ffffff;
     border-radius: 12px 12px 12px 12px;
     margin: 0 auto;
     padding: 20px 16px;
@@ -306,7 +316,6 @@ onMounted(() => {
     align-items: center;
   }
 }
-
 
 .dialog-mask {
   position: fixed;
@@ -332,8 +341,8 @@ onMounted(() => {
       // &::v-deep(.uid){
       //   color:#219653;
       // }
-      &::v-deep(.amount){
-        color:#EB5757;
+      &::v-deep(.amount) {
+        color: #eb5757;
       }
     }
 

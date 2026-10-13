@@ -770,7 +770,8 @@
     "unbind": "Bağlantıyı Kaldır",
     "noSuperior": "Üst temsilci yok",
     "unbindConfirm": "Bağlantıyı kaldırmak, coin ticareti izninizi kaybetmenize neden olacaktır.",
-    "unbindSuccess": "Bağlantı başarıyla kaldırıldı"
+    "unbindSuccess": "Bağlantı başarıyla kaldırıldı",
+    "accountNotFound": "Lütfen girdiğiniz hesabın doğru olup olmadığını kontrol edin"
   },
   "celebrityGifts": {
     "title": "Ünlü Hediye Savaşı",

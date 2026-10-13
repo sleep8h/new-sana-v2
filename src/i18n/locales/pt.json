@@ -770,7 +770,8 @@
     "unbind": "Desvincular",
     "noSuperior": "Nenhum agente superior",
     "unbindConfirm": "Desvincular fará com que você perca a permissão para negociar moedas.",
-    "unbindSuccess": "Desvinculado com sucesso"
+    "unbindSuccess": "Desvinculado com sucesso",
+    "accountNotFound": "Por favor, verifique se a conta inserida está correta"
   },
   "celebrityGifts": {
     "title": "Batalha de Presentes de Celebridades",

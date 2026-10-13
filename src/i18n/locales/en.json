@@ -770,7 +770,8 @@
     "unbind": "Unbind",
     "noSuperior": "No superior agent",
     "unbindConfirm": "Unbinding will cause you to lose the permission to trade coins.",
-    "unbindSuccess": "Unbound successfully"
+    "unbindSuccess": "Unbound successfully",
+    "accountNotFound": "Please check if the entered account is correct"
   },
   "celebrityGifts": {
     "title": "Celebrity Gift Battle",

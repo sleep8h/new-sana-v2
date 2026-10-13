@@ -787,7 +787,8 @@
     "unbind": "解除绑定",
     "noSuperior": "暂无上级代理",
     "unbindConfirm": "解除绑定关系，你会失去交易货币的权限。",
-    "unbindSuccess": "解除绑定成功"
+    "unbindSuccess": "解除绑定成功",
+    "accountNotFound": "请检查输入的账号是否正确"
   },
   "celebrityGifts": {
     "title": "名人礼物对战",

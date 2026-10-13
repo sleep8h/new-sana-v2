@@ -25,15 +25,25 @@
               @keydown="onAccountKeydown"
               @input="onAccountInput"
             />
-              <!-- @blur="onAccountBlur" -->
-            <img v-if="form.account" class="clear-icon" @click="form.account = ''" src="@/assets/p/coinAgent/icon-clear.png" />
+            <!-- @blur="onAccountBlur" -->
+            <img
+              v-if="form.account"
+              class="clear-icon"
+              @click="form.account = ''"
+              src="@/assets/p/coinAgent/icon-clear.png"
+            />
           </div>
         </div>
         <!-- 金额输入行 -->
         <div class="form-row">
           <div class="form-label">
             <span>{{ t("coinAgent.amount") }}</span>
-            <img class="clear-setting" @click="openCustomDialog" src="@/assets/p/coinAgent/icon-setting.png" />
+            <img
+              v-if="form.amount"
+              class="clear-setting"
+              @click="openCustomDialog"
+              src="@/assets/p/coinAgent/icon-setting.png"
+            />
           </div>
           <div class="form-input-wrap">
             <input
@@ -45,14 +55,26 @@
               @input="onAmountInput"
               @blur="onAmountBlur"
             />
-            <img v-if="form.amount" class="clear-icon" @click="form.amount = ''" src="@/assets/p/coinAgent/icon-clear.png" />
+            <img
+              v-if="form.amount"
+              class="clear-icon"
+              @click="form.amount = ''"
+              src="@/assets/p/coinAgent/icon-clear.png"
+            />
           </div>
         </div>
         <!-- 快捷金额选择区 -->
         <div class="quick-amounts">
           <div v-for="(item, index) in allQuickAmounts" :key="item.key" class="quick-item">
-            <div class="quick-number" dir="ltr" @click="addQuickAmount(item.value)">+{{ formatNumber(item.value) }}</div>
-            <img v-if="item.isCustom" class="quick-del" src="@/assets/p/coinAgent/icon-close.png" @click.stop="removeCustomAmount(index)" />
+            <div class="quick-number" dir="ltr" @click="addQuickAmount(item.value)">
+              +{{ formatNumber(item.value) }}
+            </div>
+            <img
+              v-if="item.isCustom"
+              class="quick-del"
+              src="@/assets/p/coinAgent/icon-close.png"
+              @click.stop="removeCustomAmount(index)"
+            />
           </div>
         </div>
       </div>
@@ -64,8 +86,16 @@
     <!-- 弹窗：转账/充值确认 -->
     <div v-if="dialogType === 'transfer'" class="dialog-mask" @click.self="closeDialog">
       <div class="dialog-box">
-        <div class="dialog-text" v-html="t('coinAgent.transferConfirm', { uid: targetUser.uid, nickname: targetUser.nick, amount: formatNumber(form.amount) })">
-        </div>
+        <div
+          class="dialog-text"
+          v-html="
+            t('coinAgent.transferConfirm', {
+              uid: targetUser.erbanNo,
+              nickname: targetUser.nick,
+              amount: formatNumber(form.amount),
+            })
+          "
+        ></div>
         <div class="dialog-btns">
           <button class="dialog-btn cancel" @click="closeDialog">{{ t("common.cancel") }}</button>
           <button class="dialog-btn confirm" @click="confirmTransfer">{{ t("common.ok") }}</button>
@@ -182,7 +212,9 @@ const formatNumber = (num) => {
  */
 const parseNumber = (str) => {
   if (!str) return "";
-  return String(str).replace(/,/g, "").replace(/[^0-9]/g, "");
+  return String(str)
+    .replace(/,/g, "")
+    .replace(/[^0-9]/g, "");
 };
 
 /**
@@ -337,10 +369,7 @@ const closeDialog = () => {
  */
 const onAccountKeydown = (e) => {
   // 允许控制键：退格、删除、Tab、方向键、全选、复制、粘贴、剪切
-  const allowedKeys = [
-    "Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight",
-    "Home", "End", "Enter",
-  ];
+  const allowedKeys = ["Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Home", "End", "Enter"];
   if (allowedKeys.includes(e.key)) return;
   // 允许 Ctrl+A/C/V/X
   if (e.ctrlKey || e.metaKey) return;
@@ -372,11 +401,11 @@ const onAccountInput = (e) => {
 const onAccountBlur = async () => {
   const raw = parseNumber(form.value.account);
   form.value.account = raw;
-  console.log(raw, form.value.account, 'raw')
+  console.log(raw, form.value.account, "raw");
   if (raw.length !== 7) {
     // return showToast(t("coinAgent.accountLengthError"));
-    return false
-  } else{
+    return false;
+  } else {
     await fetchUserInfo(raw);
   }
 };
@@ -398,7 +427,7 @@ const fetchUserInfo = async (erbanNo) => {
       targetUser.value = res.data || {};
     } else {
       targetUser.value = {};
-      showToast(res.message || t("common.requestFail"));
+      showToast(t("coinAgent.accountNotFound"));
     }
   } catch (e) {
     targetUser.value = {};
@@ -442,10 +471,10 @@ onMounted(() => {
 .recharge-content {
   width: 100%;
   height: 100%;
-  .content{
+  .content {
     width: 351px;
     height: calc(100% - 123px);
-    background: #FFFFFF;
+    background: #ffffff;
     border-radius: 12px 12px 12px 12px;
     margin: 0 auto;
     padding: 20px 16px;
@@ -464,14 +493,14 @@ onMounted(() => {
             height: 44px;
             border-radius: 50%;
           }
-  
+
           .nickname {
             font-weight: bold;
             font-size: 16px;
             color: #333333;
           }
         }
-  
+
         .form-label {
           font-weight: bold;
           font-size: 12px;
@@ -480,7 +509,7 @@ onMounted(() => {
           display: flex;
           justify-content: flex-start;
           align-items: center;
-  
+
           > img {
             width: 16px;
             height: 16px;
@@ -488,13 +517,13 @@ onMounted(() => {
             cursor: pointer;
           }
         }
-  
+
         .form-input-wrap {
           width: 319px;
           height: 41px;
-          background: #F9FBFC;
+          background: #f9fbfc;
           border-radius: 6px;
-          border: 1px solid #E8EAF2;
+          border: 1px solid #e8eaf2;
           position: relative;
           display: flex;
           justify-content: flex-start;
@@ -511,12 +540,12 @@ onMounted(() => {
             font-size: 16px;
             color: #333333;
             text-align: start;
-  
+
             &::placeholder {
               color: #bbb;
             }
           }
-  
+
           .clear-icon {
             position: absolute;
             inset-inline-end: 16px;
@@ -526,7 +555,7 @@ onMounted(() => {
           }
         }
       }
-      .account-row{
+      .account-row {
         margin-bottom: 16px;
       }
       .quick-amounts {
@@ -535,18 +564,18 @@ onMounted(() => {
         flex-wrap: wrap;
         gap: 12px;
         margin-top: 12px;
-  
+
         .quick-item {
           width: auto;
           height: 31px;
           display: flex;
           justify-content: center;
           align-items: center;
-  
+
           .quick-number {
             height: 31px;
-            background: #F9FBFC;
-            border: 1px solid #E8EAF2;
+            background: #f9fbfc;
+            border: 1px solid #e8eaf2;
             padding: 0 12px;
             border-radius: 6px;
             font-size: 12px;
@@ -559,7 +588,7 @@ onMounted(() => {
             cursor: pointer;
             direction: ltr;
           }
-  
+
           .quick-del {
             width: 16px;
             height: 16px;
@@ -575,7 +604,7 @@ onMounted(() => {
     width: 273px;
     height: 46px;
     margin: 16px auto 0;
-    background: url('@/assets/p/coinAgent/confirm-bg.png') no-repeat center center;
+    background: url("@/assets/p/coinAgent/confirm-bg.png") no-repeat center center;
     background-size: cover;
     font-size: 16px;
     color: #fff;
@@ -614,11 +643,11 @@ onMounted(() => {
       font-weight: bold;
       font-size: 14px;
       color: #333333;
-      &::v-deep(.uid){
-        color:#219653;
+      &::v-deep(.uid) {
+        color: #219653;
       }
-      &::v-deep(.amount){
-        color:#EB5757;
+      &::v-deep(.amount) {
+        color: #eb5757;
       }
     }
 
@@ -671,8 +700,8 @@ onMounted(() => {
         .custom-input-wrap {
           flex: 1;
           height: 40px;
-          background: #F9FBFC;
-          border: 1px solid #E8EAF2;
+          background: #f9fbfc;
+          border: 1px solid #e8eaf2;
           border-radius: 6px;
           display: flex;
           align-items: center;
