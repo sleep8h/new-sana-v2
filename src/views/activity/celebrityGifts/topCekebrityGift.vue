@@ -4,10 +4,10 @@
     <!-- 奖励  周和月才显示 -->
     <div class="top-reward" v-if="curTab === 1 || curTab === 2">
       <div class="title">
-        <span>Weekly TOP1 Reward</span>
-        <span>Monthly TOP1 Reward</span>
+        <span v-if="curTab === 1">Weekly TOP1 Reward</span>
+        <span v-else>Monthly TOP1 Reward</span>
       </div>
-      <div class="more">MORE</div>
+      <div class="more"></div>
       <div class="gift-list">
         <div class="gift-item" v-for="(gift, idx) in topRewards" :key="idx">
           <div class="gift-icon">
@@ -24,72 +24,147 @@
         v-for="item in tabList"
         :key="item.value"
         class="tab-item"
-        :class="{ 'tab-item-active': curTab === item.value }"
+        :class="[`tab-item-${item.value}`, { [`tab-item-${item.value}-active`]: curTab === item.value }]"
         @click="tabChange(item)"
       >
-        {{ item.text }}
+        <span class="tab-text">{{ item.text }}</span>
       </div>
     </div>
 
     <div v-if="curTab === 1 || curTab === 2" class="view-weekly view-monthly">
-      <div class="count-down">
-        <div class="time-list">
-          <div class="time-item">
-            <div class="time-number"></div>
-            <div class="time-text"></div>
+      <div class="top">
+        <div class="count-down">
+          <div class="time-list">
+            <div class="time-item" v-for="(t, idx) in timeUnits" :key="idx">
+              <div class="time-number">{{ t.value }}</div>
+              <div class="time-text">{{ t.label }}</div>
+            </div>
+          </div>
+        </div>
+        <!-- TOP3 王座 -->
+        <div class="podium-section">
+          <!-- TOP1 -->
+          <div class="top1" v-if="top1">
+            <img class="gift-img" :src="top1.avatar" alt="" />
+            <div class="podium-info">
+              <div class="podium-name text-hide">{{ celebrityName(top1) }}</div>
+              <div class="podium-score highlight">{{ formatNumber(top1.integral) }}</div>
+            </div>
+            <div class="hall-of-fame" @click="goToHallOfFame">
+              <div class="hall-avatars">
+                <img v-for="(h, i) in hallOfFame.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
+              </div>
+              <div class="hall-arrow"></div>
+            </div>
+          </div>
+
+          <!-- TOP2 -->
+          <div class="top2" v-if="top2">
+            <img class="gift-img" :src="top2.avatar" alt="" />
+            <div class="podium-info">
+              <div class="podium-name text-hide">{{ celebrityName(top2) }}</div>
+              <div class="podium-score">{{ formatNumber(top2.integral) }}</div>
+            </div>
+            <div class="hall-of-fame" @click="goToHallOfFame">
+              <div class="hall-avatars">
+                <img v-for="(h, i) in hallOfFame.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
+              </div>
+              <div class="hall-arrow"></div>
+            </div>
+          </div>
+
+          <!-- TOP3 -->
+          <div class="top3" v-if="top3">
+            <img class="gift-img" :src="top3.avatar" alt="" />
+            <div class="podium-info">
+              <div class="podium-name text-hide">{{ celebrityName(top3) }}</div>
+              <div class="podium-score">{{ formatNumber(top3.integral) }}</div>
+            </div>
+            <div class="hall-of-fame" @click="goToHallOfFame">
+              <div class="hall-avatars">
+                <img v-for="(h, i) in hallOfFame.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
+              </div>
+              <div class="hall-arrow"></div>
+            </div>
           </div>
         </div>
       </div>
-      <!-- TOP3 王座 -->
-      <div class="podium-section">
-        <div class="podium-bg">
-          <div class="podium-empty" v-if="celebrityList.length === 0">{{ $t("celebrityGifts.noRank") }}</div>
-          <template v-else>
-            <!-- TOP2 -->
-            <div class="podium-item top2" v-if="top2">
-              <div class="rank-badge">2</div>
-              <div class="avatar-frame">
-                <img :src="top2.avatar" alt="" />
-              </div>
-              <div class="podium-info">
-                <div class="podium-name text-hide">{{ celebrityName(top2) }}</div>
-                <div class="podium-score">{{ formatNumber(top2.integral) }}</div>
-              </div>
-            </div>
-
-            <!-- TOP1 -->
-            <div class="podium-item top1" v-if="top1">
-              <div class="rank-badge">1</div>
-              <div class="crown-icon"></div>
-              <div class="avatar-frame large">
-                <img :src="top1.avatar" alt="" />
-              </div>
-              <div class="podium-info">
-                <div class="podium-name text-hide">{{ celebrityName(top1) }}</div>
-                <div class="podium-score highlight">{{ formatNumber(top1.integral) }}</div>
-              </div>
-            </div>
-
-            <!-- TOP3 -->
-            <div class="podium-item top3" v-if="top3">
-              <div class="rank-badge">3</div>
-              <div class="avatar-frame">
-                <img :src="top3.avatar" alt="" />
-              </div>
-              <div class="podium-info">
-                <div class="podium-name text-hide">{{ celebrityName(top3) }}</div>
-                <div class="podium-score">{{ formatNumber(top3.integral) }}</div>
-              </div>
-            </div>
-          </template>
+      <!-- 名人礼物榜列表 -->
+      <div class="list-section">
+        <div class="item" v-for="(item, idx) in celebrityList.slice(3, 50)" :key="idx">
+          <div class="col-rank">
+            <div class="rank-num">{{ idx + 4 }}</div>
+            <div class="region">{{ item.region }}</div>
+          </div>
+          <div class="col-avatar">
+            <img :src="item.avatar" alt="" />
+          </div>
+          <div class="col-name">{{ celebrityName(item) }}</div>
+          <div class="col-score">{{ `X ${formatNumber(item.integral)}` }}</div>
         </div>
       </div>
-
-      <!-- 名人榜列表 -->
-      <div class="rank-list-panel"></div>
+    </div>
+    <div class="user-info" v-if="curTab === 1 || curTab === 2">
+      <div class="progress-box">
+        <div
+          class="progress"
+          :class="{ 'progress-rtl': store.language === 'ar' }"
+          :style="{ width: progressPercent + '%' }"
+        >
+          <span class="progress-text">88%</span>
+        </div>
+      </div>
+      <div class="user-info-item">
+        <div class="col-rank">
+          <div class="rank-num">{{ userInfo.rank }}</div>
+          <div class="region">{{ userInfo.region }}</div>
+        </div>
+        <div class="col-avatar">
+          <img :src="userInfo.avatar" alt="" />
+        </div>
+        <div class="col-name">{{ celebrityName(userInfo) }}</div>
+        <div class="col-number-score">
+          <div class="col-number">
+            <span>{{ $t("celebrityGifts.myShare") }}</span>
+            <span>{{ userInfo.percent }}%</span>
+          </div>
+          <div class="col-score">{{ `X ${formatNumber(userInfo.integral)}` }}</div>
+        </div>
+      </div>
     </div>
 
-    <div v-if="curTab === 3" class="view-previous-winner"></div>
+    <div v-if="curTab === 3" class="view-previous-winner">
+      <div class="view-previous-winner-list">
+        <div class="view-previous-winner-item" v-for="(item, idx) in previousWinnerList" :key="idx">
+          <div class="winner-period">
+            <img src="@/assets/activity/celebrityGifts/whiteSparkleIcon.png" alt="" />
+            <span>{{ item.period }}</span>
+            <img src="@/assets/activity/celebrityGifts/whiteSparkleIcon.png" alt="" />
+          </div>
+          <div class="winner-podium">
+            <!-- TOP1 -->
+            <div class="podium-first">
+              <img class="podium-avatar" :src="item.top1?.avatar" alt="" />
+              <div class="podium-name">{{ item.top1?.name }}</div>
+              <div class="podium-score">x{{ formatNumber(item.top1?.score) }}</div>
+            </div>
+            <!-- TOP2 -->
+            <div class="podium-second">
+              <img class="podium-avatar" :src="item.top2?.avatar" alt="" />
+              <div class="podium-name">{{ item.top2?.name }}</div>
+              <div class="podium-score">x{{ formatNumber(item.top2?.score) }}</div>
+            </div>
+            <!-- TOP3 -->
+            <div class="podium-third">
+              <img class="podium-avatar" :src="item.top3?.avatar" alt="" />
+              <div class="podium-name">{{ item.top3?.name }}</div>
+              <div class="podium-score">x{{ formatNumber(item.top3?.score) }}</div>
+            </div>
+          </div>
+          <img class="winner-footer" src="@/assets/activity/celebrityGifts/previous-winner-foot-bg.png" alt="" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -109,13 +184,22 @@ const defaultRewardImg = defaultAvatar;
 
 const curTab = ref(1);
 const tabList = [
-  { text: t("celebrityGifts.todayRank"), value: 1 },
-  { text: t("celebrityGifts.yesterdayRank"), value: 2 },
-  { text: t("celebrityGifts.totalRank"), value: 3 },
+  { text: t("celebrityGifts.weeklyRank"), value: 1 },
+  { text: t("celebrityGifts.monthlyRank"), value: 2 },
+  { text: t("celebrityGifts.previousWinner"), value: 3 },
 ];
 
 const celebrityList = ref([]);
 const hallOfFame = ref([]);
+const userInfo = ref({
+  rank: 99,
+  region: "",
+  avatar: defaultRewardImg,
+  nick: "123456",
+  nickAr: "",
+  percent: 88,
+  integral: 88888,
+});
 const countdown = ref({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 let countdownTimer = null;
 
@@ -123,10 +207,77 @@ const top1 = computed(() => celebrityList.value[0] || null);
 const top2 = computed(() => celebrityList.value[1] || null);
 const top3 = computed(() => celebrityList.value[2] || null);
 
+// 进度条百分比，可自行修改
+const progressPercent = ref(60);
+
+const previousWinnerList = ref([
+  {
+    period: "2026/09/14 ~ 2026/09/20",
+    top1: {
+      avatar: "https://example.com/avatar1.png",
+      name: "礼物昵称",
+      score: 7777,
+    },
+    top2: {
+      avatar: "https://example.com/avatar2.png",
+      name: "礼物昵称",
+      score: 7777,
+    },
+    top3: {
+      avatar: "https://example.com/avatar3.png",
+      name: "礼物昵称",
+      score: 7777,
+    },
+  },
+  {
+    period: "2026/09/14 ~ 2026/09/20",
+    top1: {
+      avatar: "https://example.com/avatar1.png",
+      name: "礼物昵称",
+      score: 7777,
+    },
+    top2: {
+      avatar: "https://example.com/avatar2.png",
+      name: "礼物昵称",
+      score: 7777,
+    },
+    top3: {
+      avatar: "https://example.com/avatar3.png",
+      name: "礼物昵称",
+      score: 7777,
+    },
+  },
+  {
+    period: "2026/09/14 ~ 2026/09/20",
+    top1: {
+      avatar: "https://example.com/avatar1.png",
+      name: "礼物昵称",
+      score: 7777,
+    },
+    top2: {
+      avatar: "https://example.com/avatar2.png",
+      name: "礼物昵称",
+      score: 7777,
+    },
+    top3: {
+      avatar: "https://example.com/avatar3.png",
+      name: "礼物昵称",
+      score: 7777,
+    },
+  },
+]);
+
 const topRewards = computed(() => mockRewardGroups[0]?.gifts?.slice(0, 3) || []);
 
 const celebrityName = (c) => (store.language === "ar" ? c.nickAr || c.nick : c.nick);
 const formatNumber = (num) => Number(num || 0).toLocaleString("en-US");
+
+const timeUnits = computed(() => [
+  { value: countdown.value.days, label: t("celebrityGifts.day") },
+  { value: countdown.value.hours, label: t("celebrityGifts.hour") },
+  { value: countdown.value.minutes, label: t("celebrityGifts.minute") },
+  { value: countdown.value.seconds, label: t("celebrityGifts.second") },
+]);
 
 const startCountdown = (timeOut) => {
   const updateCountdown = () => {
@@ -153,6 +304,11 @@ const tabChange = async (item) => {
   await getCelebrityRank();
 };
 
+const goToHallOfFame = () => {
+  // TODO: 跳转到名人堂页面
+  console.log("go to hall of fame");
+};
+
 const getCelebrityRank = async () => {
   const data = await withMock(
     () =>
@@ -166,6 +322,9 @@ const getCelebrityRank = async () => {
     mockCelebrityRank,
   );
   celebrityList.value = data.list || [];
+  if (data.userInfo) {
+    userInfo.value = { ...userInfo.value, ...data.userInfo };
+  }
 };
 
 const getHallOfFame = async () => {
@@ -205,17 +364,31 @@ onUnmounted(() => {
     margin-bottom: 8px;
     background: url("@/assets/activity/celebrityGifts/top-reward-bg.png") no-repeat center center;
     background-size: cover;
+    position: relative;
     .title {
+      position: absolute;
+      top: 31.5px;
+      left: 50%;
+      transform: translateX(-50%);
       font-style: Bold;
       font-size: 14px;
+      color: #ffffff;
       text-align: center;
     }
     .more {
-      font-size: 12px;
-      color: #ffe9c7;
-      cursor: pointer;
+      width: 92px;
+      height: 28px;
+      position: absolute;
+      top: 81.5px;
+      right: -18px;
+      background: url("@/assets/activity/celebrityGifts/brownMedallionBanner.png") no-repeat center center;
+      background-size: cover;
     }
     .gift-list {
+      position: absolute;
+      top: 120px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       gap: 12px;
       .gift-item {
@@ -223,23 +396,687 @@ onUnmounted(() => {
         flex-direction: column;
         align-items: center;
         .gift-icon {
-          width: 50px;
-          height: 50px;
+          width: 90px;
+          height: 90px;
           margin-bottom: 4px;
+          background: url("@/assets/activity/celebrityGifts/redSealMedallion.png") no-repeat center center;
+          background-size: 190% 190%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 64px;
+            height: auto;
           }
         }
         .name {
           font-size: 12px;
-          color: #ffe9c7;
+          background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
           margin-bottom: 2px;
         }
         .number {
           font-size: 12px;
-          color: #ffe9c7;
+          background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+      }
+    }
+  }
+
+  .tab {
+    width: 100%;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 8px;
+    .tab-item-1 {
+      width: 130px;
+      height: 36px;
+      background: url("@/assets/activity/celebrityGifts/tab1-hide.png") no-repeat center center;
+      background-size: 100% 100%;
+    }
+    .tab-item-2 {
+      width: 131px;
+      height: 36px;
+      margin: 0 -8px;
+      background: url("@/assets/activity/celebrityGifts/tab2-hide.png") no-repeat center center;
+      background-size: 100% 100%;
+    }
+    .tab-item-3 {
+      width: 130px;
+      height: 36px;
+      background: url("@/assets/activity/celebrityGifts/tab3-hide.png") no-repeat center center;
+      background-size: 100% 100%;
+    }
+    .tab-item-1,
+    .tab-item-2,
+    .tab-item-3 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .tab-text {
+        padding: 0 12px;
+        color: #470000;
+        font-size: 12px;
+        line-height: 14px;
+        font-style: Bold;
+        text-align: center;
+      }
+    }
+    .tab-item-1-active {
+      width: 130px;
+      height: 42.5px;
+      background: url("@/assets/activity/celebrityGifts/tab1-show.png") no-repeat center center;
+      background-size: 100% 100%;
+    }
+    .tab-item-2-active {
+      width: 132px;
+      height: 42.5px;
+      background: url("@/assets/activity/celebrityGifts/tab2-show.png") no-repeat center center;
+      background-size: 100% 100%;
+    }
+    .tab-item-3-active {
+      width: 130px;
+      height: 42.5px;
+      background: url("@/assets/activity/celebrityGifts/tab3-show.png") no-repeat center center;
+      background-size: 100% 100%;
+    }
+    .tab-item-1-active,
+    .tab-item-2-active,
+    .tab-item-3-active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .tab-text {
+        padding: 6.5px 12px 0 12px;
+        color: #470000;
+        font-size: 12px;
+        line-height: 14px;
+        font-style: Bold;
+        text-align: center;
+      }
+    }
+  }
+  .view-weekly,
+  .view-monthly {
+    width: 100%;
+    height: auto;
+    padding-bottom: 125px;
+    .top {
+      width: 100%;
+      height: 728px;
+      background: url("@/assets/activity/celebrityGifts/topCekebrityGiftBg.png") no-repeat center center;
+      background-size: 100% 100%;
+      position: relative;
+      margin-bottom: 12px;
+      .count-down {
+        position: absolute;
+        top: 67.5px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        .time-list {
+          display: flex;
+          .time-item {
+            width: 68px;
+            height: 67.5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            background: url("@/assets/activity/celebrityGifts/time-bg.png") no-repeat center center;
+            background-size: 100% 100%;
+            .time-number {
+              margin-top: 5px;
+              width: 42px;
+              font-size: 32px;
+              height: 37.5px;
+              line-height: 37.5px;
+              font-weight: bold;
+              background: linear-gradient(180deg, #fbdb9b 4.97%, #fffdf2 40.31%, #ffecbb 92.76%, #ffd686 147.83%);
+              -webkit-background-clip: text;
+              background-clip: text;
+              -webkit-text-fill-color: transparent;
+              color: transparent;
+            }
+            .time-text {
+              font-size: 12px;
+              background: linear-gradient(127.58deg, #fff0ca 3.96%, #ffd05e 95.87%);
+              -webkit-background-clip: text;
+              background-clip: text;
+              -webkit-text-fill-color: transparent;
+              color: transparent;
+            }
+          }
+        }
+      }
+      .podium-section {
+        position: absolute;
+        width: 100%;
+        height: 497.5px;
+        top: 172.5px;
+        left: 50%;
+        transform: translateX(-50%);
+        .top1 {
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 180px;
+          height: 215px;
+          .gift-img {
+            position: absolute;
+            top: 56px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: auto;
+            height: 78.5px;
+          }
+          .podium-info {
+            position: absolute;
+            top: 134.5px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 11px;
+            text-align: center;
+          }
+          .hall-of-fame {
+            position: absolute;
+            top: 165.5px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            .hall-avatars {
+              display: flex;
+              gap: 1.5px;
+              img {
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+              }
+            }
+            .hall-arrow {
+              margin-inline-start: -6.5px;
+              width: 29px;
+              height: 15px;
+              background: url("@/assets/activity/celebrityGifts/arrow-right.png") no-repeat center center;
+              background-size: contain;
+            }
+          }
+        }
+        .top2 {
+          position: absolute;
+          top: 296.5px;
+          left: 19.5px;
+          width: 149px;
+          height: 173px;
+          .gift-img {
+            position: absolute;
+            top: 44.5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: auto;
+            height: 50px;
+          }
+          .podium-info {
+            position: absolute;
+            top: 94.5px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 10px;
+            text-align: center;
+          }
+          .hall-of-fame {
+            position: absolute;
+            top: 124.5px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            .hall-avatars {
+              display: flex;
+              gap: 1.5px;
+              img {
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+              }
+            }
+            .hall-arrow {
+              margin-inline-start: -6.5px;
+              width: 29px;
+              height: 15px;
+              background: url("@/assets/activity/celebrityGifts/arrow-right.png") no-repeat center center;
+              background-size: contain;
+            }
+          }
+        }
+        .top3 {
+          position: absolute;
+          top: 296.5px;
+          right: 14px;
+          width: 144.5px;
+          height: 173px;
+          .gift-img {
+            position: absolute;
+            top: 44.5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: auto;
+            height: 50px;
+          }
+          .podium-info {
+            position: absolute;
+            top: 94.5px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 10px;
+            text-align: center;
+          }
+          .hall-of-fame {
+            position: absolute;
+            top: 124.5px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            .hall-avatars {
+              display: flex;
+              gap: 1.5px;
+              img {
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+              }
+            }
+            .hall-arrow {
+              margin-inline-start: -6.5px;
+              width: 29px;
+              height: 15px;
+              background: url("@/assets/activity/celebrityGifts/arrow-right.png") no-repeat center center;
+              background-size: contain;
+            }
+          }
+        }
+      }
+    }
+    .list-section {
+      width: 100%;
+      max-height: 585px;
+      overflow: auto;
+      .item {
+        width: 100%;
+        height: 87px;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 0 18px;
+        box-sizing: border-box;
+        background: url("@/assets/activity/celebrityGifts/darkListBanner.png") no-repeat center center;
+        background-size: 100% 100%;
+        &:last-child {
+          margin-bottom: 0;
+        }
+        .col-rank {
+          width: 24px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 3.5px;
+          margin-inline-end: 16.5px;
+          .rank-num {
+            font-weight: bold;
+            background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 18px;
+            line-height: 21px;
+          }
+          .region {
+            width: 24px;
+            height: 16px;
+            background: url("@/assets/activity/celebrityGifts/darkListBanner.png") no-repeat center center;
+            background-size: 100% 100%;
+          }
+        }
+        .col-avatar {
+          width: 60px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-inline-end: 9px;
+          img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+        }
+        .col-name {
+          width: 90px;
+          font-size: 12px;
+          background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          font-size: 12px;
+          line-height: 21px;
+          text-align: start;
+          color: transparent;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .col-score {
+          flex: 1;
+          background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          font-size: 12px;
+          line-height: 21px;
+          text-align: start;
+          color: transparent;
+          text-align: end;
+        }
+      }
+    }
+  }
+  .user-info {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 125px;
+    background: url("@/assets/activity/celebrityGifts/stickyBottomBar.png") no-repeat center center;
+    background-size: 100% 100%;
+    z-index: 100;
+    .progress-box {
+      position: absolute;
+      width: 100%;
+      height: 18px;
+      background: #2b2b2b;
+      top: 9px;
+      overflow: hidden;
+      .progress {
+        height: 18px;
+        background: url("@/assets/activity/celebrityGifts/progress-status.png") no-repeat center center;
+        background-size: cover;
+        transition: width 0.3s ease;
+        color: #0e0e0e;
+        font-style: bold;
+        font-size: 12px;
+        text-align: end;
+        position: relative;
+        display: flex;
+        box-sizing: border-box;
+        padding: 0 2px;
+        transform: scaleX(-1);
+        &.progress-rtl {
+          justify-content: flex-end;
+          transform: scaleX(1);
+          .progress-text {
+            transform: scaleX(1);
+          }
+        }
+        .progress-text {
+          display: inline-block;
+          transform: scaleX(-1);
+        }
+      }
+    }
+    .user-info-item {
+      position: absolute;
+      top: 27px;
+      width: 100%;
+      height: 87px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0 18px;
+      box-sizing: border-box;
+      background: url("@/assets/activity/celebrityGifts/darkListBanner.png") no-repeat center center;
+      background-size: 100% 100%;
+      .col-rank {
+        width: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3.5px;
+        margin-inline-end: 16.5px;
+        .rank-num {
+          font-weight: bold;
+          background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          font-size: 18px;
+          line-height: 21px;
+        }
+        .region {
+          width: 24px;
+          height: 16px;
+          background: url("@/assets/activity/celebrityGifts/darkListBanner.png") no-repeat center center;
+          background-size: 100% 100%;
+        }
+      }
+      .col-avatar {
+        width: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-inline-end: 9px;
+        img {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+      .col-name {
+        width: 90px;
+        font-size: 12px;
+        background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        font-size: 12px;
+        line-height: 21px;
+        text-align: start;
+        color: transparent;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .col-number-score {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        .col-number {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          gap: 5px;
+          > span {
+            &:nth-child(1) {
+              font-size: 10px;
+              color: #685a48;
+            }
+            &:nth-child(2) {
+              font-size: 14px;
+              color: #45a82c;
+            }
+          }
+        }
+        .col-score {
+          background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          font-size: 12px;
+          line-height: 21px;
+          text-align: start;
+          color: transparent;
+          text-align: end;
+        }
+      }
+    }
+  }
+  .view-previous-winner {
+    width: 100%;
+    box-sizing: border-box;
+    .view-previous-winner-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      .view-previous-winner-item {
+        width: 100%;
+        height: 500px;
+        background: url("@/assets/activity/celebrityGifts/darkRedPage3.png") no-repeat center center;
+        background-size: 100% 100%;
+        box-sizing: border-box;
+        position: relative;
+        margin-bottom: 15px;
+        .winner-period {
+          position: absolute;
+          top: 40px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 250px;
+          height: 32px;
+          font-size: 16px;
+          text-align: center;
+          background: linear-gradient(180deg, #fbdb9b 4.97%, #fffdf2 40.31%, #ffecbb 92.76%, #ffd686 147.83%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: transparent;
+          > img {
+            width: 12px;
+            height: 16px;
+          }
+          > span {
+            display: inline-block;
+            height: 16px;
+            line-height: 16px;
+            margin: 0 10px;
+          }
+          &::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 250px;
+            height: 1px;
+            background: url("@/assets/activity/celebrityGifts/previous-winner-title-bg.png") no-repeat center center;
+            background-size: 100% 100%;
+          }
+        }
+        .winner-podium {
+          position: absolute;
+          width: 100%;
+          height: 275px;
+          .podium-first,
+          .podium-second,
+          .podium-third {
+            position: absolute;
+            width: 140px;
+            height: 226px;
+            top: 99px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .podium-avatar {
+              width: 86px;
+              height: 86.5px;
+              margin-top: 52.5px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              img {
+                width: 81px;
+                height: auto;
+                object-fit: cover;
+              }
+            }
+            .podium-name {
+              font-size: 12px;
+              font-style: bold;
+              line-height: 22px;
+              text-align: center;
+              color: #ffffff;
+            }
+            .podium-score {
+              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+              -webkit-background-clip: text;
+              background-clip: text;
+              -webkit-text-fill-color: transparent; /* 新增：让文字填充透明，显示渐变背景 */
+              font-size: 12px;
+              line-height: 12px;
+            }
+          }
+          .podium-second {
+            width: 115px;
+            height: 193px;
+            top: 178px;
+            left: 8px;
+            transform: none;
+            .podium-avatar {
+              width: 68px;
+              height: 68px;
+              margin-top: 50px;
+              img {
+                width: 81px;
+              }
+            }
+            .podium-name {
+              font-size: 11px;
+            }
+          }
+          .podium-third {
+            width: 120px;
+            height: 196px;
+            top: 177px;
+            left: auto;
+            right: 1px;
+            transform: none;
+            .podium-avatar {
+              width: 70px;
+              height: 70px;
+              margin-top: 51px;
+              img {
+                width: 81px;
+              }
+            }
+            .podium-name {
+              font-size: 11px;
+            }
+          }
+        }
+        .winner-footer {
+          position: absolute;
+          top: 471px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 404px;
+          height: 37px;
+          background: url("@/assets/activity/celebrityGifts/previous-winner-footer-bg.png") no-repeat center center;
+          background-size: 100% 100%;
         }
       }
     }

@@ -10,6 +10,7 @@
       <div class="my-gift-content">
         <div class="gift-info">
           <div class="gift-image">
+            <div class="gift-image-frame"></div>
             <img :src="myGift.image || defaultGiftImg" alt="" />
           </div>
           <div class="gift-detail">
@@ -250,7 +251,18 @@ onMounted(async () => {
         .gift-image {
           width: 89px;
           height: 126px;
+          position: relative;
+          .gift-image-frame {
+            position: absolute;
+            z-index: 2;
+            width: 89px;
+            height: 126px;
+            background: url("@/assets/activity/celebrityGifts/avatarFrame1.png") no-repeat center center;
+            background-size: cover;
+          }
           img {
+            position: absolute;
+            z-index: 1;
             width: 89px;
             height: 126px;
             object-fit: fill;
