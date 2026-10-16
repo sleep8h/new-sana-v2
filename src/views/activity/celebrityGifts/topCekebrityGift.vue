@@ -272,11 +272,13 @@ const topRewards = computed(() => mockRewardGroups[0]?.gifts?.slice(0, 3) || [])
 const celebrityName = (c) => (store.language === "ar" ? c.nickAr || c.nick : c.nick);
 const formatNumber = (num) => Number(num || 0).toLocaleString("en-US");
 
+const padZero = (num) => String(num).padStart(2, "0");
+
 const timeUnits = computed(() => [
-  { value: countdown.value.days, label: t("celebrityGifts.day") },
-  { value: countdown.value.hours, label: t("celebrityGifts.hour") },
-  { value: countdown.value.minutes, label: t("celebrityGifts.minute") },
-  { value: countdown.value.seconds, label: t("celebrityGifts.second") },
+  { value: padZero(countdown.value.days), label: t("celebrityGifts.day") },
+  { value: padZero(countdown.value.hours), label: t("celebrityGifts.hour") },
+  { value: padZero(countdown.value.minutes), label: t("celebrityGifts.minute") },
+  { value: padZero(countdown.value.seconds), label: t("celebrityGifts.second") },
 ]);
 
 const startCountdown = (timeOut) => {
