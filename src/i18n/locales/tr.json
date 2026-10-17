@@ -818,12 +818,18 @@
     "richesRoad": "Zenginlik Yolu",
     "target": "Hedef",
     "rewardPreview": "Ödüller",
-    "ruleList": [
-      "1. Etkinlik sırasında desteklediğiniz ünlüye hediye göndererek katkı kazanırsınız. 1 elmas = 1 katkı.",
-      "2. Savaşı toplam katkısı daha yüksek olan ünlü kazanır. Kazanan tarafın destekçileri ek ödüller alır.",
-      "3. Her aşamanın hediye hedefine ulaşıldığında aşama ödülleri açılır. Ödüller, etkinlik sona erdikten sonra 3 iş günü içinde çantanıza gönderilir.",
-      "4. Sıralamadaki ilk 3 katkı sahibi tahtta gösterilir ve Şöhret Salonuna girer.",
-      "5. Düzenleyici bu etkinliğin nihai yorum hakkını saklı tutar. Bu etkinlik Apple Inc. ile bağlantılı değildir."
-    ]
+    "ruleTitle1": "1. Ünlü Hediye Seviyesi",
+    "ruleDesc1": "Her hafta belirli sayıda ünlü hediye gönderildiğinde, seviye ödülleri elde edilebilir.",
+    "ruleTitle2": "2. Haftalık Hediye Sıralaması",
+    "ruleDesc2": "Gönderilen \"Ünlü Hediye\" sayısına göre sıralanır. Pazar günü haftalık sıralama sona erdiğinde ilk 10 ödül alır.",
+    "ruleTitle3": "3. Aylık Hediye Sıralaması",
+    "ruleDesc3": "Gönderilen \"Ünlü Hediye\" sayısına göre sıralanır. Ayın başında aylık sıralama sona erdiğinde ilk 10 ödül alır.",
+    "ruleTitle4": "4. Haftalık Destekçi Sıralaması",
+    "ruleDesc4": "Kullanıcıların \"Ünlü Hediyeler\" için harcadığı toplam jeton miktarına göre sıralanır. Pazar günü haftalık sıralama sona erdiğinde ilk 10 ödül alır.",
+    "ruleTitle5": "5. Aylık Destekçi Sıralaması",
+    "ruleDesc5": "Kullanıcıların \"Ünlü Hediyeler\" için harcadığı toplam jeton miktarına göre sıralanır. Ayın başında aylık sıralama sona erdiğinde ilk 10 ödül alır.",
+    "ruleDesc6": "6. Ödüller, sıralama geri sayımı sona erdikten sonra 3 iş günü içinde verilecektir.",
+    "ruleDesc7": "7. Etkinlik sırasında kullanıcıların verileri manipüle etmek için yasa dışı yöntemler kullandığından şüphelenilirse, resmi kuruluş etkinlik verilerini silme ve etkinlik katılım haklarını iptal etme hakkına sahiptir.",
+    "ruleDesc8": "8. Bu etkinliğin nihai yorum hakkı resmi kuruluşa aittir. Herhangi bir sorunuz varsa lütfen müşteri hizmetleriyle iletişime geçin."
   }
 }

@@ -77,9 +77,11 @@ const makeCelebrity = (key) => ({
   score: key === "a" ? 1827650 : 1305920,
   // 该阵营贡献前三的用户头像
   topUsers: [
-    { uid: 8000000, avatar: defaultAvatar },
-    { uid: 8000016, avatar: defaultAvatar },
-    { uid: 8000005, avatar: defaultAvatar },
+    { uid: 8000000, nick: "Olivia 1000", avatar: defaultAvatar, integral: 9284500, country: "US", index: 1 },
+    { uid: 8000016, nick: "Amir 1015", avatar: defaultAvatar, integral: 8720300, country: "BR", index: 2 },
+    { uid: 8000005, nick: "Ava 1004", avatar: defaultAvatar, integral: 7905200, country: "TR", index: 3 },
+    { uid: 8000006, nick: "Liam 1001", avatar: defaultAvatar, integral: 6113200, country: "EG", index: 4 },
+    { uid: 8000007, nick: "Emma 1002", avatar: defaultAvatar, integral: 4820900, country: "SA", index: 5 },
   ],
 });
 

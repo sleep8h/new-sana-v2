@@ -85,7 +85,7 @@
         <topSupporter v-if="curTab === 3" />
       </div>
 
-      <RuleToast v-model:isShow="rulesShow" :rewardGroups="rewardGroups" @close="rulesShow = false" />
+      <RuleToast v-model:isShow="rulesShow" @close="rulesShow = false" />
     </div>
   </div>
 </template>
@@ -96,7 +96,6 @@ import { useI18n } from "vue-i18n";
 import { get } from "@/utils/http.js";
 import { useMainStore } from "@/pinia/index.js";
 import defaultAvatar from "@/assets/common/user-avatar-default.png";
-import CountDownCelebrity from "./components/CountDownCelebrity.vue";
 import RuleToast from "./components/ruleToast.vue";
 import celebrityGift from "./celebrityGift.vue";
 import topCekebrityGift from "./topCekebrityGift.vue";

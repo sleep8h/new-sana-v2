@@ -1,6 +1,8 @@
 <!-- 名人礼物榜：按收到礼物价值排序的名人榜单 -->
 <template>
   <div class="celebrity-rank">
+    <!-- senderTop 弹窗 -->
+    <senderTop v-model:isShow="showSenderTop" :list="senderTopList" :giftName="senderTopGiftName" />
     <!-- 奖励  周和月才显示 -->
     <div class="top-reward" v-if="curTab === 1 || curTab === 2">
       <div class="title">
@@ -207,6 +209,11 @@ const top1 = computed(() => celebrityList.value[0] || null);
 const top2 = computed(() => celebrityList.value[1] || null);
 const top3 = computed(() => celebrityList.value[2] || null);
 
+// senderTop 弹窗状态
+const showSenderTop = ref(false);
+const senderTopList = ref([]);
+const senderTopGiftName = ref("");
+
 // 进度条百分比，可自行修改
 const progressPercent = ref(60);
 
@@ -307,8 +314,10 @@ const tabChange = async (item) => {
 };
 
 const goToHallOfFame = () => {
-  // TODO: 跳转到名人堂页面
-  console.log("go to hall of fame");
+  // 打开 senderTop 弹窗，展示当前选中名人的 TOP10 发送者
+  senderTopGiftName.value = top1.value ? celebrityName(top1.value) : "";
+  senderTopList.value = top1.value?.topUsers || [];
+  showSenderTop.value = true;
 };
 
 const getCelebrityRank = async () => {

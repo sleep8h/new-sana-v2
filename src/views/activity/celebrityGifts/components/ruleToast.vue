@@ -2,27 +2,34 @@
 <template>
   <div class="rule-toast" v-if="isShow">
     <div class="toast-mask" @click="closeModal"></div>
-    <div class="toast-content">
-      <div class="scroll-card">
-        <div class="card-title">
-          <span>{{ $t("celebrityGifts.activityRule") }}</span>
-        </div>
-        <div class="card-body" :class="{ 'card-body-ar': store.language === 'ar' }">
-          <p v-for="(item, index) in ruleList" :key="index">{{ item }}</p>
-        </div>
-        <div class="reward-preview">
-          <div class="preview-title">{{ $t("celebrityGifts.rewardPreview") }}</div>
-          <div class="preview-row" v-for="group in rewardGroups" :key="group.id">
-            <div class="gifts">
-              <div class="gift-item" v-for="gift in group.gifts" :key="gift.giftId">
-                <reward :gift="gift" :size="34" :show-value="false" />
-              </div>
-            </div>
-            <div class="support-tag">{{ $t("celebrityGifts.support") }}</div>
-          </div>
+    <div class="toast-content" @click="closeModal">
+      <div class="card-title">
+        <span>{{ $t("celebrityGifts.activityRule") }}</span>
+      </div>
+      <div class="scroll-card" @click.stop>
+        <div class="text">
+          <p class="rule-title">{{ $t("celebrityGifts.ruleTitle1") }}</p>
+          <p>{{ $t("celebrityGifts.ruleDesc1") }}</p>
+
+          <p class="rule-title">{{ $t("celebrityGifts.ruleTitle2") }}</p>
+          <p>{{ $t("celebrityGifts.ruleDesc2") }}</p>
+
+          <p class="rule-title">{{ $t("celebrityGifts.ruleTitle3") }}</p>
+          <p>{{ $t("celebrityGifts.ruleDesc3") }}</p>
+
+          <p class="rule-title">{{ $t("celebrityGifts.ruleTitle4") }}</p>
+          <p>{{ $t("celebrityGifts.ruleDesc4") }}</p>
+
+          <p class="rule-title">{{ $t("celebrityGifts.ruleTitle5") }}</p>
+          <p>{{ $t("celebrityGifts.ruleDesc5") }}</p>
+
+          <p>{{ $t("celebrityGifts.ruleDesc6") }}</p>
+
+          <p>{{ $t("celebrityGifts.ruleDesc7") }}</p>
+
+          <p>{{ $t("celebrityGifts.ruleDesc8") }}</p>
         </div>
       </div>
-      <div class="toast-close" @click="closeModal"></div>
     </div>
   </div>
 </template>
@@ -31,7 +38,6 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMainStore } from "@/pinia/index.js";
-import reward from "./reward.vue";
 
 const store = useMainStore();
 const { tm, rt } = useI18n();
@@ -41,20 +47,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  rewardGroups: {
-    type: Array,
-    default: () => [],
-  },
 });
 
 const emit = defineEmits(["update:isShow", "close"]);
-
-// 规则文案（i18n 数组消息）
-const ruleList = computed(() => {
-  const arr = tm("celebrityGifts.ruleList");
-  if (Array.isArray(arr)) return arr.map((k) => rt(k));
-  return [];
-});
 
 const closeModal = () => {
   emit("update:isShow", false);
@@ -85,136 +80,62 @@ const closeModal = () => {
   .toast-content {
     position: relative;
     z-index: 10000;
-    width: 345px;
-    max-height: 80vh;
+    width: 368px;
+    height: 520px;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  .scroll-card {
-    width: 323px;
-    max-height: calc(80vh - 50px);
-    border-radius: 14px;
-    border: 2px solid #e7b740;
-    background:
-      linear-gradient(180deg, rgba(125, 17, 25, 0.96) 0%, rgba(74, 8, 14, 0.98) 100%);
-    box-shadow:
-      0 0 0 1px rgba(90, 40, 5, 0.8),
-      0 10px 36px rgba(0, 0, 0, 0.65),
-      inset 0 0 26px rgba(0, 0, 0, 0.35);
-    overflow-y: auto;
     .card-title {
-      width: 220px;
-      height: 42px;
-      margin: -2px auto 0;
-      border-radius: 0 0 12px 12px;
-      background: linear-gradient(180deg, #f2cd63 0%, #c1892b 100%);
+      box-sizing: border-box;
+      padding-top: 8px;
+      width: 130px;
+      height: 43px;
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       justify-content: center;
       align-items: center;
+      z-index: 2;
+      background: url("@/assets/activity/celebrityGifts/rule-title-bg.png") no-repeat center center;
+      background-size: 100% 100%;
       > span {
-        font-weight: bold;
-        font-size: 17px;
-        color: #5c1503;
-        line-height: 20px;
-      }
-    }
-    .card-body {
-      padding: 14px 18px 4px;
-      font-size: 12.5px;
-      line-height: 20px;
-      color: #ffe6b8;
-      text-align: left;
-      > p {
-        margin-bottom: 10px;
-      }
-    }
-    .card-body-ar {
-      text-align: right;
-    }
-    .reward-preview {
-      padding: 6px 14px 16px;
-      .preview-title {
-        margin: 6px 0 10px;
-        text-align: center;
-        font-weight: bold;
-        font-size: 14px;
-        line-height: 18px;
-        background-image: linear-gradient(180deg, #fff3c4 0%, #f3c54b 100%);
+        background: linear-gradient(90deg, #ffe197 0%, #ffc636 100%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
-      }
-      .preview-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 6px;
-        margin-bottom: 8px;
-        border-radius: 10px;
-        border: 1px solid rgba(231, 183, 64, 0.45);
-        background: rgba(40, 4, 8, 0.45);
-        .gifts {
-          display: flex;
-          align-items: center;
-          .gift-item {
-            width: 58px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-right: 4px;
-            .gift-name {
-              max-width: 58px;
-              margin-top: 3px;
-              font-size: 10px;
-              line-height: 14px;
-              color: #ffd98a;
-              text-align: center;
-            }
-          }
-        }
-        .support-tag {
-          flex-shrink: 0;
-          width: 62px;
-          height: 28px;
-          margin-left: 6px;
-          border-radius: 14px;
-          border: 1px solid #f2cd63;
-          background: linear-gradient(180deg, #f23b3b 0%, #a30d14 100%);
-          font-weight: bold;
-          font-size: 12px;
-          line-height: 26px;
-          text-align: center;
-          color: #ffe9b0;
-        }
+        font-weight: bold;
+        font-size: 12px;
+        line-height: 14px;
       }
     }
   }
-  .toast-close {
-    margin-top: 18px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 2px solid #e7b740;
-    background: radial-gradient(circle at 35% 30%, #8b2020 0%, #4a0a10 70%);
-    position: relative;
-    &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 14px;
-      height: 2px;
-      border-radius: 1px;
-      background: #f2cd63;
-      transform-origin: center;
-    }
-    &::before {
-      transform: translate(-50%, -50%) rotate(45deg);
-    }
-    &::after {
-      transform: translate(-50%, -50%) rotate(-45deg);
+  .scroll-card {
+    width: 368px;
+    height: 505.5px;
+    background: url("@/assets/activity/celebrityGifts/rule-bg.png") no-repeat center center;
+    background-size: 100% 100%;
+    box-sizing: border-box;
+    padding: 38px 34px 35.5px 48.5px;
+    .text {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      > p {
+        margin-bottom: 12px;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 18px;
+        color: #ffffff;
+      }
+      .rule-title {
+        font-weight: bold;
+        margin-bottom: 0;
+      }
     }
   }
 }

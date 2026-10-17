@@ -818,12 +818,18 @@
     "richesRoad": "Riches Road",
     "target": "Target",
     "rewardPreview": "Rewards",
-    "ruleList": [
-      "1. During the event, send gifts to your supported celebrity to earn contribution. 1 diamond = 1 contribution.",
-      "2. The celebrity with the higher total contribution wins the battle. Supporters of the winning side receive extra rewards.",
-      "3. Reach the gift target of each stage to unlock stage rewards. Rewards will be sent to your bag within 3 working days after the event ends.",
-      "4. The top 3 contributors on the ranking are displayed on the throne and enter the Hall of Fame.",
-      "5. The organizer reserves the final right of interpretation for this event. This event is not affiliated with Apple Inc."
-    ]
+    "ruleTitle1": "1. Celebrity Gift Level",
+    "ruleDesc1": "When a certain number of celebrity gifts are sent each week, level rewards can be obtained.",
+    "ruleTitle2": "2. Weekly Gift Ranking",
+    "ruleDesc2": "Ranked by the number of \"Celebrity Gifts\" sent. The top 10 will receive rewards when the weekly ranking is settled on Sunday.",
+    "ruleTitle3": "3. Monthly Gift Ranking",
+    "ruleDesc3": "Ranked by the number of \"Celebrity Gifts\" sent. The top 10 will receive rewards when the monthly ranking is settled at the beginning of the month.",
+    "ruleTitle4": "4. Weekly Supporter Ranking",
+    "ruleDesc4": "Ranked by the total amount of coins users spent on \"Celebrity Gifts\". The top 10 will receive rewards when the weekly ranking is settled on Sunday.",
+    "ruleTitle5": "5. Monthly Supporter Ranking",
+    "ruleDesc5": "Ranked by the total amount of coins users spent on \"Celebrity Gifts\". The top 10 will receive rewards when the monthly ranking is settled at the beginning of the month.",
+    "ruleDesc6": "6. Rewards will be issued within 3 working days after the ranking countdown ends.",
+    "ruleDesc7": "7. If users are suspected of using illegal methods to manipulate data during the event, the official has the right to clear event data and cancel event qualifications.",
+    "ruleDesc8": "8. The final interpretation right of this event belongs to the official. If you have any questions, please contact customer service."
   }
 }

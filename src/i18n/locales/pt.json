@@ -818,12 +818,18 @@
     "richesRoad": "Caminho da Fortuna",
     "target": "Meta",
     "rewardPreview": "Prêmios",
-    "ruleList": [
-      "1. Durante a atividade, envie presentes para a celebridade que você apoia para ganhar contribuição. 1 diamante = 1 contribuição.",
-      "2. A celebridade com a maior contribuição total vence a batalha. Os apoiadores do lado vencedor recebem recompensas extras.",
-      "3. Alcance a meta de presentes de cada fase para desbloquear as recompensas da fase. As recompensas serão enviadas para sua mochila em até 3 dias úteis após o término da atividade.",
-      "4. Os 3 maiores contribuintes do ranking são exibidos no trono e entram para o Hall da Fama.",
-      "5. O organizador reserva-se o direito de interpretação final desta atividade. Esta atividade não é afiliada à Apple Inc."
-    ]
+    "ruleTitle1": "1. Nível do Presente de Celebridade",
+    "ruleDesc1": "Quando um certo número de presentes de celebridades for enviado a cada semana, recompensas de nível poderão ser obtidas.",
+    "ruleTitle2": "2. Ranking Semanal de Presentes",
+    "ruleDesc2": "Classificado pelo número de \"Presentes de Celebridades\" enviados. Os 10 primeiros receberão recompensas quando a classificação semanal for definida no domingo.",
+    "ruleTitle3": "3. Ranking Mensal de Presentes",
+    "ruleDesc3": "Classificado pelo número de \"Presentes de Celebridades\" enviados. Os 10 primeiros receberão recompensas quando a classificação mensal for definida no início do mês.",
+    "ruleTitle4": "4. Ranking Semanal de Apoiadores",
+    "ruleDesc4": "Classificado pelo valor total de moedas gasto pelos usuários em \"Presentes de Celebridades\". Os 10 primeiros receberão recompensas quando a classificação semanal for definida no domingo.",
+    "ruleTitle5": "5. Ranking Mensal de Apoiadores",
+    "ruleDesc5": "Classificado pelo valor total de moedas gasto pelos usuários em \"Presentes de Celebridades\". Os 10 primeiros receberão recompensas quando a classificação mensal for definida no início do mês.",
+    "ruleDesc6": "6. As recompensas serão emitidas em até 3 dias úteis após o término da contagem regressiva do ranking.",
+    "ruleDesc7": "7. Se os usuários forem suspeitos de usar métodos ilegais para manipular dados durante a atividade, a organização oficial tem o direito de limpar os dados da atividade e cancelar as qualificações.",
+    "ruleDesc8": "8. O direito final de interpretação desta atividade pertence à organização oficial. Se você tiver alguma dúvida, entre em contato com o atendimento ao cliente."
   }
 }
