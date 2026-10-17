@@ -35,6 +35,7 @@ export const mockRewardGroups = [
       mockGift(101, "Golden Crown", "التاج الذهبي", 1, 0),
       mockGift(102, "Sapphire", "ياقوت أزرق", 5, 1),
       mockGift(103, "Amethyst", "جمشت", 10, 2),
+      mockGift(103, "Amethyst", "جمشت", 10, 2),
     ],
   },
   {

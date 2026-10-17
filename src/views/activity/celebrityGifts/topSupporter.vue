@@ -45,46 +45,46 @@
         <div class="podium-section">
           <!-- TOP1 -->
           <div class="top1" v-if="top1">
-            <img class="gift-img" :src="top1.avatar" alt="" />
+            <div class="avatar">
+              <div class="avatar-frame"></div>
+              <img class="avatar-img" :src="top1.avatar" alt="" />
+            </div>
             <div class="podium-info">
               <div class="podium-name text-hide">{{ celebrityName(top1) }}</div>
-              <div class="podium-score highlight">{{ formatNumber(top1.integral) }}</div>
-            </div>
-            <div class="hall-of-fame" @click="goToHallOfFame">
-              <div class="hall-avatars">
-                <img v-for="(h, i) in hallOfFame.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
+              <div class="podium-score highlight">
+                <div class="coin-icon"></div>
+                <span>{{ formatNumber(top1.integral) }}</span>
               </div>
-              <div class="hall-arrow"></div>
             </div>
           </div>
 
           <!-- TOP2 -->
           <div class="top2" v-if="top2">
-            <img class="gift-img" :src="top2.avatar" alt="" />
+            <div class="avatar">
+              <div class="avatar-frame"></div>
+              <img class="avatar-img" :src="top2.avatar" alt="" />
+            </div>
             <div class="podium-info">
               <div class="podium-name text-hide">{{ celebrityName(top2) }}</div>
-              <div class="podium-score">{{ formatNumber(top2.integral) }}</div>
-            </div>
-            <div class="hall-of-fame" @click="goToHallOfFame">
-              <div class="hall-avatars">
-                <img v-for="(h, i) in hallOfFame.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
+              <div class="podium-score highlight">
+                <div class="coin-icon"></div>
+                <span>{{ formatNumber(top2.integral) }}</span>
               </div>
-              <div class="hall-arrow"></div>
             </div>
           </div>
 
           <!-- TOP3 -->
           <div class="top3" v-if="top3">
-            <img class="gift-img" :src="top3.avatar" alt="" />
+            <div class="avatar">
+              <div class="avatar-frame"></div>
+              <img class="avatar-img" :src="top3.avatar" alt="" />
+            </div>
             <div class="podium-info">
               <div class="podium-name text-hide">{{ celebrityName(top3) }}</div>
-              <div class="podium-score">{{ formatNumber(top3.integral) }}</div>
-            </div>
-            <div class="hall-of-fame" @click="goToHallOfFame">
-              <div class="hall-avatars">
-                <img v-for="(h, i) in hallOfFame.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
+              <div class="podium-score highlight">
+                <div class="coin-icon"></div>
+                <span>{{ formatNumber(top3.integral) }}</span>
               </div>
-              <div class="hall-arrow"></div>
             </div>
           </div>
         </div>
@@ -99,8 +99,17 @@
           <div class="col-avatar">
             <img :src="item.avatar" alt="" />
           </div>
-          <div class="col-name">{{ celebrityName(item) }}</div>
-          <div class="col-score">{{ `X ${formatNumber(item.integral)}` }}</div>
+          <div class="col-name-userno">
+            <div class="name">{{ celebrityName(item) }}</div>
+            <div class="userno">
+              <img src="@/assets/activity/celebrityGifts/darkListBanner.png" alt="" />
+              <span>{{ "123456" }}</span>
+            </div>
+          </div>
+          <div class="col-score">
+            <img src="@/assets/activity/celebrityGifts/dataIcon.png" alt="" />
+            <span>{{ `${formatNumber(item.integral)}` }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -122,13 +131,22 @@
         <div class="col-avatar">
           <img :src="userInfo.avatar" alt="" />
         </div>
-        <div class="col-name">{{ celebrityName(userInfo) }}</div>
+        <div class="col-name-userno">
+          <div class="name">{{ celebrityName(userInfo) }}</div>
+          <div class="userno">
+            <img src="@/assets/activity/celebrityGifts/darkListBanner.png" alt="" />
+            <span>{{ "123456" }}</span>
+          </div>
+        </div>
         <div class="col-number-score">
           <div class="col-number">
             <span>{{ $t("celebrityGifts.myShare") }}</span>
             <span>{{ userInfo.percent }}%</span>
           </div>
-          <div class="col-score">{{ `X ${formatNumber(userInfo.integral)}` }}</div>
+          <div class="col-score">
+            <img src="@/assets/activity/celebrityGifts/dataIcon.png" alt="" />
+            <span>{{ `${formatNumber(userInfo.integral)}` }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -144,24 +162,38 @@
           <div class="winner-podium">
             <!-- TOP1 -->
             <div class="podium-first">
-              <img class="podium-avatar" :src="item.top1?.avatar" alt="" />
-              <div class="podium-name">{{ item.top1?.name }}</div>
-              <div class="podium-score">x{{ formatNumber(item.top1?.score) }}</div>
+              <div class="podium-avatar">
+                <div class="frame"></div>
+                <img :src="item.top1?.avatar" alt="" />
+              </div>
+              <div class="text">
+                <div class="podium-name">{{ item.top1?.name }}</div>
+                <div class="podium-score">x{{ formatNumber(item.top1?.score) }}</div>
+              </div>
             </div>
             <!-- TOP2 -->
             <div class="podium-second">
-              <img class="podium-avatar" :src="item.top2?.avatar" alt="" />
-              <div class="podium-name">{{ item.top2?.name }}</div>
-              <div class="podium-score">x{{ formatNumber(item.top2?.score) }}</div>
+              <div class="podium-avatar">
+                <div class="frame"></div>
+                <img :src="item.top2?.avatar" alt="" />
+              </div>
+              <div class="text">
+                <div class="podium-name">{{ item.top2?.name }}</div>
+                <div class="podium-score">x{{ formatNumber(item.top2?.score) }}</div>
+              </div>
             </div>
             <!-- TOP3 -->
             <div class="podium-third">
-              <img class="podium-avatar" :src="item.top3?.avatar" alt="" />
-              <div class="podium-name">{{ item.top3?.name }}</div>
-              <div class="podium-score">x{{ formatNumber(item.top3?.score) }}</div>
+              <div class="podium-avatar">
+                <div class="frame"></div>
+                <img :src="item.top3?.avatar" alt="" />
+              </div>
+              <div class="text">
+                <div class="podium-name">{{ item.top3?.name }}</div>
+                <div class="podium-score">x{{ formatNumber(item.top3?.score) }}</div>
+              </div>
             </div>
           </div>
-          <img class="winner-footer" src="@/assets/activity/celebrityGifts/previous-winner-foot-bg.png" alt="" />
         </div>
       </div>
     </div>
@@ -267,7 +299,7 @@ const previousWinnerList = ref([
   },
 ]);
 
-const topRewards = computed(() => mockRewardGroups[0]?.gifts?.slice(0, 3) || []);
+const topRewards = computed(() => mockRewardGroups[0]?.gifts?.slice(0, 4) || []);
 
 const celebrityName = (c) => (store.language === "ar" ? c.nickAr || c.nick : c.nick);
 const formatNumber = (num) => Number(num || 0).toLocaleString("en-US");
@@ -392,17 +424,17 @@ onUnmounted(() => {
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 12px;
+      gap: 3.5px;
       .gift-item {
         display: flex;
         flex-direction: column;
         align-items: center;
         .gift-icon {
-          width: 90px;
-          height: 90px;
+          width: 83px;
+          height: 83px;
           margin-bottom: 4px;
-          background: url("@/assets/activity/celebrityGifts/redSealMedallion.png") no-repeat center center;
-          background-size: 190% 190%;
+          background: url("@/assets/activity/celebrityGifts/gift-bg.png") no-repeat center center;
+          background-size: 100% 100%;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -417,10 +449,11 @@ onUnmounted(() => {
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
-          margin-bottom: 2px;
+          font-weight: bold;
+          margin-top: 13.5px;
         }
         .number {
-          font-size: 12px;
+          font-size: 11px;
           background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
           -webkit-background-clip: text;
           background-clip: text;
@@ -512,11 +545,25 @@ onUnmounted(() => {
     padding-bottom: 125px;
     .top {
       width: 100%;
-      height: 728px;
-      background: url("@/assets/activity/celebrityGifts/topCekebrityGiftBg.png") no-repeat center center;
+      // height: 724px;
+      // background: url("@/assets/activity/celebrityGifts/darkRedAppPageScreenshot.png") no-repeat center center;
+      height: 783px;
+      background: url("@/assets/activity/celebrityGifts/goldPageFrame.png") no-repeat center center;
       background-size: 100% 100%;
       position: relative;
       margin-bottom: 12px;
+      &::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 385px;
+        height: 743px;
+        background: url("@/assets/activity/celebrityGifts/darkRedAppPageScreenshot.png") no-repeat center center;
+        background-size: cover;
+      }
       .count-down {
         position: absolute;
         top: 67.5px;
@@ -562,153 +609,157 @@ onUnmounted(() => {
       .podium-section {
         position: absolute;
         width: 100%;
-        height: 497.5px;
-        top: 172.5px;
+        height: 485.5px;
+        top: 174.5px;
         left: 50%;
         transform: translateX(-50%);
-        .top1 {
+        .top1,
+        .top2,
+        .top3 {
           position: absolute;
           top: 0;
           left: 50%;
           transform: translateX(-50%);
-          width: 180px;
-          height: 215px;
-          .gift-img {
+          width: 224px;
+          height: 280px;
+          .avatar {
             position: absolute;
-            top: 56px;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: auto;
-            height: 78.5px;
+            width: 224px;
+            height: 232px;
+            .avatar-frame {
+              width: 224px;
+              height: 232px;
+              position: absolute;
+              z-index: 10;
+              background: url("@/assets/activity/celebrityGifts/avatarTop1.png") no-repeat center center;
+              background-size: 100% 100%;
+            }
+            .avatar-img {
+              position: absolute;
+              z-index: 9;
+              top: 55px;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 120px;
+              height: 120px;
+            }
           }
           .podium-info {
             position: absolute;
-            top: 134.5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 140px;
+            height: 48px;
+            // top: 232px;
+            top: 212px;
             left: 50%;
             transform: translateX(-50%);
-            color: #ffffff;
+            background: url("@/assets/activity/celebrityGifts/darkRedInfoBar1.png") no-repeat center center;
+            background-size: 100% 100%;
             font-size: 11px;
             text-align: center;
-          }
-          .hall-of-fame {
-            position: absolute;
-            top: 165.5px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            .hall-avatars {
-              display: flex;
-              gap: 1.5px;
-              img {
-                width: 18px;
-                height: 18px;
-                border-radius: 50%;
-              }
+            .podium-name {
+              font-size: 12px;
+              font-weight: bold;
+              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+              -webkit-background-clip: text;
+              background-clip: text;
+              -webkit-text-fill-color: transparent;
+              color: transparent;
             }
-            .hall-arrow {
-              margin-inline-start: -6.5px;
-              width: 29px;
-              height: 15px;
-              background: url("@/assets/activity/celebrityGifts/arrow-right.png") no-repeat center center;
-              background-size: contain;
+            .podium-score {
+              font-size: 11px;
+              font-weight: bold;
+              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+              -webkit-background-clip: text;
+              background-clip: text;
+              -webkit-text-fill-color: transparent;
+              color: transparent;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              gap: 5px;
+              .coin-icon {
+                width: 12px;
+                height: 10px;
+                background: url("@/assets/activity/celebrityGifts/goldLeafIcon.png") no-repeat center center;
+                background-size: cover;
+              }
             }
           }
         }
         .top2 {
           position: absolute;
-          top: 296.5px;
-          left: 19.5px;
-          width: 149px;
-          height: 173px;
-          .gift-img {
+          top: 280px;
+          left: 31px;
+          transform: translateX(0);
+          width: 140px;
+          height: 187px;
+          .avatar {
             position: absolute;
-            top: 44.5px;
+            top: 0px;
             left: 50%;
             transform: translateX(-50%);
-            width: auto;
-            height: 50px;
+            width: 136px;
+            height: 139px;
+            .avatar-frame {
+              width: 136px;
+              height: 139px;
+              background: url("@/assets/activity/celebrityGifts/avatarTop2.png") no-repeat center center;
+              background-size: 100% 100%;
+            }
+            .avatar-img {
+              position: absolute;
+              z-index: 9;
+              top: 32px;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 81px;
+              height: 81px;
+            }
           }
           .podium-info {
-            position: absolute;
-            top: 94.5px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #ffffff;
-            font-size: 10px;
-            text-align: center;
-          }
-          .hall-of-fame {
-            position: absolute;
-            top: 124.5px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            .hall-avatars {
-              display: flex;
-              gap: 1.5px;
-              img {
-                width: 18px;
-                height: 18px;
-                border-radius: 50%;
-              }
-            }
-            .hall-arrow {
-              margin-inline-start: -6.5px;
-              width: 29px;
-              height: 15px;
-              background: url("@/assets/activity/celebrityGifts/arrow-right.png") no-repeat center center;
-              background-size: contain;
-            }
+            top: 139px;
           }
         }
         .top3 {
           position: absolute;
-          top: 296.5px;
-          right: 14px;
-          width: 144.5px;
-          height: 173px;
-          .gift-img {
+          top: 280px;
+          left: auto;
+          transform: translateX(0);
+          right: 16px;
+          width: 140px;
+          height: 187px;
+          .avatar {
             position: absolute;
-            top: 44.5px;
+            top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: auto;
-            height: 50px;
+            width: 134px;
+            height: 139px;
+            .avatar-frame {
+              width: 134px;
+              height: 139px;
+              background: url("@/assets/activity/celebrityGifts/avatarTop3.png") no-repeat center center;
+              background-size: 100% 100%;
+            }
+            .avatar-img {
+              position: absolute;
+              z-index: 9;
+              top: 32px;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 81px;
+              height: 81px;
+            }
           }
           .podium-info {
-            position: absolute;
-            top: 94.5px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #ffffff;
-            font-size: 10px;
-            text-align: center;
-          }
-          .hall-of-fame {
-            position: absolute;
-            top: 124.5px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            .hall-avatars {
-              display: flex;
-              gap: 1.5px;
-              img {
-                width: 18px;
-                height: 18px;
-                border-radius: 50%;
-              }
-            }
-            .hall-arrow {
-              margin-inline-start: -6.5px;
-              width: 29px;
-              height: 15px;
-              background: url("@/assets/activity/celebrityGifts/arrow-right.png") no-repeat center center;
-              background-size: contain;
-            }
+            top: 139px;
           }
         }
       }
@@ -767,21 +818,50 @@ onUnmounted(() => {
             object-fit: cover;
           }
         }
-        .col-name {
+        .col-name-userno {
           width: 90px;
-          font-size: 12px;
-          background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          font-size: 12px;
-          line-height: 21px;
-          text-align: start;
-          color: transparent;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          .name {
+            font-size: 12px;
+            background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            font-size: 12px;
+            line-height: 21px;
+            text-align: start;
+            color: transparent;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          .userno {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 3px;
+            > img {
+              width: 12px;
+              height: 12px;
+            }
+            > span {
+              font-size: 13px;
+              line-height: 21px;
+              text-align: start;
+              color: #ffffff;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
         }
         .col-score {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 3px;
           flex: 1;
           background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
           -webkit-background-clip: text;
@@ -791,6 +871,10 @@ onUnmounted(() => {
           text-align: start;
           color: transparent;
           text-align: end;
+          > img {
+            width: 12px;
+            height: 10px;
+          }
         }
       }
     }
@@ -886,19 +970,44 @@ onUnmounted(() => {
           object-fit: cover;
         }
       }
-      .col-name {
+      .col-name-userno {
         width: 90px;
-        font-size: 12px;
-        background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        font-size: 12px;
-        line-height: 21px;
-        text-align: start;
-        color: transparent;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        .name {
+          font-size: 12px;
+          background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          font-size: 12px;
+          line-height: 21px;
+          text-align: start;
+          color: transparent;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .userno {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          gap: 3px;
+          > img {
+            width: 12px;
+            height: 12px;
+          }
+          > span {
+            font-size: 13px;
+            line-height: 21px;
+            text-align: start;
+            color: #ffffff;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
       }
       .col-number-score {
         flex: 1;
@@ -923,6 +1032,10 @@ onUnmounted(() => {
           }
         }
         .col-score {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 3px;
           background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
           -webkit-background-clip: text;
           background-clip: text;
@@ -931,6 +1044,10 @@ onUnmounted(() => {
           text-align: start;
           color: transparent;
           text-align: end;
+          > img {
+            width: 12px;
+            height: 10px;
+          }
         }
       }
     }
@@ -941,18 +1058,16 @@ onUnmounted(() => {
     .view-previous-winner-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
       .view-previous-winner-item {
         width: 100%;
-        height: 500px;
-        background: url("@/assets/activity/celebrityGifts/darkRedPage3.png") no-repeat center center;
+        height: 667px;
+        background: url("@/assets/activity/celebrityGifts/darkPageScreenshot.png") no-repeat center center;
         background-size: 100% 100%;
         box-sizing: border-box;
         position: relative;
-        margin-bottom: 15px;
         .winner-period {
           position: absolute;
-          top: 40px;
+          top: 57px;
           left: 50%;
           transform: translateX(-50%);
           width: 250px;
@@ -990,95 +1105,125 @@ onUnmounted(() => {
         .winner-podium {
           position: absolute;
           width: 100%;
-          height: 275px;
+          height: 667px;
           .podium-first,
           .podium-second,
           .podium-third {
             position: absolute;
-            width: 140px;
-            height: 226px;
-            top: 99px;
-            left: 50%;
-            transform: translateX(-50%);
+            width: 147.5px;
+            height: 186px;
+            top: 97px;
+            right: 26.5px;
             display: flex;
             flex-direction: column;
             align-items: center;
             .podium-avatar {
-              width: 86px;
-              height: 86.5px;
-              margin-top: 52.5px;
+              width: 147.5px;
+              height: 152px;
               display: flex;
               justify-content: center;
               align-items: center;
-              img {
-                width: 81px;
-                height: auto;
+              position: absolute;
+              top: 0;
+              left: 50%;
+              transform: translateX(-50%);
+              .frame {
+                position: absolute;
+                z-index: 10;
+                width: 147.5px;
+                height: 152px;
+                background: url("@/assets/activity/celebrityGifts/top1-avatar.png") no-repeat center center;
+                background-size: 100% 100%;
+              }
+              > img {
+                position: absolute;
+                z-index: 9;
+                width: 98px;
+                height: 98px;
+                border-radius: 50%;
+                overflow: hidden;
                 object-fit: cover;
               }
             }
-            .podium-name {
-              font-size: 12px;
-              font-style: bold;
-              line-height: 22px;
-              text-align: center;
-              color: #ffffff;
-            }
-            .podium-score {
-              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
-              -webkit-background-clip: text;
-              background-clip: text;
-              -webkit-text-fill-color: transparent; /* 新增：让文字填充透明，显示渐变背景 */
-              font-size: 12px;
-              line-height: 12px;
+            .text {
+              margin-top: 138px;
+              width: 140px;
+              height: 98px;
+              background: url("@/assets/activity/celebrityGifts/darkRedInfoBar1.png") no-repeat center center;
+              background-size: 100% 100%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              .podium-name {
+                font-size: 12px;
+                font-style: bold;
+                line-height: 22px;
+                text-align: center;
+                background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+              }
+              .podium-score {
+                background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent; /* 新增：让文字填充透明，显示渐变背景 */
+                font-size: 12px;
+                line-height: 12px;
+              }
             }
           }
           .podium-second {
-            width: 115px;
+            width: 140px;
             height: 193px;
-            top: 178px;
-            left: 8px;
+            top: 293px;
+            left: 10.5px;
             transform: none;
             .podium-avatar {
-              width: 68px;
-              height: 68px;
-              margin-top: 50px;
-              img {
-                width: 81px;
+              width: 115px;
+              height: 131px;
+              .frame {
+                width: 115px;
+                height: 131px;
+                background: url("@/assets/activity/celebrityGifts/top2-avatar.png") no-repeat center center;
+                background-size: 100% 100%;
+              }
+              > img {
+                width: 105.5px;
+                height: 105.5px;
               }
             }
-            .podium-name {
-              font-size: 11px;
+            .text {
+              margin-top: 128px;
             }
           }
           .podium-third {
-            width: 120px;
-            height: 196px;
-            top: 177px;
+            width: 140px;
+            height: 166px;
+            top: 386px;
             left: auto;
-            right: 1px;
+            right: 44px;
             transform: none;
             .podium-avatar {
-              width: 70px;
-              height: 70px;
-              margin-top: 51px;
-              img {
-                width: 81px;
+              width: 115px;
+              height: 118px;
+              .frame {
+                width: 115px;
+                height: 118px;
+                background: url("@/assets/activity/celebrityGifts/top3-avatar.png") no-repeat center center;
+                background-size: 100% 100%;
+              }
+              > img {
+                width: 105.5px;
+                height: 105.5px;
               }
             }
-            .podium-name {
-              font-size: 11px;
+            .text {
+              margin-top: 118px;
             }
           }
-        }
-        .winner-footer {
-          position: absolute;
-          top: 471px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 404px;
-          height: 37px;
-          background: url("@/assets/activity/celebrityGifts/previous-winner-footer-bg.png") no-repeat center center;
-          background-size: 100% 100%;
         }
       }
     }

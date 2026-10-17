@@ -6,16 +6,30 @@
       <div class="bg-top">
         <!-- 背景层 -->
         <div class="bg-media">
-          <img v-if="bgImage" class="bg-img" src="@/assets/activity/celebrityGifts/top1_bg.png" alt="" />
-          <video
-            v-else
-            class="bg-video"
-            src="@/assets/activity/celebrityGifts/top1_bg.mp4"
-            autoplay
-            loop
-            muted
-            playsinline
-          ></video>
+          <template v-if="curTab === 1 || curTab === 2">
+            <img v-if="bgImage" class="bg-img" :src="store.language === 'ar' ? top1BgAr : top1Bg" alt="" />
+            <video
+              v-else
+              class="bg-video"
+              :src="store.language === 'ar' ? top1BgArMp4 : top1BgMp4"
+              autoplay
+              loop
+              muted
+              playsinline
+            ></video>
+          </template>
+          <template v-else>
+            <img v-if="bgImage" class="bg-img" :src="store.language === 'ar' ? top2BgAr : top2Bg" alt="" />
+            <video
+              v-else
+              class="bg-video"
+              :src="store.language === 'ar' ? top2BgArMp4 : top2BgMp4"
+              autoplay
+              loop
+              muted
+              playsinline
+            ></video>
+          </template>
         </div>
 
         <!-- 规则入口 -->
@@ -88,7 +102,14 @@ import celebrityGift from "./celebrityGift.vue";
 import topCekebrityGift from "./topCekebrityGift.vue";
 import topSupporter from "./topSupporter.vue";
 import { withMock, mockInfo, mockLastWeekTop } from "./mock.js";
-
+import top1BgAr from "@/assets/activity/celebrityGifts/top1_bg_ar.png";
+import top1Bg from "@/assets/activity/celebrityGifts/top1_bg.png";
+import top2BgAr from "@/assets/activity/celebrityGifts/top2_bg_ar.png";
+import top2Bg from "@/assets/activity/celebrityGifts/top2_bg.png";
+import top1BgMp4 from "@/assets/activity/celebrityGifts/top1_bg.mp4";
+import top2BgMp4 from "@/assets/activity/celebrityGifts/top2_bg.mp4";
+import top1BgArMp4 from "@/assets/activity/celebrityGifts/top1_bg_ar.mp4";
+import top2BgArMp4 from "@/assets/activity/celebrityGifts/top2_bg_ar.mp4";
 const store = useMainStore();
 const { t } = useI18n();
 
