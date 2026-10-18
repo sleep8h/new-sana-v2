@@ -15,13 +15,8 @@
           </div>
           <div class="gift-detail">
             <div class="detail">ID: {{ myGift.erbanNo }}</div>
-            <div class="detail">
-              WEEKLY LEVEL: {{ myGift.currentLevel }}
-              <template v-if="myGift.weeklyCount != null && myGift.nextLevelNeed != null">
-                ({{ myGift.weeklyCount }}/{{ myGift.nextLevelNeed }})
-              </template>
-            </div>
-            <div class="detail">MONTHLY TASK: {{ myGift.monthlyCount }}/{{ myGift.monthlyTarget }}</div>
+            <div class="detail">WEEKLY LEVEL: {{ myGift.currentLevel }}</div>
+            <div class="detail">MONTHLY TASK: {{ myGift.monthlyCount }}/40</div>
             <div class="detail">STATE: {{ myGift.status === 1 ? "Valid" : "Invalid" }}</div>
           </div>
         </div>
@@ -57,7 +52,7 @@
           </div>
         </div>
         <div class="level-badge-bg">
-          <div class="progress-bg"></div>
+          <div class="progress-bg" :style="{ width: progressWidth }"></div>
         </div>
       </div>
 
@@ -116,6 +111,18 @@ const myGift = ref({});
 
 // 等级列表
 const levelList = ref([]);
+
+// 进度条宽度计算
+const progressWidth = computed(() => {
+  const { currentLevel, weeklyCount, thresholds } = myGift.value || {};
+  if (!currentLevel || currentLevel <= 0) return "0%";
+  if (!thresholds || !Array.isArray(thresholds) || thresholds.length === 0) return "0%";
+  // currentLevel 对应 thresholds 的索引 (currentLevel - 1)
+  const threshold = thresholds[currentLevel - 1];
+  if (!threshold || threshold <= 0) return "0%";
+  const percent = Math.min((weeklyCount / threshold) * 100, 100);
+  return `${percent}%`;
+});
 
 const hasMyGift = computed(() => {
   if (!myGift.value) return false;
@@ -199,7 +206,7 @@ const getDataList = async (type) => {
 // 获取奖励
 const getRankRewards = async (type) => {
   try {
-    const res = await postFormData("/h5doings/activity/famous2026/rankRewards", {
+    const res = await get("/h5doings/activity/famous2026/rankRewards", {
       uid: store.uid,
       ticket: store.ticket,
       language: store.language,

@@ -224,62 +224,7 @@ const senderTopGiftName = ref("");
 // 进度条百分比，可自行修改
 const progressPercent = ref(60);
 
-const previousWinnerList = ref([
-  {
-    period: "2026/09/14 ~ 2026/09/20",
-    top1: {
-      avatar: "https://example.com/avatar1.png",
-      name: "礼物昵称",
-      score: 7777,
-    },
-    top2: {
-      avatar: "https://example.com/avatar2.png",
-      name: "礼物昵称",
-      score: 7777,
-    },
-    top3: {
-      avatar: "https://example.com/avatar3.png",
-      name: "礼物昵称",
-      score: 7777,
-    },
-  },
-  {
-    period: "2026/09/14 ~ 2026/09/20",
-    top1: {
-      avatar: "https://example.com/avatar1.png",
-      name: "礼物昵称",
-      score: 7777,
-    },
-    top2: {
-      avatar: "https://example.com/avatar2.png",
-      name: "礼物昵称",
-      score: 7777,
-    },
-    top3: {
-      avatar: "https://example.com/avatar3.png",
-      name: "礼物昵称",
-      score: 7777,
-    },
-  },
-  {
-    period: "2026/09/14 ~ 2026/09/20",
-    top1: {
-      avatar: "https://example.com/avatar1.png",
-      name: "礼物昵称",
-      score: 7777,
-    },
-    top2: {
-      avatar: "https://example.com/avatar2.png",
-      name: "礼物昵称",
-      score: 7777,
-    },
-    top3: {
-      avatar: "https://example.com/avatar3.png",
-      name: "礼物昵称",
-      score: 7777,
-    },
-  },
-]);
+const previousWinnerList = ref([]);
 
 const topRewardsArr = ref([]);
 const topRewardsArrList = ref([]);
@@ -330,7 +275,7 @@ const handleMoreClick = () => {
 const tabChange = async (item) => {
   curTab.value = item.value;
   celebrityList.value = [];
-  await getSupporterRank();
+  await getDataList();
   await getRankRewards();
 };
 
@@ -341,17 +286,32 @@ const goToHallOfFame = () => {
   showSenderTop.value = true;
 };
 
-const getHallOfFame = async () => {
-  const data = await withMock(
-    () =>
-      get("/h5doings/activity/celebrityGift2026/hallOfFame", {
-        uid: store.uid,
-        ticket: store.ticket,
-        language: store.language,
-      }),
-    mockHallOfFame,
-  );
-  hallOfFame.value = Array.isArray(data) ? data : data.list || [];
+const getDataList = async (type) => {
+  try {
+    const res = await postFormData("/h5doings/activity/famous2026/list", {
+      uid: store.uid,
+      ticket: store.ticket,
+      language: store.language,
+    });
+    if (res && res.code === 200) {
+      if (curTab.value === 1) {
+        celebrityList.value = res.data.weekGiftRank || [];
+        const timeOut = res.data.timeOutWeek || res.data.timeOutDay || 0;
+        startCountdown(Date.now() + timeOut);
+      } else if (curTab.value === 2) {
+        celebrityList.value = res.data.monthGiftRank || [];
+        const timeOut = res.data.timeOutMonth || res.data.timeOutDay || 0;
+        startCountdown(Date.now() + timeOut);
+      } else if (curTab.value === 3) {
+        previousWinnerList.value = res.data.history || [];
+      }
+      console.log(res);
+    } else {
+      console.error(res.message);
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const getRankRewards = async () => {
@@ -382,35 +342,9 @@ const getRankRewards = async () => {
   }
 };
 
-const getSupporterRank = async (type) => {
-  try {
-    const res = await get("/h5doings/activity/famous2026/rank", {
-      uid: store.uid,
-      ticket: store.ticket,
-      size: 50,
-      type: type || curTab.value,
-      language: store.language,
-    });
-    if (res && res.code === 200) {
-      celebrityList.value = res.data.list || [];
-      if (res.data.self) {
-        userInfo.value = { ...userInfo.value, ...res.data.self };
-      }
-    } else {
-      console.error("getSupporterRank code !== 200 error:", res.message);
-    }
-  } catch (error) {
-    console.error("getSupporterRank catch error:", error);
-  }
-};
-
 onMounted(async () => {
+  await getDataList();
   await getRankRewards();
-  await getHallOfFame();
-  await getSupporterRank();
-  // 从 mock 数据获取倒计时时间
-  const mockTimeOut = (44 * 24 * 60 * 60 + 19 * 60 * 60 + 38 * 60 + 29) * 1000;
-  startCountdown(Date.now() + mockTimeOut);
 });
 
 onUnmounted(() => {
