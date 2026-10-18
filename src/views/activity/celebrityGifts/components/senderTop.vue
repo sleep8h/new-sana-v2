@@ -20,18 +20,16 @@
             :class="{ 'sender-item-ar': store.language === 'ar' }"
           >
             <div class="item-left">
-              <div class="diamond-icon"></div>
-              <div class="score">X{{ formatNumber(item.integral ?? item.score) }}</div>
+              <img v-if="item.country" class="country-flag" :src="getCountryFlag(item.country)" alt="" />
+              <div class="rank-num">{{ padZero(item.index || index + 1) }}</div>
+              <img class="avatar" :src="item.avatar" alt="" />
             </div>
             <div class="item-center">
               <div class="name text-hide">{{ item.nick }}</div>
             </div>
             <div class="item-right">
-              <img class="avatar" :src="item.avatar" alt="" />
-              <div class="rank-num" :class="{ 'rank-top': (item.index || index + 1) <= 3 }">
-                {{ padZero(item.index || index + 1) }}
-              </div>
-              <img v-if="item.country" class="country-flag" :src="getCountryFlag(item.country)" alt="" />
+              <div class="diamond-icon"></div>
+              <div class="score">X{{ formatNumber(item.integral ?? item.score) }}</div>
             </div>
           </div>
         </div>
@@ -133,7 +131,7 @@ const displayList = computed(() => {
       height: 460px;
       background: url("@/assets/activity/celebrityGifts/senderTopBg.png") no-repeat center center;
       background-size: 100% 100%;
-      padding: 18px 26px 38px;
+      padding: 18px 15px 26px 11px;
       box-sizing: border-box;
       position: relative;
       display: flex;
@@ -153,23 +151,24 @@ const displayList = computed(() => {
       }
 
       .modal-title {
-        text-align: left;
-        margin-bottom: 14px;
-        padding-left: 4px;
+        width: 300px;
+        height: 64px;
         flex-shrink: 0;
-
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
         .gift-name {
-          font-size: 15px;
+          font-size: 18px;
           font-weight: bold;
-          color: #f2cd63;
+          color: #fff0c0;
           line-height: 20px;
         }
 
         .top-label {
-          font-size: 12px;
-          color: #e9c889;
-          line-height: 16px;
-          margin-top: 1px;
+          font-size: 15px;
+          color: #fff0c0;
+          line-height: 15px;
         }
       }
 
@@ -187,12 +186,6 @@ const displayList = computed(() => {
           width: 342px;
           height: 60px;
           margin-bottom: 10px;
-          padding: 0 14px;
-          border-radius: 30px;
-          background: linear-gradient(90deg, rgba(60, 15, 20, 0.5) 0%, rgba(25, 8, 10, 0.5) 100%);
-          border: 1px solid rgba(139, 105, 20, 0.25);
-          box-sizing: border-box;
-
           &:last-child {
             margin-bottom: 0;
           }
@@ -200,33 +193,47 @@ const displayList = computed(() => {
           .item-left {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             flex-shrink: 0;
-            min-width: 70px;
-
-            .diamond-icon {
-              width: 12px;
-              height: 12px;
-              background: url("@/assets/activity/celebrityGifts/whiteSparkleIcon.png") no-repeat center center;
-              background-size: contain;
-              flex-shrink: 0;
+            .country-flag {
+              width: 24px;
+              height: 16px;
             }
-
-            .score {
-              font-size: 12px;
+            .rank-num {
+              width: 20px;
+              height: 21px;
               font-weight: bold;
-              color: #f7d264;
+              font-size: 18px;
+              line-height: 20px;
+              text-align: center;
+              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+              color: transparent;
+            }
+            .avatar {
+              margin-inline-start: 8px;
+              width: 60px;
+              height: 60px;
+              border-radius: 50%;
+              border: 1px solid linear-gradient(180deg, #fbdb9b 4.97%, #fffdf2 40.31%, #ffecbb 92.76%, #ffd686 147.83%);
+              object-fit: cover;
             }
           }
 
           .item-center {
-            flex: 1;
-            padding: 0 6px;
-            min-width: 0;
-
+            width: 90px;
+            margin-inline-start: 7px;
             .name {
-              font-size: 11px;
-              color: #e9c889;
+              font-weight: 400;
+              line-height: 21px;
+              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+              color: transparent;
+              font-size: 12px;
               text-align: center;
               overflow: hidden;
               text-overflow: ellipsis;
@@ -237,39 +244,25 @@ const displayList = computed(() => {
           .item-right {
             display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: flex-end;
+            gap: 7px;
             flex-shrink: 0;
-
-            .avatar {
-              width: 30px;
-              height: 30px;
-              border-radius: 50%;
-              border: 1px solid #c9a04d;
-              object-fit: cover;
+            flex: 1;
+            .diamond-icon {
+              width: 12px;
+              height: 10px;
+              background: url("@/assets/activity/celebrityGifts/dataIcon.png") no-repeat center center;
+              background-size: contain;
+              flex-shrink: 0;
             }
 
-            .rank-num {
-              width: 20px;
-              height: 20px;
-              border-radius: 50%;
-              background: rgba(201, 160, 77, 0.15);
-              font-weight: bold;
-              font-size: 10px;
-              line-height: 20px;
-              text-align: center;
-              color: #c9a04d;
-            }
-
-            .rank-top {
-              background: linear-gradient(180deg, #f2cd63 0%, #c1892b 100%);
-              color: #5c1503;
-            }
-
-            .country-flag {
-              width: 18px;
-              height: 12px;
-              border-radius: 1px;
-              object-fit: cover;
+            .score {
+              font-size: 18px;
+              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+              color: transparent;
             }
           }
         }
