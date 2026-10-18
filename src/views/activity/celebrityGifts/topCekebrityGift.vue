@@ -3,19 +3,25 @@
   <div class="celebrity-rank">
     <!-- senderTop 弹窗 -->
     <senderTop v-model:isShow="showSenderTop" :list="senderTopList" :giftName="senderTopGiftName" />
+    <!-- 名人礼物周榜奖励弹窗 -->
+    <cekebrityGiftReward v-model:isShow="showWeeklyReward" :list="weeklyRewardList" :type="1" />
+    <!-- 名人礼物月榜奖励弹窗 -->
+    <cekebrityGiftReward v-model:isShow="showMonthlyReward" :list="monthlyRewardList" :type="2" />
     <!-- 奖励  周和月才显示 -->
     <div class="top-reward" v-if="curTab === 1 || curTab === 2">
       <div class="title">
-        <span v-if="curTab === 1">Weekly TOP1 Reward</span>
-        <span v-else>Monthly TOP1 Reward</span>
+        <span v-if="curTab === 1">{{ $t("celebrityGifts.weeklyTop1Reward") }}</span>
+        <span v-else>{{ $t("celebrityGifts.monthlyTop1Reward") }}</span>
       </div>
-      <div class="more"></div>
+      <div class="more" @click="handleMoreClick"></div>
       <div class="gift-list">
-        <div class="gift-item" v-for="(gift, idx) in topRewards" :key="idx">
+        <div class="gift-item" v-for="(gift, idx) in topRewardsArr" :key="idx">
           <div class="gift-icon">
             <img :src="gift.rewardUrl || defaultRewardImg" alt="Reward" />
           </div>
-          <div class="name">{{ gift.rewardName }}</div>
+          <div class="name">
+            {{ `${store.language === "ar" ? gift.rewardNameAr : gift.rewardName}*${gift.rewardValue}` }}
+          </div>
           <div class="number">{{ gift.rewardValue }}</div>
         </div>
       </div>
@@ -173,10 +179,11 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
-import { get } from "@/utils/http.js";
 import { useMainStore } from "@/pinia/index.js";
+import { get, postFormData } from "@/utils/http.js";
 import senderTop from "./components/senderTop.vue";
-import { withMock, mockCelebrityRank, mockHallOfFame, mockRewardGroups } from "./mock.js";
+import { withMock, mockHallOfFame } from "./mock.js";
+import cekebrityGiftReward from "./components/cekebrityGiftReward.vue";
 import defaultAvatar from "@/assets/common/user-avatar-default.png";
 
 const store = useMainStore();
@@ -274,7 +281,12 @@ const previousWinnerList = ref([
   },
 ]);
 
-const topRewards = computed(() => mockRewardGroups[0]?.gifts?.slice(0, 3) || []);
+const topRewardsArr = ref([]);
+const topRewardsArrList = ref([]);
+const weeklyRewardList = ref([]);
+const monthlyRewardList = ref([]);
+const showWeeklyReward = ref(false);
+const showMonthlyReward = ref(false);
 
 const celebrityName = (c) => (store.language === "ar" ? c.nickAr || c.nick : c.nick);
 const formatNumber = (num) => Number(num || 0).toLocaleString("en-US");
@@ -307,10 +319,19 @@ const startCountdown = (timeOut) => {
   countdownTimer = setInterval(updateCountdown, 1000);
 };
 
+const handleMoreClick = () => {
+  if (curTab.value === 1) {
+    showWeeklyReward.value = true;
+  } else if (curTab.value === 2) {
+    showMonthlyReward.value = true;
+  }
+};
+
 const tabChange = async (item) => {
   curTab.value = item.value;
   celebrityList.value = [];
-  await getCelebrityRank();
+  await getSupporterRank();
+  await getRankRewards();
 };
 
 const goToHallOfFame = () => {
@@ -318,24 +339,6 @@ const goToHallOfFame = () => {
   senderTopGiftName.value = top1.value ? celebrityName(top1.value) : "";
   senderTopList.value = top1.value?.topUsers || [];
   showSenderTop.value = true;
-};
-
-const getCelebrityRank = async () => {
-  const data = await withMock(
-    () =>
-      get("/h5doings/activity/celebrityGift2026/celebrityRank", {
-        uid: store.uid,
-        size: 100,
-        type: curTab.value,
-        ticket: store.ticket,
-        language: store.language,
-      }),
-    mockCelebrityRank,
-  );
-  celebrityList.value = data.list || [];
-  if (data.userInfo) {
-    userInfo.value = { ...userInfo.value, ...data.userInfo };
-  }
 };
 
 const getHallOfFame = async () => {
@@ -351,9 +354,60 @@ const getHallOfFame = async () => {
   hallOfFame.value = Array.isArray(data) ? data : data.list || [];
 };
 
+const getRankRewards = async () => {
+  try {
+    const res = await get("/h5doings/activity/famous2026/rankRewards", {
+      uid: store.uid,
+      ticket: store.ticket,
+      language: store.language,
+      groupType: curTab.value === 1 ? 2 : 3,
+    });
+    if (res && res.code === 200) {
+      console.log(res, "res");
+      const data = res.data || {};
+      const arr = Object.values(data);
+      topRewardsArrList.value = arr;
+      topRewardsArr.value = arr[0] || [];
+      if (curTab.value === 1) {
+        weeklyRewardList.value = arr?.slice(0, 5);
+      } else if (curTab.value === 2) {
+        monthlyRewardList.value = arr?.slice(0, 4);
+      }
+      console.log(topRewardsArr.value, "topRewardsArr.value");
+    } else {
+      console.error(res.message);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getSupporterRank = async (type) => {
+  try {
+    const res = await get("/h5doings/activity/famous2026/rank", {
+      uid: store.uid,
+      ticket: store.ticket,
+      size: 50,
+      type: type || curTab.value,
+      language: store.language,
+    });
+    if (res && res.code === 200) {
+      celebrityList.value = res.data.list || [];
+      if (res.data.self) {
+        userInfo.value = { ...userInfo.value, ...res.data.self };
+      }
+    } else {
+      console.error("getSupporterRank code !== 200 error:", res.message);
+    }
+  } catch (error) {
+    console.error("getSupporterRank catch error:", error);
+  }
+};
+
 onMounted(async () => {
-  await getCelebrityRank();
+  await getRankRewards();
   await getHallOfFame();
+  await getSupporterRank();
   // 从 mock 数据获取倒计时时间
   const mockTimeOut = (44 * 24 * 60 * 60 + 19 * 60 * 60 + 38 * 60 + 29) * 1000;
   startCountdown(Date.now() + mockTimeOut);
@@ -381,7 +435,7 @@ onUnmounted(() => {
       top: 31.5px;
       left: 50%;
       transform: translateX(-50%);
-      font-style: Bold;
+      font-weight: bold;
       font-size: 14px;
       color: #ffffff;
       text-align: center;
@@ -427,6 +481,7 @@ onUnmounted(() => {
           background-clip: text;
           color: transparent;
           margin-bottom: 2px;
+          text-align: center;
         }
         .number {
           font-size: 12px;
@@ -476,7 +531,7 @@ onUnmounted(() => {
         color: #470000;
         font-size: 12px;
         line-height: 14px;
-        font-style: Bold;
+        font-weight: bold;
         text-align: center;
       }
     }
@@ -509,7 +564,7 @@ onUnmounted(() => {
         color: #470000;
         font-size: 12px;
         line-height: 14px;
-        font-style: Bold;
+        font-weight: bold;
         text-align: center;
       }
     }
@@ -826,7 +881,7 @@ onUnmounted(() => {
         background-size: cover;
         transition: width 0.3s ease;
         color: #0e0e0e;
-        font-style: bold;
+        font-weight: bold;
         font-size: 12px;
         text-align: end;
         position: relative;
@@ -1027,7 +1082,7 @@ onUnmounted(() => {
             }
             .podium-name {
               font-size: 12px;
-              font-style: bold;
+              font-weight: bold;
               line-height: 22px;
               text-align: center;
               color: #ffffff;

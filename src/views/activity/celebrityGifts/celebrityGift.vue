@@ -11,21 +11,18 @@
         <div class="gift-info">
           <div class="gift-image">
             <div class="gift-image-frame"></div>
-            <img :src="myGift.image || defaultGiftImg" alt="" />
+            <img :src="myGift.giftPicUrl || defaultImg" :alt="myGift.giftName" />
           </div>
           <div class="gift-detail">
-            <div class="detail">{{ $t("celebrityGifts.id", { number: myGift.uid }) }}</div>
-            <div class="detail">{{ $t("celebrityGifts.weeklyLevel", { level: myGift.weeklyLevel }) }}</div>
+            <div class="detail">ID: {{ myGift.erbanNo }}</div>
             <div class="detail">
-              {{ $t("celebrityGifts.monthlyTask", { num1: myGift.monthlyTaskNum1, num2: myGift.monthlyTaskNum2 }) }}
+              WEEKLY LEVEL: {{ myGift.currentLevel }}
+              <template v-if="myGift.weeklyCount != null && myGift.nextLevelNeed != null">
+                ({{ myGift.weeklyCount }}/{{ myGift.nextLevelNeed }})
+              </template>
             </div>
-            <div class="detail">
-              {{
-                $t("celebrityGifts.sate", {
-                  state: myGift.state ? $t("celebrityGifts.valid") : $t("celebrityGifts.invalid"),
-                })
-              }}
-            </div>
+            <div class="detail">MONTHLY TASK: {{ myGift.monthlyCount }}/{{ myGift.monthlyTarget }}</div>
+            <div class="detail">STATE: {{ myGift.status === 1 ? "Valid" : "Invalid" }}</div>
           </div>
         </div>
         <div class="gift-tip">{{ $t("celebrityGifts.myGiftTip") }}</div>
@@ -53,7 +50,7 @@
         <div class="level-item" v-for="(item, index) in levelList" :key="index" @click="goToSlide(index)">
           <div class="level-coin">
             <span class="coin-icon"></span>
-            <span class="coin-num">{{ item.coin }}</span>
+            <span class="coin-num">{{ item }}</span>
           </div>
           <div class="level-badge" :class="{ 'level-active': rewardPage === index }">
             <div :class="'level' + (index + 1)"></div>
@@ -82,9 +79,13 @@
               <div class="reward-group">
                 <div v-for="(reward, idx) in rewardGroup" :key="idx" class="reward-item">
                   <div class="reward-frame">
-                    <img :src="reward.image || defaultRewardImg" alt="" />
+                    <img :src="reward.rewardUrl || defaultImg" :alt="reward.rewardName" />
                   </div>
-                  <div class="reward-name">{{ reward.name }}</div>
+                  <sanaAutoText class="reward-name">
+                    <span>{{
+                      `${store.language === "ar" ? reward.rewardNameAr : reward.rewardName}*${reward.rewardValue}`
+                    }}</span>
+                  </sanaAutoText>
                 </div>
               </div>
             </SwiperSlide>
@@ -101,23 +102,28 @@ import { ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/swiper-bundle.css";
-import { get } from "@/utils/http.js";
+import { get, postFormData } from "@/utils/http.js";
 import { useMainStore } from "@/pinia/index.js";
 import defaultAvatar from "@/assets/common/user-avatar-default.png";
-import { withMock, mockMyGift, mockLevelList } from "./mock.js";
 
 const store = useMainStore();
 const { t } = useI18n();
 
-const defaultGiftImg = defaultAvatar;
-const defaultRewardImg = defaultAvatar;
+const defaultImg = defaultAvatar;
 
 // 我的名人礼物数据
 const myGift = ref({});
-const hasMyGift = computed(() => !!myGift.value && myGift.value.hasGift);
 
 // 等级列表
 const levelList = ref([]);
+
+const hasMyGift = computed(() => {
+  if (!myGift.value) return false;
+  // 优先使用后端明确的 hasGift 标记
+  if (typeof myGift.value.hasGift === "boolean") return myGift.value.hasGift;
+  // status: 1 上架（有效），2 下架（无效）
+  return !!myGift.value.giftPicUrl && myGift.value.status === 1;
+});
 
 // 奖励展示
 const rewardPage = ref(0);
@@ -125,24 +131,24 @@ const rewardSwiper = ref(null);
 
 const allRewards = ref([
   [
-    { name: "HEADWEAR*1", image: "" },
-    { name: "BADGE*1", image: "" },
+    { rewardName: "HEADWEAR HEADWEAR", rewardNameAr: "التواجه", rewardValue: 1, rewardUrl: "" },
+    { rewardName: "BADGE", rewardNameAr: "شارة", rewardValue: 1, rewardUrl: "" },
   ],
   [
-    { name: "FRAME*2", image: "" },
-    { name: "THEME*2", image: "" },
+    { rewardName: "FRAME", rewardNameAr: "إطار", rewardValue: 2, rewardUrl: "" },
+    { rewardName: "THEME", rewardNameAr: "سمة", rewardValue: 2, rewardUrl: "" },
   ],
   [
-    { name: "HEADWEAR*3", image: "" },
-    { name: "BADGE*3", image: "" },
+    { rewardName: "HEADWEAR", rewardNameAr: "التواجه", rewardValue: 3, rewardUrl: "" },
+    { rewardName: "BADGE", rewardNameAr: "شارة", rewardValue: 3, rewardUrl: "" },
   ],
   [
-    { name: "FRAME*4", image: "" },
-    { name: "FRAME*4", image: "" },
+    { rewardName: "FRAME", rewardNameAr: "إطار", rewardValue: 4, rewardUrl: "" },
+    { rewardName: "FRAME", rewardNameAr: "إطار", rewardValue: 4, rewardUrl: "" },
   ],
   [
-    { name: "FRAME*5", image: "" },
-    { name: "THEME*5", image: "" },
+    { rewardName: "FRAME", rewardNameAr: "إطار", rewardValue: 5, rewardUrl: "" },
+    { rewardName: "THEME", rewardNameAr: "سمة", rewardValue: 5, rewardUrl: "" },
   ],
 ]);
 
@@ -169,37 +175,50 @@ const nextReward = () => {
   }
 };
 
-// 获取我的名人礼物
-const getMyGift = async () => {
-  const data = await withMock(
-    () =>
-      get("/h5doings/activity/celebrityGift2026/myGift", {
-        uid: store.uid,
-        ticket: store.ticket,
-        language: store.language,
-      }),
-    mockMyGift,
-  );
-  myGift.value = data || {};
+const getDataList = async (type) => {
+  try {
+    const res = await postFormData("/h5doings/activity/famous2026/list", {
+      uid: store.uid,
+      ticket: store.ticket,
+      language: store.language,
+    });
+    if (res && res.code === 200) {
+      // 获取我的名人礼物
+      myGift.value = res.data.myGift || {};
+      levelList.value = res.data.levelThresholds || [];
+
+      console.log(res);
+    } else {
+      console.error(res.message);
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-// 获取等级列表
-const getLevelList = async () => {
-  const data = await withMock(
-    () =>
-      get("/h5doings/activity/celebrityGift2026/levelList", {
-        uid: store.uid,
-        ticket: store.ticket,
-        language: store.language,
-      }),
-    mockLevelList,
-  );
-  levelList.value = data.list || [];
+// 获取奖励
+const getRankRewards = async (type) => {
+  try {
+    const res = await postFormData("/h5doings/activity/famous2026/rankRewards", {
+      uid: store.uid,
+      ticket: store.ticket,
+      language: store.language,
+      groupType: 1,
+    });
+    if (res && res.code === 200) {
+      const arr = Object.values(res.data || {});
+      allRewards.value = arr;
+    } else {
+      console.error(res.message);
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 onMounted(async () => {
-  await getMyGift();
-  await getLevelList();
+  await getDataList();
+  await getRankRewards();
 });
 </script>
 
@@ -378,12 +397,13 @@ onMounted(async () => {
           display: flex;
           justify-content: flex-start;
           align-items: center;
-
+          gap: 5px;
           .coin-icon {
             width: 24px;
             height: 20px;
             background: url("@/assets/activity/celebrityGifts/goldLeafIcon.png") no-repeat center center;
             background-size: cover;
+            margin-inline-start: 5px;
           }
 
           .coin-num {
@@ -487,7 +507,7 @@ onMounted(async () => {
         align-items: center;
         cursor: pointer;
         flex-shrink: 0;
-        background: url("@/assets/activity/celebrityGifts/arrow-left.png") no-repeat center center;
+        background: url("@/assets/activity/celebrityGifts/swiper-arrow-left.png") no-repeat center center;
         background-size: cover;
         &:active {
           transform: scale(0.9);
@@ -498,11 +518,11 @@ onMounted(async () => {
         top: 61px;
         left: auto;
         right: 20px;
-        background: url("@/assets/activity/celebrityGifts/arrow-right.png") no-repeat center center;
+        background: url("@/assets/activity/celebrityGifts/swiper-arrow-right.png") no-repeat center center;
         background-size: cover;
       }
       .swiper-box {
-        position: relative;
+        position: absolute;
         left: 50%;
         transform: translateX(-50%);
         width: 238.5px;
@@ -543,12 +563,15 @@ onMounted(async () => {
             }
 
             .reward-name {
+              width: 100.5px;
               height: 18px;
               line-height: 18px;
               font-size: 12px;
-              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
+              :deep(span) {
+                background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+              }
             }
           }
         }
