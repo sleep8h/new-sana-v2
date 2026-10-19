@@ -14,10 +14,16 @@
             <img :src="myGift.giftPicUrl || defaultImg" :alt="myGift.giftName" />
           </div>
           <div class="gift-detail">
-            <div class="detail">ID: {{ myGift.erbanNo }}</div>
-            <div class="detail">WEEKLY LEVEL: {{ myGift.currentLevel }}</div>
-            <div class="detail">MONTHLY TASK: {{ myGift.monthlyCount }}/40</div>
-            <div class="detail">STATE: {{ myGift.status === 1 ? "Valid" : "Invalid" }}</div>
+            <div class="detail">{{ $t("celebrityGifts.id", { number: myGift.erbanNo }) }}</div>
+            <div class="detail">{{ $t("celebrityGifts.weeklyLevel", { level: myGift.currentLevel }) }}</div>
+            <div class="detail detail-monthly-task" v-html="monthlyTaskHtml"></div>
+            <div class="detail">
+              {{
+                $t("celebrityGifts.sate", {
+                  state: myGift.status === 1 ? $t("celebrityGifts.valid") : $t("celebrityGifts.invalid"),
+                })
+              }}
+            </div>
           </div>
         </div>
         <div class="gift-tip">{{ $t("celebrityGifts.myGiftTip") }}</div>
@@ -47,7 +53,10 @@
             <span class="coin-icon"></span>
             <span class="coin-num">{{ item }}</span>
           </div>
-          <div class="level-badge" :class="{ 'level-active': rewardPage === index }">
+          <div
+            class="level-badge"
+            :class="{ 'level-active': rewardPage === index, 'level-gray': index > currentLevelIndex }"
+          >
             <div :class="'level' + (index + 1)"></div>
           </div>
         </div>
@@ -112,16 +121,61 @@ const myGift = ref({});
 // 等级列表
 const levelList = ref([]);
 
+// 当前达到的等级索引 (基于 weeklyCount 和 thresholds)
+const currentLevelIndex = computed(() => {
+  const { weeklyCount, thresholds } = myGift.value || {};
+  const count = weeklyCount || 0;
+  const levels = thresholds || [3, 20, 50, 100, 200];
+
+  let index = -1;
+  for (let i = 0; i < levels.length; i++) {
+    if (count >= levels[i]) {
+      index = i;
+    } else {
+      break;
+    }
+  }
+  return index;
+});
+
 // 进度条宽度计算
+// thresholds: [3, 20, 50, 100, 200]
+// 每个阶梯占 20%，根据当前数量计算在对应阶梯内的进度
 const progressWidth = computed(() => {
-  const { currentLevel, weeklyCount, thresholds } = myGift.value || {};
-  if (!currentLevel || currentLevel <= 0) return "0%";
-  if (!thresholds || !Array.isArray(thresholds) || thresholds.length === 0) return "0%";
-  // currentLevel 对应 thresholds 的索引 (currentLevel - 1)
-  const threshold = thresholds[currentLevel - 1];
-  if (!threshold || threshold <= 0) return "0%";
-  const percent = Math.min((weeklyCount / threshold) * 100, 100);
-  return `${percent}%`;
+  const { weeklyCount, thresholds } = myGift.value || {};
+  const count = weeklyCount || 0;
+  const levels = thresholds || [3, 20, 50, 100, 200];
+
+  if (count < levels[0]) return "0%";
+  if (count >= levels[4]) return "100%";
+
+  // 找到当前所在的阶梯
+  let currentLevelIndex = 0;
+  for (let i = 0; i < levels.length; i++) {
+    if (count >= levels[i]) {
+      currentLevelIndex = i;
+    } else {
+      break;
+    }
+  }
+
+  // 基础进度 (每个已完成的阶梯占 20%)
+  const basePercent = currentLevelIndex * 20;
+
+  // 在当前阶梯内的进度
+  const currentLevelMin = levels[currentLevelIndex];
+  console.log(currentLevelMin, "currentLevelMin");
+  const nextLevelMin = levels[currentLevelIndex + 1];
+  console.log(nextLevelMin, "nextLevelMin");
+  const levelRange = nextLevelMin - currentLevelMin;
+  console.log(levelRange, "levelRange");
+  const levelProgress = levelRange > 0 ? ((count - currentLevelMin) / levelRange) * 20 : 0;
+  console.log(levelProgress, "levelProgress");
+
+  const totalPercent = Math.min(basePercent + levelProgress, 100);
+  console.log(totalPercent, "totalPercent");
+  if (totalPercent >= 100) return "100%";
+  return `calc(${totalPercent}% + 17px)`;
 });
 
 const hasMyGift = computed(() => {
@@ -130,6 +184,13 @@ const hasMyGift = computed(() => {
   if (typeof myGift.value.hasGift === "boolean") return myGift.value.hasGift;
   // status: 1 上架（有效），2 下架（无效）
   return !!myGift.value.giftPicUrl && myGift.value.status === 1;
+});
+
+const monthlyTaskHtml = computed(() => {
+  return t("celebrityGifts.monthlyTask", {
+    num1: myGift.value.monthlyCount || 0,
+    num2: myGift.value.monthlyTarget || 0,
+  });
 });
 
 // 奖励展示
@@ -172,13 +233,23 @@ const goToSlide = (index) => {
 
 const prevReward = () => {
   if (rewardSwiper.value && rewardSwiper.value.$el.swiper) {
-    rewardSwiper.value.$el.swiper.slidePrev(300);
+    const isAr = store.language === "ar";
+    if (isAr) {
+      rewardSwiper.value.$el.swiper.slideNext(300);
+    } else {
+      rewardSwiper.value.$el.swiper.slidePrev(300);
+    }
   }
 };
 
 const nextReward = () => {
   if (rewardSwiper.value && rewardSwiper.value.$el.swiper) {
-    rewardSwiper.value.$el.swiper.slideNext(300);
+    const isAr = store.language === "ar";
+    if (isAr) {
+      rewardSwiper.value.$el.swiper.slidePrev(300);
+    } else {
+      rewardSwiper.value.$el.swiper.slideNext(300);
+    }
   }
 };
 
@@ -288,8 +359,11 @@ onMounted(async () => {
           }
           img {
             position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 1;
-            width: 89px;
+            // width: 89px;
+            width: auto;
             height: 126px;
             object-fit: fill;
           }
@@ -308,6 +382,15 @@ onMounted(async () => {
             background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+          }
+          .detail-monthly-task {
+            background: none;
+            -webkit-background-clip: initial;
+            -webkit-text-fill-color: initial;
+            color: #e4be6e;
+            ::v-deep(.red) {
+              color: #ff0000;
+            }
           }
         }
       }
@@ -465,6 +548,10 @@ onMounted(async () => {
           &.level-active {
             transform: scale(1.2);
             transition: transform 0.3s ease;
+          }
+          &.level-gray {
+            filter: grayscale(100%);
+            opacity: 0.8;
           }
         }
       }

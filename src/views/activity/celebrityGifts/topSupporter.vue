@@ -2,17 +2,9 @@
 <template>
   <div class="celebrity-rank">
     <!-- 支持者周榜奖励弹窗 -->
-    <supporterReward
-      v-model:isShow="showWeeklyReward"
-      :list="weeklyRewardList"
-      :type="1"
-    />
+    <supporterReward v-model:isShow="showWeeklyReward" :list="weeklyRewardList" :type="1" />
     <!-- 支持者月榜奖励弹窗 -->
-    <supporterReward
-      v-model:isShow="showMonthlyReward"
-      :list="monthlyRewardList"
-      :type="2"
-    />
+    <supporterReward v-model:isShow="showMonthlyReward" :list="monthlyRewardList" :type="2" />
     <!-- 奖励  周和月才显示 -->
     <div class="top-reward" v-if="curTab === 1 || curTab === 2">
       <div class="title">
@@ -107,7 +99,6 @@
         <div class="item" v-for="(item, idx) in celebrityList.slice(3, 50)" :key="idx">
           <div class="col-rank">
             <div class="rank-num">{{ idx + 4 }}</div>
-            <div class="region">{{ item.region }}</div>
           </div>
           <div class="col-avatar">
             <img :src="item.avatar" alt="" />
@@ -115,31 +106,20 @@
           <div class="col-name-userno">
             <div class="name">{{ celebrityName(item) }}</div>
             <div class="userno">
-              <img src="@/assets/activity/celebrityGifts/darkListBanner.png" alt="" />
               <span>{{ "123456" }}</span>
             </div>
           </div>
           <div class="col-score">
-            <img src="@/assets/activity/celebrityGifts/dataIcon.png" alt="" />
+            <img src="@/assets/activity/celebrityGifts/goldLeafIcon.png" alt="" />
             <span>{{ `${formatNumber(item.integral)}` }}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="user-info" v-if="curTab === 1 || curTab === 2">
-      <div class="progress-box">
-        <div
-          class="progress"
-          :class="{ 'progress-rtl': store.language === 'ar' }"
-          :style="{ width: progressPercent + '%' }"
-        >
-          <span class="progress-text">88%</span>
-        </div>
-      </div>
       <div class="user-info-item">
         <div class="col-rank">
           <div class="rank-num">{{ userInfo.rank }}</div>
-          <div class="region">{{ userInfo.region }}</div>
         </div>
         <div class="col-avatar">
           <img :src="userInfo.avatar" alt="" />
@@ -147,17 +127,12 @@
         <div class="col-name-userno">
           <div class="name">{{ celebrityName(userInfo) }}</div>
           <div class="userno">
-            <img src="@/assets/activity/celebrityGifts/darkListBanner.png" alt="" />
             <span>{{ "123456" }}</span>
           </div>
         </div>
         <div class="col-number-score">
-          <div class="col-number">
-            <span>{{ $t("celebrityGifts.myShare") }}</span>
-            <span>{{ userInfo.percent }}%</span>
-          </div>
           <div class="col-score">
-            <img src="@/assets/activity/celebrityGifts/dataIcon.png" alt="" />
+            <img src="@/assets/activity/celebrityGifts/goldLeafIcon.png" alt="" />
             <span>{{ `${formatNumber(userInfo.integral)}` }}</span>
           </div>
         </div>
@@ -181,7 +156,10 @@
               </div>
               <div class="text">
                 <div class="podium-name">{{ item.top1?.name }}</div>
-                <div class="podium-score">x{{ formatNumber(item.top1?.score) }}</div>
+                <div class="podium-score">
+                  <img src="@/assets/activity/celebrityGifts/goldLeafIcon.png" alt="" />
+                  <span>{{ formatNumber(item.top1?.score) }}</span>
+                </div>
               </div>
             </div>
             <!-- TOP2 -->
@@ -192,7 +170,10 @@
               </div>
               <div class="text">
                 <div class="podium-name">{{ item.top2?.name }}</div>
-                <div class="podium-score">x{{ formatNumber(item.top2?.score) }}</div>
+                <div class="podium-score">
+                  <img src="@/assets/activity/celebrityGifts/goldLeafIcon.png" alt="" />
+                  <span>{{ formatNumber(item.top2?.score) }}</span>
+                </div>
               </div>
             </div>
             <!-- TOP3 -->
@@ -203,7 +184,10 @@
               </div>
               <div class="text">
                 <div class="podium-name">{{ item.top3?.name }}</div>
-                <div class="podium-score">x{{ formatNumber(item.top3?.score) }}</div>
+                <div class="podium-score">
+                  <img src="@/assets/activity/celebrityGifts/goldLeafIcon.png" alt="" />
+                  <span>{{ formatNumber(item.top3?.score) }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -236,7 +220,6 @@ const tabList = [
 const celebrityList = ref([]);
 const userInfo = ref({
   rank: 99,
-  region: "",
   avatar: defaultRewardImg,
   nick: "123456",
   nickAr: "",
@@ -359,18 +342,46 @@ const handleMoreClick = () => {
 const tabChange = async (item) => {
   curTab.value = item.value;
   celebrityList.value = [];
+  await getDataList();
+  await getRank();
   await getRankRewards();
-  await getSupporterRank();
 };
 
-const getSupporterRank = async () => {
+const getDataList = async (type) => {
+  try {
+    const res = await postFormData("/h5doings/activity/famous2026/list", {
+      uid: store.uid,
+      ticket: store.ticket,
+      language: store.language,
+    });
+    if (res && res.code === 200) {
+      if (curTab.value === 1) {
+        const timeOut = res.data.timeOutWeek || res.data.timeOutDay || 0;
+        startCountdown(Date.now() + timeOut);
+      } else if (curTab.value === 2) {
+        const timeOut = res.data.timeOutMonth || res.data.timeOutDay || 0;
+        startCountdown(Date.now() + timeOut);
+      } else if (curTab.value === 3) {
+        previousWinnerList.value = res.data.history || [];
+      }
+      console.log(res);
+    } else {
+      console.error(res.message);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getRank = async () => {
   try {
     const res = await get("/h5doings/activity/famous2026/rank", {
       uid: store.uid,
       ticket: store.ticket,
+      language: store.language,
       size: 50,
       type: curTab.value,
-      language: store.language,
+      groupType: 2,
     });
     if (res && res.code === 200) {
       celebrityList.value = res.data.list || [];
@@ -413,11 +424,9 @@ const getRankRewards = async (type) => {
 };
 
 onMounted(async () => {
-  await getSupporterRank();
+  await getDataList();
+  await getRank();
   await getRankRewards();
-  // 从 mock 数据获取倒计时时间
-  const mockTimeOut = (44 * 24 * 60 * 60 + 19 * 60 * 60 + 38 * 60 + 29) * 1000;
-  startCountdown(Date.now() + mockTimeOut);
 });
 
 onUnmounted(() => {
@@ -439,11 +448,12 @@ onUnmounted(() => {
     position: relative;
     .title {
       position: absolute;
-      top: 31.5px;
+      top: 37.5px;
       left: 50%;
       transform: translateX(-50%);
       font-weight: bold;
       font-size: 14px;
+      line-height: 14px;
       color: #ffffff;
       text-align: center;
     }
@@ -508,6 +518,8 @@ onUnmounted(() => {
     justify-content: center;
     align-items: flex-end;
     margin-bottom: 8px;
+    direction: ltr;
+    text-align: center;
     .tab-item-1 {
       width: 130px;
       height: 36px;
@@ -836,12 +848,6 @@ onUnmounted(() => {
             font-size: 18px;
             line-height: 21px;
           }
-          .region {
-            width: 24px;
-            height: 16px;
-            background: url("@/assets/activity/celebrityGifts/darkListBanner.png") no-repeat center center;
-            background-size: 100% 100%;
-          }
         }
         .col-avatar {
           width: 60px;
@@ -987,12 +993,6 @@ onUnmounted(() => {
           color: transparent;
           font-size: 18px;
           line-height: 21px;
-        }
-        .region {
-          width: 24px;
-          height: 16px;
-          background: url("@/assets/activity/celebrityGifts/darkListBanner.png") no-repeat center center;
-          background-size: 100% 100%;
         }
       }
       .col-avatar {
@@ -1210,6 +1210,14 @@ onUnmounted(() => {
                 -webkit-text-fill-color: transparent; /* 新增：让文字填充透明，显示渐变背景 */
                 font-size: 12px;
                 line-height: 12px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;
+                > img {
+                  width: 12px;
+                  height: 10px;
+                }
               }
             }
           }

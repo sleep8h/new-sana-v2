@@ -56,11 +56,15 @@
             <img class="gift-img" :src="top1.avatar" alt="" />
             <div class="podium-info">
               <div class="podium-name text-hide">{{ celebrityName(top1) }}</div>
-              <div class="podium-score highlight">{{ formatNumber(top1.integral) }}</div>
+              <div class="podium-score highlight">{{ formatNumber(top1.giftCount) }}</div>
             </div>
-            <div class="hall-of-fame" @click="goToHallOfFame">
+            <div
+              class="hall-of-fame"
+              v-if="top1?.topSenders?.length > 0"
+              @click="goToHallOfFame(celebrityName(top1), top1?.topSenders || [])"
+            >
               <div class="hall-avatars">
-                <img v-for="(h, i) in hallOfFame.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
+                <img v-for="(h, i) in top1.topSenders?.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
               </div>
               <div class="hall-arrow"></div>
             </div>
@@ -71,11 +75,15 @@
             <img class="gift-img" :src="top2.avatar" alt="" />
             <div class="podium-info">
               <div class="podium-name text-hide">{{ celebrityName(top2) }}</div>
-              <div class="podium-score">{{ formatNumber(top2.integral) }}</div>
+              <div class="podium-score">{{ formatNumber(top2.giftCount) }}</div>
             </div>
-            <div class="hall-of-fame" @click="goToHallOfFame">
+            <div
+              class="hall-of-fame"
+              v-if="top2?.topSenders?.length > 0"
+              @click="goToHallOfFame(celebrityName(top2), top2?.topSenders || [])"
+            >
               <div class="hall-avatars">
-                <img v-for="(h, i) in hallOfFame.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
+                <img v-for="(h, i) in top2.topSenders?.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
               </div>
               <div class="hall-arrow"></div>
             </div>
@@ -86,11 +94,15 @@
             <img class="gift-img" :src="top3.avatar" alt="" />
             <div class="podium-info">
               <div class="podium-name text-hide">{{ celebrityName(top3) }}</div>
-              <div class="podium-score">{{ formatNumber(top3.integral) }}</div>
+              <div class="podium-score">{{ formatNumber(top3.giftCount) }}</div>
             </div>
-            <div class="hall-of-fame" @click="goToHallOfFame">
+            <div
+              class="hall-of-fame"
+              v-if="top3?.topSenders?.length > 0"
+              @click="goToHallOfFame(celebrityName(top3), top3?.topSenders || [])"
+            >
               <div class="hall-avatars">
-                <img v-for="(h, i) in hallOfFame.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
+                <img v-for="(h, i) in top3.topSenders?.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
               </div>
               <div class="hall-arrow"></div>
             </div>
@@ -102,7 +114,6 @@
         <div class="item" v-for="(item, idx) in celebrityList.slice(3, 50)" :key="idx">
           <div class="col-rank">
             <div class="rank-num">{{ idx + 4 }}</div>
-            <div class="region">{{ item.region }}</div>
           </div>
           <div class="col-avatar">
             <img :src="item.avatar" alt="" />
@@ -119,23 +130,22 @@
           :class="{ 'progress-rtl': store.language === 'ar' }"
           :style="{ width: progressPercent + '%' }"
         >
-          <span class="progress-text">88%</span>
+          <span class="progress-text">{{ progressPercent }}%</span>
         </div>
       </div>
       <div class="user-info-item">
         <div class="col-rank">
           <div class="rank-num">{{ userInfo.rank }}</div>
-          <div class="region">{{ userInfo.region }}</div>
         </div>
         <div class="col-avatar">
           <img :src="userInfo.avatar" alt="" />
         </div>
         <div class="col-name">{{ celebrityName(userInfo) }}</div>
         <div class="col-number-score">
-          <div class="col-number">
+          <!-- <div class="col-number">
             <span>{{ $t("celebrityGifts.myShare") }}</span>
             <span>{{ userInfo.percent }}%</span>
-          </div>
+          </div> -->
           <div class="col-score">{{ `X ${formatNumber(userInfo.integral)}` }}</div>
         </div>
       </div>
@@ -202,7 +212,6 @@ const celebrityList = ref([]);
 const hallOfFame = ref([]);
 const userInfo = ref({
   rank: 99,
-  region: "",
   avatar: defaultRewardImg,
   nick: "123456",
   nickAr: "",
@@ -222,7 +231,7 @@ const senderTopList = ref([]);
 const senderTopGiftName = ref("");
 
 // 进度条百分比，可自行修改
-const progressPercent = ref(60);
+const progressPercent = ref(0);
 
 const previousWinnerList = ref([]);
 
@@ -233,7 +242,7 @@ const monthlyRewardList = ref([]);
 const showWeeklyReward = ref(false);
 const showMonthlyReward = ref(false);
 
-const celebrityName = (c) => (store.language === "ar" ? c.nickAr || c.nick : c.nick);
+const celebrityName = (c) => (store.language === "ar" ? c.giftName || c.giftName : c.giftName);
 const formatNumber = (num) => Number(num || 0).toLocaleString("en-US");
 
 const padZero = (num) => String(num).padStart(2, "0");
@@ -279,10 +288,10 @@ const tabChange = async (item) => {
   await getRankRewards();
 };
 
-const goToHallOfFame = () => {
+const goToHallOfFame = (senderTopGiftName, senderTopList) => {
   // 打开 senderTop 弹窗，展示当前选中名人的 TOP10 发送者
-  senderTopGiftName.value = top1.value ? celebrityName(top1.value) : "";
-  senderTopList.value = top1.value?.topUsers || [];
+  senderTopGiftName.value = senderTopGiftName;
+  senderTopList.value = senderTopList || [];
   showSenderTop.value = true;
 };
 
@@ -295,17 +304,44 @@ const getDataList = async (type) => {
     });
     if (res && res.code === 200) {
       if (curTab.value === 1) {
-        celebrityList.value = res.data.weekGiftRank || [];
         const timeOut = res.data.timeOutWeek || res.data.timeOutDay || 0;
         startCountdown(Date.now() + timeOut);
+        const monthlyCount = res.data.myGift.monthlyCount || 0;
+        const monthlyTarget = res.data.myGift.monthlyTarget || 0;
+        progressPercent.value = Math.min(Math.floor((monthlyCount / monthlyTarget) * 100), 100);
       } else if (curTab.value === 2) {
-        celebrityList.value = res.data.monthGiftRank || [];
         const timeOut = res.data.timeOutMonth || res.data.timeOutDay || 0;
         startCountdown(Date.now() + timeOut);
+        const monthlyCount = res.data.myGift.monthlyCount || 0;
+        const monthlyTarget = res.data.myGift.monthlyTarget || 0;
+        progressPercent.value = Math.min(Math.floor((monthlyCount / monthlyTarget) * 100), 100);
       } else if (curTab.value === 3) {
         previousWinnerList.value = res.data.history || [];
       }
       console.log(res);
+    } else {
+      console.error(res.message);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getRank = async () => {
+  try {
+    const res = await get("/h5doings/activity/famous2026/rank", {
+      uid: store.uid,
+      ticket: store.ticket,
+      language: store.language,
+      size: 50,
+      type: curTab.value,
+      groupType: 1,
+    });
+    if (res && res.code === 200) {
+      celebrityList.value = res.data.list || [];
+      if (res.data.self) {
+        userInfo.value = { ...userInfo.value, ...res.data.self };
+      }
     } else {
       console.error(res.message);
     }
@@ -344,6 +380,7 @@ const getRankRewards = async () => {
 
 onMounted(async () => {
   await getDataList();
+  await getRank();
   await getRankRewards();
 });
 
@@ -364,15 +401,16 @@ onUnmounted(() => {
     background: url("@/assets/activity/celebrityGifts/top-reward-bg.png") no-repeat center center;
     background-size: cover;
     position: relative;
-    .title {
+    > .title {
       position: absolute;
-      top: 31.5px;
+      top: 37.5px;
       left: 50%;
       transform: translateX(-50%);
       font-weight: bold;
       font-size: 14px;
       color: #ffffff;
       text-align: center;
+      line-height: 14px;
     }
     .more {
       width: 92px;
@@ -435,6 +473,7 @@ onUnmounted(() => {
     justify-content: center;
     align-items: flex-end;
     margin-bottom: 8px;
+    direction: ltr;
     .tab-item-1 {
       width: 130px;
       height: 36px;
@@ -745,12 +784,6 @@ onUnmounted(() => {
             font-size: 18px;
             line-height: 21px;
           }
-          .region {
-            width: 24px;
-            height: 16px;
-            background: url("@/assets/activity/celebrityGifts/darkListBanner.png") no-repeat center center;
-            background-size: 100% 100%;
-          }
         }
         .col-avatar {
           width: 60px;
@@ -863,12 +896,6 @@ onUnmounted(() => {
           color: transparent;
           font-size: 18px;
           line-height: 21px;
-        }
-        .region {
-          width: 24px;
-          height: 16px;
-          background: url("@/assets/activity/celebrityGifts/darkListBanner.png") no-repeat center center;
-          background-size: 100% 100%;
         }
       }
       .col-avatar {

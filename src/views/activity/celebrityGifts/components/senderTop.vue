@@ -9,7 +9,7 @@
         <!-- 标题 -->
         <div class="modal-title">
           <div class="gift-name">{{ giftName }}</div>
-          <div class="top-label">TOP 10 SENDER</div>
+          <div class="top-label">{{ $t("celebrityGifts.top10Sender") }}</div>
         </div>
         <!-- 列表 -->
         <div class="sender-list">
@@ -19,18 +19,10 @@
             :key="item.uid || index"
             :class="{ 'sender-item-ar': store.language === 'ar' }"
           >
-            <div class="item-left">
-              <img v-if="item.country" class="country-flag" :src="getCountryFlag(item.country)" alt="" />
-              <div class="rank-num">{{ padZero(item.index || index + 1) }}</div>
-              <img class="avatar" :src="item.avatar" alt="" />
-            </div>
-            <div class="item-center">
-              <div class="name text-hide">{{ item.nick }}</div>
-            </div>
-            <div class="item-right">
-              <div class="diamond-icon"></div>
-              <div class="score">X{{ formatNumber(item.integral ?? item.score) }}</div>
-            </div>
+            <div class="rank-num">{{ padZero(item.index || index + 1) }}</div>
+            <img class="avatar" :src="item.giftPicUrl" alt="" />
+            <div class="name text-hide">{{ item.giftName }}</div>
+            <div class="score">X{{ formatNumber(item.giftCount ?? 0) }}</div>
           </div>
         </div>
         <div class="empty" v-if="displayList.length === 0">{{ $t("celebrityGifts.noRank") }}</div>
@@ -154,6 +146,8 @@ const displayList = computed(() => {
         width: 300px;
         height: 64px;
         flex-shrink: 0;
+        box-sizing: border-box;
+        padding-bottom: 10px;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -189,81 +183,53 @@ const displayList = computed(() => {
           &:last-child {
             margin-bottom: 0;
           }
-
-          .item-left {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex-shrink: 0;
-            .country-flag {
-              width: 24px;
-              height: 16px;
-            }
-            .rank-num {
-              width: 20px;
-              height: 21px;
-              font-weight: bold;
-              font-size: 18px;
-              line-height: 20px;
-              text-align: center;
-              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              background-clip: text;
-              color: transparent;
-            }
-            .avatar {
-              margin-inline-start: 8px;
-              width: 60px;
-              height: 60px;
-              border-radius: 50%;
-              border: 1px solid linear-gradient(180deg, #fbdb9b 4.97%, #fffdf2 40.31%, #ffecbb 92.76%, #ffd686 147.83%);
-              object-fit: cover;
-            }
+          .rank-num {
+            width: 20px;
+            height: 21px;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 20px;
+            text-align: center;
+            background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
           }
-
-          .item-center {
+          .avatar {
+            margin-inline-start: 8px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 1px solid linear-gradient(180deg, #fbdb9b 4.97%, #fffdf2 40.31%, #ffecbb 92.76%, #ffd686 147.83%);
+            object-fit: cover;
+          }
+          .name {
             width: 90px;
             margin-inline-start: 7px;
-            .name {
-              font-weight: 400;
-              line-height: 21px;
-              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              background-clip: text;
-              color: transparent;
-              font-size: 12px;
-              text-align: center;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-            }
+            font-weight: 400;
+            line-height: 21px;
+            background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            font-size: 12px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
-
-          .item-right {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 7px;
-            flex-shrink: 0;
+          .score {
             flex: 1;
-            .diamond-icon {
-              width: 12px;
-              height: 10px;
-              background: url("@/assets/activity/celebrityGifts/dataIcon.png") no-repeat center center;
-              background-size: contain;
-              flex-shrink: 0;
-            }
-
-            .score {
-              font-size: 18px;
-              background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              background-clip: text;
-              color: transparent;
-            }
+            display: flex;
+            justify-content: flex-end;
+            font-size: 18px;
+            background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
           }
         }
 

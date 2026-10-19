@@ -41,7 +41,7 @@
         <!-- 上周 TOP1 展示区 -->
         <div class="last-week-top">
           <!-- 左边：上周名人礼物 TOP1 -->
-          <div class="top-card">
+          <div class="top-card" v-if="lastWeekCelebrity">
             <div class="top-avatar-wrap">
               <img class="top-avatar" :src="lastWeekCelebrity?.avatar || defaultAvatar" alt="" />
               <img class="avatar-frame" src="@/assets/activity/celebrityGifts/avatarFrame1.png" alt="" />
@@ -53,7 +53,7 @@
           </div>
 
           <!-- 右边：上周 Top Supporter TOP1 -->
-          <div class="top-card top-card-right">
+          <div class="top-card top-card-right" v-if="lastWeekSupporter">
             <div class="top-avatar-wrap">
               <img class="top-avatar" :src="lastWeekSupporter?.avatar || defaultAvatar" alt="" />
               <img class="avatar-frame" src="@/assets/activity/celebrityGifts/avatarFrame2.png" alt="" />
@@ -143,9 +143,10 @@ const getDataList = async (type) => {
       language: store.language,
     });
     if (res && res.code === 200) {
-      console.log(res);
       lastWeekCelebrity.value = res.data.history ? res.data.history[0]?.giftTop3?.[0] || null : null;
       lastWeekSupporter.value = res.data.history ? res.data.history[0]?.supporterTop3?.[0] || null : null;
+      console.log(lastWeekCelebrity.value);
+      console.log(lastWeekSupporter.value);
     } else {
       console.error(res.message);
     }
