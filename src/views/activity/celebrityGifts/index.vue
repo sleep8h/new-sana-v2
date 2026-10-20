@@ -34,8 +34,7 @@
 
         <!-- 规则入口 -->
         <div class="rules" @click="rulesShow = true">
-          <span class="rules-icon">?</span>
-          <span>{{ $t("celebrityGifts.rule") }}</span>
+          <span>RULE</span>
         </div>
 
         <!-- 上周 TOP1 展示区 -->
@@ -208,13 +207,13 @@ onMounted(() => {
       // 规则
       .rules {
         position: absolute;
-        top: 460px;
-        right: 12px;
-        height: 28px;
-        padding: 0 10px;
-        border-radius: 14px;
-        border: 1px solid rgba(242, 205, 99, 0.7);
-        background: rgba(40, 6, 10, 0.7);
+        top: 237px;
+        right: -21px;
+        width: 72px;
+        height: 32px;
+        padding: 0 21px 0 10px;
+        background: url("@/assets/activity/celebrityGifts/rules-bg.png") no-repeat center center;
+        background-size: cover;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -222,16 +221,6 @@ onMounted(() => {
         font-size: 12px;
         color: #f7d264;
         cursor: pointer;
-        .rules-icon {
-          width: 16px;
-          height: 16px;
-          margin-right: 3px;
-          border-radius: 50%;
-          border: 1px solid #f7d264;
-          font-size: 11px;
-          line-height: 14px;
-          text-align: center;
-        }
       }
 
       // 上周 TOP1 展示区

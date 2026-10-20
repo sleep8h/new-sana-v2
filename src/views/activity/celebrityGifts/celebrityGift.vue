@@ -94,6 +94,8 @@
               </div>
             </SwiperSlide>
           </Swiper>
+          <!-- 已点亮遮罩：放在 swiper 外部，避免被 overflow 裁剪 -->
+          <div v-if="rewardPage <= currentLevelIndex" class="lit-overlay"></div>
         </div>
         <div class="reward-arrow-right" @click="nextReward"></div>
       </div>
@@ -621,7 +623,7 @@ onMounted(async () => {
         transform: translateX(-50%);
         width: 238.5px;
         height: 171px;
-        overflow: hidden;
+        // overflow: hidden;
         .swiper {
           width: 238.5px;
           .reward-group {
@@ -630,6 +632,10 @@ onMounted(async () => {
             align-items: flex-start;
             gap: 37.5px;
             height: 171px;
+            position: relative;
+            &:has(> .reward-item:only-child) {
+              justify-content: center;
+            }
           }
 
           .reward-item {
@@ -668,6 +674,17 @@ onMounted(async () => {
               }
             }
           }
+        }
+        .lit-overlay {
+          position: absolute;
+          top: -10px;
+          right: -50px;
+          width: 77px;
+          height: 77px;
+          background: url("@/assets/activity/celebrityGifts/receiy.png") no-repeat center center;
+          background-size: cover;
+          pointer-events: none;
+          z-index: 2;
         }
       }
     }

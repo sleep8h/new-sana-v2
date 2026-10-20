@@ -499,6 +499,7 @@ onUnmounted(() => {
           color: transparent;
           font-weight: bold;
           margin-top: 13.5px;
+          text-align: center;
         }
         .number {
           font-size: 11px;

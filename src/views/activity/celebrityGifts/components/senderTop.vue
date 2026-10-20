@@ -20,9 +20,9 @@
             :class="{ 'sender-item-ar': store.language === 'ar' }"
           >
             <div class="rank-num">{{ padZero(item.index || index + 1) }}</div>
-            <img class="avatar" :src="item.giftPicUrl" alt="" />
-            <div class="name text-hide">{{ item.giftName }}</div>
-            <div class="score">X{{ formatNumber(item.giftCount ?? 0) }}</div>
+            <img class="avatar" :src="item.avatar" alt="" />
+            <div class="name text-hide">{{ item.nick }}</div>
+            <div class="score">X{{ formatNumber(item.gold ?? 0) }}</div>
           </div>
         </div>
         <div class="empty" v-if="displayList.length === 0">{{ $t("celebrityGifts.noRank") }}</div>
@@ -67,19 +67,7 @@ const getCountryFlag = (country) => {
   return `https://flagcdn.com/w40/${country.toLowerCase()}.png`;
 };
 
-// 假数据：当传入的 list 为空时，展示 10 条演示数据
-const mockSenderList = [
-  { uid: 8000000, nick: "UESRNAME123...", avatar: defaultAvatar, integral: 6666, country: "US", index: 1 },
-  { uid: 8000001, nick: "UESRNAME123...", avatar: defaultAvatar, integral: 5555, country: "BR", index: 2 },
-  { uid: 8000002, nick: "UESRNAME123...", avatar: defaultAvatar, integral: 4444, country: "TR", index: 3 },
-  { uid: 8000003, nick: "UESRNAME123...", avatar: defaultAvatar, integral: 3333, country: "EG", index: 4 },
-  { uid: 8000004, nick: "UESRNAME123...", avatar: defaultAvatar, integral: 2222, country: "SA", index: 5 },
-  { uid: 8000005, nick: "UESRNAME123...", avatar: defaultAvatar, integral: 1111, country: "IN", index: 6 },
-  { uid: 8000006, nick: "UESRNAME123...", avatar: defaultAvatar, integral: 999, country: "ID", index: 7 },
-  { uid: 8000007, nick: "UESRNAME123...", avatar: defaultAvatar, integral: 888, country: "PK", index: 8 },
-  { uid: 8000008, nick: "UESRNAME123...", avatar: defaultAvatar, integral: 777, country: "US", index: 9 },
-  { uid: 8000009, nick: "UESRNAME123...", avatar: defaultAvatar, integral: 666, country: "BR", index: 10 },
-];
+const mockSenderList = [];
 
 const displayList = computed(() => {
   if (props.list && props.list.length > 0) return props.list;
@@ -215,7 +203,7 @@ const displayList = computed(() => {
             background-clip: text;
             color: transparent;
             font-size: 12px;
-            text-align: center;
+            text-align: start;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;

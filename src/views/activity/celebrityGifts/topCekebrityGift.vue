@@ -19,10 +19,12 @@
           <div class="gift-icon">
             <img :src="gift.rewardUrl || defaultRewardImg" alt="Reward" />
           </div>
-          <div class="name">
-            {{ `${store.language === "ar" ? gift.rewardNameAr : gift.rewardName}*${gift.rewardValue}` }}
-          </div>
-          <div class="number">{{ gift.rewardValue }}</div>
+          <sanaAutoText class="name">
+            <span>
+              {{ `${store.language === "ar" ? gift.rewardNameAr : gift.rewardName}*${gift.rewardValue}` }}
+            </span>
+          </sanaAutoText>
+          <!-- <div class="number">{{ gift.rewardValue }}</div> -->
         </div>
       </div>
     </div>
@@ -55,13 +57,13 @@
           <div class="top1" v-if="top1">
             <img class="gift-img" :src="top1.avatar" alt="" />
             <div class="podium-info">
-              <div class="podium-name text-hide">{{ celebrityName(top1) }}</div>
-              <div class="podium-score highlight">{{ formatNumber(top1.giftCount) }}</div>
+              <div class="podium-name text-hide">{{ top1.nick }}</div>
+              <div class="podium-score highlight">{{ `X ${formatNumber(top1.integral)}` }}</div>
             </div>
             <div
               class="hall-of-fame"
               v-if="top1?.topSenders?.length > 0"
-              @click="goToHallOfFame(celebrityName(top1), top1?.topSenders || [])"
+              @click="goToHallOfFame(top1.nick, top1?.topSenders || [])"
             >
               <div class="hall-avatars">
                 <img v-for="(h, i) in top1.topSenders?.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
@@ -74,13 +76,13 @@
           <div class="top2" v-if="top2">
             <img class="gift-img" :src="top2.avatar" alt="" />
             <div class="podium-info">
-              <div class="podium-name text-hide">{{ celebrityName(top2) }}</div>
-              <div class="podium-score">{{ formatNumber(top2.giftCount) }}</div>
+              <div class="podium-name text-hide">{{ top2.nick }}</div>
+              <div class="podium-score">{{ `X ${formatNumber(top2.integral)}` }}</div>
             </div>
             <div
               class="hall-of-fame"
               v-if="top2?.topSenders?.length > 0"
-              @click="goToHallOfFame(celebrityName(top2), top2?.topSenders || [])"
+              @click="goToHallOfFame(top2.nick, top2?.topSenders || [])"
             >
               <div class="hall-avatars">
                 <img v-for="(h, i) in top2.topSenders?.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
@@ -93,13 +95,13 @@
           <div class="top3" v-if="top3">
             <img class="gift-img" :src="top3.avatar" alt="" />
             <div class="podium-info">
-              <div class="podium-name text-hide">{{ celebrityName(top3) }}</div>
-              <div class="podium-score">{{ formatNumber(top3.giftCount) }}</div>
+              <div class="podium-name text-hide">{{ top3.nick }}</div>
+              <div class="podium-score">{{ `X ${formatNumber(top3.integral)}` }}</div>
             </div>
             <div
               class="hall-of-fame"
               v-if="top3?.topSenders?.length > 0"
-              @click="goToHallOfFame(celebrityName(top3), top3?.topSenders || [])"
+              @click="goToHallOfFame(top3.nick, top3?.topSenders || [])"
             >
               <div class="hall-avatars">
                 <img v-for="(h, i) in top3.topSenders?.slice(0, 3)" :key="i" :src="h.avatar" alt="" />
@@ -118,7 +120,7 @@
           <div class="col-avatar">
             <img :src="item.avatar" alt="" />
           </div>
-          <div class="col-name">{{ celebrityName(item) }}</div>
+          <div class="col-name">{{ item.nick }}</div>
           <div class="col-score">{{ `X ${formatNumber(item.integral)}` }}</div>
         </div>
       </div>
@@ -140,7 +142,7 @@
         <div class="col-avatar">
           <img :src="userInfo.avatar" alt="" />
         </div>
-        <div class="col-name">{{ celebrityName(userInfo) }}</div>
+        <div class="col-name">{{ userInfo.nick }}</div>
         <div class="col-number-score">
           <!-- <div class="col-number">
             <span>{{ $t("celebrityGifts.myShare") }}</span>
@@ -242,8 +244,7 @@ const monthlyRewardList = ref([]);
 const showWeeklyReward = ref(false);
 const showMonthlyReward = ref(false);
 
-const celebrityName = (c) => (store.language === "ar" ? c.giftName || c.giftName : c.giftName);
-const formatNumber = (num) => Number(num || 0).toLocaleString("en-US");
+const formatNumber = (num) => String(num || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 const padZero = (num) => String(num).padStart(2, "0");
 
@@ -288,10 +289,10 @@ const tabChange = async (item) => {
   await getRankRewards();
 };
 
-const goToHallOfFame = (senderTopGiftName, senderTopList) => {
+const goToHallOfFame = (giftName, list) => {
   // 打开 senderTop 弹窗，展示当前选中名人的 TOP10 发送者
-  senderTopGiftName.value = senderTopGiftName;
-  senderTopList.value = senderTopList || [];
+  senderTopGiftName.value = giftName;
+  senderTopList.value = list || [];
   showSenderTop.value = true;
 };
 
@@ -334,8 +335,7 @@ const getRank = async () => {
       ticket: store.ticket,
       language: store.language,
       size: 50,
-      type: curTab.value,
-      groupType: 1,
+      type: curTab.value + 2,
     });
     if (res && res.code === 200) {
       celebrityList.value = res.data.list || [];
@@ -429,6 +429,7 @@ onUnmounted(() => {
       display: flex;
       gap: 12px;
       .gift-item {
+        width: 90px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -447,13 +448,16 @@ onUnmounted(() => {
           }
         }
         .name {
+          width: 90px;
           font-size: 12px;
-          background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
-          -webkit-background-clip: text;
-          background-clip: text;
           color: transparent;
           margin-bottom: 2px;
           text-align: center;
+          :deep(span) {
+            background: linear-gradient(180deg, #e4be6e 19.05%, #ecb25f 85.71%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
         }
         .number {
           font-size: 12px;
