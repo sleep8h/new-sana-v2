@@ -124,7 +124,7 @@ const goBack = () => {
     z-index: 999;
     width: 100%;
     height: 88px;
-    boxsizing: border-box;
+    box-sizing: border-box;
     padding-top: 44px;
     display: flex;
     justify-content: center;

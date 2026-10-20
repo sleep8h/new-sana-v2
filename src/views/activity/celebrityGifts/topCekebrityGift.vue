@@ -1106,7 +1106,7 @@ onUnmounted(() => {
           transform: translateX(-50%);
           width: 404px;
           height: 37px;
-          background: url("@/assets/activity/celebrityGifts/previous-winner-footer-bg.png") no-repeat center center;
+          background: url("@/assets/activity/celebrityGifts/previous-winner-foot-bg.png") no-repeat center center;
           background-size: 100% 100%;
         }
       }
