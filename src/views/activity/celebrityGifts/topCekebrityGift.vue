@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div v-if="curTab === 1 || curTab === 2" class="view-weekly view-monthly">
+    <div v-if="curTab === 1 || curTab === 2" class="view-weekly view-monthly" :class="{ padding: userInfo?.index }">
       <div class="top">
         <div class="count-down">
           <div class="time-list">
@@ -125,8 +125,8 @@
         </div>
       </div>
     </div>
-    <div class="user-info" v-if="curTab === 1 || curTab === 2">
-      <div class="progress-box">
+    <div class="user-info" v-if="(curTab === 1 || curTab === 2) && userInfo?.index">
+      <!-- <div class="progress-box">
         <div
           class="progress"
           :class="{ 'progress-rtl': store.language === 'ar' }"
@@ -134,10 +134,10 @@
         >
           <span class="progress-text">{{ progressPercent }}%</span>
         </div>
-      </div>
+      </div> -->
       <div class="user-info-item">
         <div class="col-rank">
-          <div class="rank-num">{{ userInfo.rank }}</div>
+          <div class="rank-num">{{ userInfo.index }}</div>
         </div>
         <div class="col-avatar">
           <img :src="userInfo.avatar" alt="" />
@@ -158,27 +158,27 @@
         <div class="view-previous-winner-item" v-for="(item, idx) in previousWinnerList" :key="idx">
           <div class="winner-period">
             <img src="@/assets/activity/celebrityGifts/whiteSparkleIcon.png" alt="" />
-            <span>{{ item.period }}</span>
+            <span>{{ item.weekStr }} ~ {{ getWeekEndStr(item.weekStr) }}</span>
             <img src="@/assets/activity/celebrityGifts/whiteSparkleIcon.png" alt="" />
           </div>
           <div class="winner-podium">
             <!-- TOP1 -->
-            <div class="podium-first">
-              <img class="podium-avatar" :src="item.top1?.avatar" alt="" />
-              <div class="podium-name">{{ item.top1?.name }}</div>
-              <div class="podium-score">x{{ formatNumber(item.top1?.score) }}</div>
+            <div class="podium-first" v-if="item.giftTop3[0]">
+              <img class="podium-avatar" :src="item.giftTop3[0]?.avatar" alt="" />
+              <div class="podium-name">{{ item.giftTop3[0]?.giftName }}</div>
+              <div class="podium-score">x{{ formatNumber(item.giftTop3[0]?.giftCount) }}</div>
             </div>
             <!-- TOP2 -->
-            <div class="podium-second">
-              <img class="podium-avatar" :src="item.top2?.avatar" alt="" />
-              <div class="podium-name">{{ item.top2?.name }}</div>
-              <div class="podium-score">x{{ formatNumber(item.top2?.score) }}</div>
+            <div class="podium-second" v-if="item.giftTop3[1]">
+              <img class="podium-avatar" :src="item.giftTop3[1]?.avatar" alt="" />
+              <div class="podium-name">{{ item.giftTop3[1]?.giftName }}</div>
+              <div class="podium-score">x{{ formatNumber(item.giftTop3[1]?.giftCount) }}</div>
             </div>
             <!-- TOP3 -->
-            <div class="podium-third">
-              <img class="podium-avatar" :src="item.top3?.avatar" alt="" />
-              <div class="podium-name">{{ item.top3?.name }}</div>
-              <div class="podium-score">x{{ formatNumber(item.top3?.score) }}</div>
+            <div class="podium-third" v-if="item.giftTop3[2]">
+              <img class="podium-avatar" :src="item.giftTop3[2]?.avatar" alt="" />
+              <div class="podium-name">{{ item.giftTop3[2]?.giftName }}</div>
+              <div class="podium-score">x{{ formatNumber(item.giftTop3[2]?.giftCount) }}</div>
             </div>
           </div>
           <img class="winner-footer" src="@/assets/activity/celebrityGifts/previous-winner-foot-bg.png" alt="" />
@@ -246,6 +246,16 @@ const showMonthlyReward = ref(false);
 
 const formatNumber = (num) => String(num || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
+const getWeekEndStr = (weekStr) => {
+  if (!weekStr) return "";
+  const date = new Date(weekStr.replace(/-/g, "/"));
+  date.setDate(date.getDate() + 6);
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+};
+
 const padZero = (num) => String(num).padStart(2, "0");
 
 const timeUnits = computed(() => [
@@ -256,6 +266,7 @@ const timeUnits = computed(() => [
 ]);
 
 const startCountdown = (timeOut) => {
+  if (countdownTimer) clearInterval(countdownTimer);
   const updateCountdown = () => {
     const now = Date.now();
     const diff = timeOut - now;
@@ -285,6 +296,8 @@ const handleMoreClick = () => {
 const tabChange = async (item) => {
   curTab.value = item.value;
   celebrityList.value = [];
+  if (countdownTimer) clearInterval(countdownTimer);
+  countdown.value = { days: 0, hours: 0, minutes: 0, seconds: 0 };
   await getDataList();
   await getRankRewards();
 };
@@ -317,7 +330,13 @@ const getDataList = async (type) => {
         const monthlyTarget = res.data.myGift.monthlyTarget || 0;
         progressPercent.value = Math.min(Math.floor((monthlyCount / monthlyTarget) * 100), 100);
       } else if (curTab.value === 3) {
-        previousWinnerList.value = res.data.history || [];
+        previousWinnerList.value = res.data.history || [
+          {
+            weekStr: "",
+            giftTop3: [],
+            supporterTop3: [],
+          },
+        ];
       }
       console.log(res);
     } else {
@@ -340,7 +359,7 @@ const getRank = async () => {
     if (res && res.code === 200) {
       celebrityList.value = res.data.list || [];
       if (res.data.self) {
-        userInfo.value = { ...userInfo.value, ...res.data.self };
+        userInfo.value = res.data.self;
       }
     } else {
       console.error(res.message);
@@ -550,7 +569,6 @@ onUnmounted(() => {
   .view-monthly {
     width: 100%;
     height: auto;
-    padding-bottom: 125px;
     .top {
       width: 100%;
       height: 728px;
@@ -829,6 +847,9 @@ onUnmounted(() => {
         }
       }
     }
+  }
+  .padding {
+    padding-bottom: 125px;
   }
   .user-info {
     position: fixed;

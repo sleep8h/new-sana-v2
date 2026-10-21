@@ -144,49 +144,49 @@
         <div class="view-previous-winner-item" v-for="(item, idx) in previousWinnerList" :key="idx">
           <div class="winner-period">
             <img src="@/assets/activity/celebrityGifts/whiteSparkleIcon.png" alt="" />
-            <span>{{ item.period }}</span>
+            <span>{{ item.weekStr }} ~ {{ getWeekEndStr(item.weekStr) }}</span>
             <img src="@/assets/activity/celebrityGifts/whiteSparkleIcon.png" alt="" />
           </div>
           <div class="winner-podium">
             <!-- TOP1 -->
-            <div class="podium-first">
+            <div class="podium-first" v-if="item.supporterTop3[0]">
               <div class="podium-avatar">
                 <div class="frame"></div>
-                <img :src="item.top1?.avatar" alt="" />
+                <img :src="item.supporterTop3[0]?.avatar" alt="" />
               </div>
               <div class="text">
-                <div class="podium-name">{{ item.top1?.name }}</div>
+                <div class="podium-name">{{ item.supporterTop3[0]?.nick }}</div>
                 <div class="podium-score">
                   <img src="@/assets/activity/celebrityGifts/goldLeafIcon.png" alt="" />
-                  <span>{{ formatNumber(item.top1?.score) }}</span>
+                  <span>{{ formatNumber(item.supporterTop3[0]?.gold) }}</span>
                 </div>
               </div>
             </div>
             <!-- TOP2 -->
-            <div class="podium-second">
+            <div class="podium-second" v-if="item.supporterTop3[1]">
               <div class="podium-avatar">
                 <div class="frame"></div>
-                <img :src="item.top2?.avatar" alt="" />
+                <img :src="item.supporterTop3[1]?.avatar" alt="" />
               </div>
               <div class="text">
-                <div class="podium-name">{{ item.top2?.name }}</div>
+                <div class="podium-name">{{ item.supporterTop3[1]?.nick }}</div>
                 <div class="podium-score">
                   <img src="@/assets/activity/celebrityGifts/goldLeafIcon.png" alt="" />
-                  <span>{{ formatNumber(item.top2?.score) }}</span>
+                  <span>{{ formatNumber(item.supporterTop3[1]?.gold) }}</span>
                 </div>
               </div>
             </div>
             <!-- TOP3 -->
-            <div class="podium-third">
+            <div class="podium-third" v-if="item.supporterTop3[2]">
               <div class="podium-avatar">
                 <div class="frame"></div>
-                <img :src="item.top3?.avatar" alt="" />
+                <img :src="item.supporterTop3[2]?.avatar" alt="" />
               </div>
               <div class="text">
-                <div class="podium-name">{{ item.top3?.name }}</div>
+                <div class="podium-name">{{ item.supporterTop3[2]?.nick }}</div>
                 <div class="podium-score">
                   <img src="@/assets/activity/celebrityGifts/goldLeafIcon.png" alt="" />
-                  <span>{{ formatNumber(item.top3?.score) }}</span>
+                  <span>{{ formatNumber(item.supporterTop3[2]?.gold) }}</span>
                 </div>
               </div>
             </div>
@@ -303,6 +303,16 @@ const showMonthlyReward = ref(false);
 const celebrityName = (c) => (store.language === "ar" ? c.nickAr || c.nick : c.nick);
 const formatNumber = (num) => Number(num || 0).toLocaleString("en-US");
 
+const getWeekEndStr = (weekStr) => {
+  if (!weekStr) return "";
+  const date = new Date(weekStr.replace(/-/g, "/"));
+  date.setDate(date.getDate() + 6);
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+};
+
 const padZero = (num) => String(num).padStart(2, "0");
 
 const timeUnits = computed(() => [
@@ -313,6 +323,7 @@ const timeUnits = computed(() => [
 ]);
 
 const startCountdown = (timeOut) => {
+  if (countdownTimer) clearInterval(countdownTimer);
   const updateCountdown = () => {
     const now = Date.now();
     const diff = timeOut - now;
@@ -342,6 +353,8 @@ const handleMoreClick = () => {
 const tabChange = async (item) => {
   curTab.value = item.value;
   celebrityList.value = [];
+  if (countdownTimer) clearInterval(countdownTimer);
+  countdown.value = { days: 0, hours: 0, minutes: 0, seconds: 0 };
   await getDataList();
   await getRank();
   await getRankRewards();
@@ -362,7 +375,13 @@ const getDataList = async (type) => {
         const timeOut = res.data.timeOutMonth || res.data.timeOutDay || 0;
         startCountdown(Date.now() + timeOut);
       } else if (curTab.value === 3) {
-        previousWinnerList.value = res.data.history || [];
+        previousWinnerList.value = res.data.history || [
+          {
+            weekStr: "",
+            giftTop3: [],
+            supporterTop3: [],
+          },
+        ];
       }
       console.log(res);
     } else {
@@ -1238,8 +1257,8 @@ onUnmounted(() => {
                 background-size: 100% 100%;
               }
               > img {
-                width: 105.5px;
-                height: 105.5px;
+                width: 108px;
+                height: 108px;
               }
             }
             .text {
