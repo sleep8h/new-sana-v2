@@ -793,6 +793,7 @@
     "sate": "DURUM: {state}",
     "valid": "Geçerli",
     "invalid": "Geçersiz",
+    "completed": "Tamamlandı",
     "myGiftTip": "*Ünlü hediyenizin bir sonraki döngüde de gösterilmeye devam etmesi için ayda 40 kez gönderilmesi gerekir, aksi takdirde otomatik olarak kaldırılır (ilk listeleme hariç). Arkadaşlarınızı ünlü hediyenizi desteklemeye çağırın!",
     "noGiftTip": "Üzgünüz, henüz özel bir ünlü hediyeniz yok. Servet seviyeniz 48'e ulaştığında, hediye özelleştirme için personelimizle iletişime geçebilirsiniz.",
     "myItems": "Öğelerim",

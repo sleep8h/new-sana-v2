@@ -164,21 +164,23 @@
           <div class="winner-podium">
             <!-- TOP1 -->
             <div class="podium-first" v-if="item.giftTop3[0]">
-              <img class="podium-avatar" :src="item.giftTop3[0]?.avatar" alt="" />
+              <img class="podium-avatar" :src="item.giftTop3[0]?.giftPicUrl" alt="" />
               <div class="podium-name">{{ item.giftTop3[0]?.giftName }}</div>
               <div class="podium-score">x{{ formatNumber(item.giftTop3[0]?.giftCount) }}</div>
             </div>
-            <!-- TOP2 -->
-            <div class="podium-second" v-if="item.giftTop3[1]">
-              <img class="podium-avatar" :src="item.giftTop3[1]?.avatar" alt="" />
-              <div class="podium-name">{{ item.giftTop3[1]?.giftName }}</div>
-              <div class="podium-score">x{{ formatNumber(item.giftTop3[1]?.giftCount) }}</div>
-            </div>
             <!-- TOP3 -->
-            <div class="podium-third" v-if="item.giftTop3[2]">
-              <img class="podium-avatar" :src="item.giftTop3[2]?.avatar" alt="" />
+            <div class="podium-second" v-if="item.giftTop3[2]">
+              <img class="podium-avatar" :src="item.giftTop3[2]?.giftPicUrl" alt="" />
               <div class="podium-name">{{ item.giftTop3[2]?.giftName }}</div>
               <div class="podium-score">x{{ formatNumber(item.giftTop3[2]?.giftCount) }}</div>
+            </div>
+            <!-- TOP2 -->
+            <div class="podium-third" v-if="item.giftTop3[1]">
+              <div class="podium-avatar">
+                <img :src="item.giftTop3[1]?.giftPicUrl" alt="" />
+              </div>
+              <div class="podium-name">{{ item.giftTop3[1]?.giftName }}</div>
+              <div class="podium-score">x{{ formatNumber(item.giftTop3[1]?.giftCount) }}</div>
             </div>
           </div>
           <img class="winner-footer" src="@/assets/activity/celebrityGifts/previous-winner-foot-bg.png" alt="" />
@@ -296,9 +298,14 @@ const handleMoreClick = () => {
 const tabChange = async (item) => {
   curTab.value = item.value;
   celebrityList.value = [];
+  topRewardsArr.value = [];
   if (countdownTimer) clearInterval(countdownTimer);
   countdown.value = { days: 0, hours: 0, minutes: 0, seconds: 0 };
   await getDataList();
+  // 切换榜单后需要按新的榜单类型重新拉取排名和奖励数据，否则列表会被清空后一直为空
+  if (item.value === 1 || item.value === 2) {
+    await getRank();
+  }
   await getRankRewards();
 };
 
@@ -1054,9 +1061,10 @@ onUnmounted(() => {
             flex-direction: column;
             align-items: center;
             .podium-avatar {
-              width: 86px;
-              height: 86.5px;
-              margin-top: 52.5px;
+              width: auto;
+              height: 80px;
+              margin-top: 56px;
+              margin-bottom: 3px;
               display: flex;
               justify-content: center;
               align-items: center;
@@ -1089,9 +1097,10 @@ onUnmounted(() => {
             left: 8px;
             transform: none;
             .podium-avatar {
-              width: 68px;
-              height: 68px;
-              margin-top: 50px;
+              width: auto;
+              height: 60px;
+              margin-top: 54px;
+              margin-bottom: 4px;
               img {
                 width: 81px;
               }
@@ -1111,8 +1120,11 @@ onUnmounted(() => {
               width: 70px;
               height: 70px;
               margin-top: 51px;
+              background: url("@/assets/activity/celebrityGifts/giftTop2Bg.png") no-repeat center center;
+              background-size: cover;
               img {
-                width: 81px;
+                width: auto;
+                height: 60px;
               }
             }
             .podium-name {

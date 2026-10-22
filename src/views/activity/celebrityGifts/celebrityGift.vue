@@ -18,11 +18,7 @@
             <div class="detail">{{ $t("celebrityGifts.weeklyLevel", { level: myGift.currentLevel }) }}</div>
             <div class="detail detail-monthly-task" v-html="monthlyTaskHtml"></div>
             <div class="detail">
-              {{
-                $t("celebrityGifts.sate", {
-                  state: myGift.status === 1 ? $t("celebrityGifts.valid") : $t("celebrityGifts.invalid"),
-                })
-              }}
+              {{ $t("celebrityGifts.sate", { state: giftstatusText }) }}
             </div>
           </div>
         </div>
@@ -184,7 +180,7 @@ const hasMyGift = computed(() => {
   if (!myGift.value) return false;
   // 优先使用后端明确的 hasGift 标记
   if (typeof myGift.value.hasGift === "boolean") return myGift.value.hasGift;
-  // status: 1 上架（有效），2 下架（无效）
+  // status: 1 有效，2 无效
   return !!myGift.value.giftPicUrl && myGift.value.status === 1;
 });
 
@@ -193,6 +189,14 @@ const monthlyTaskHtml = computed(() => {
     num1: myGift.value.monthlyCount || 0,
     num2: myGift.value.monthlyTarget || 0,
   });
+});
+
+// 状态：接口 status 字段 1 有效 / 2 无效；月度任务完成（monthlyCount >= monthlyTarget）显示已完成
+const giftstatusText = computed(() => {
+  const count = Number(myGift.value.monthlyCount) || 0;
+  const target = Number(myGift.value.monthlyTarget) || 0;
+  if (target > 0 && count >= target) return t("celebrityGifts.completed");
+  return myGift.value.status === 1 ? t("celebrityGifts.valid") : t("celebrityGifts.invalid");
 });
 
 // 奖励展示
@@ -681,7 +685,7 @@ onMounted(async () => {
           right: -50px;
           width: 77px;
           height: 77px;
-          background: url("@/assets/activity/celebrityGifts/receiy.png") no-repeat center center;
+          background: url("@/assets/activity/celebrityGifts/received.png") no-repeat center center;
           background-size: cover;
           pointer-events: none;
           z-index: 2;

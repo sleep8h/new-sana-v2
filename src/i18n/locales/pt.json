@@ -793,6 +793,7 @@
     "sate": "ESTADO: {state}",
     "valid": "Válido",
     "invalid": "Inválido",
+    "completed": "Concluído",
     "myGiftTip": "*O presente de celebridade precisa ser enviado 40 vezes por mês para continuar sendo exibido no próximo ciclo, caso contrário será removido automaticamente (exceto o primeiro lançamento). Vá chamar amigos para apoiar seu presente de celebridade!",
     "noGiftTip": "Desculpe, você ainda não possui um presente de celebridade exclusivo. Quando seu nível de riqueza atingir 48, você pode entrar em contato com nossa equipe para personalizar o presente.",
     "myItems": "Meus Itens",

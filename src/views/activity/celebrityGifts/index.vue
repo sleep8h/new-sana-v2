@@ -42,11 +42,11 @@
           <!-- 左边：上周名人礼物 TOP1 -->
           <div class="top-card" v-if="lastWeekCelebrity">
             <div class="top-avatar-wrap">
-              <img class="top-avatar" :src="lastWeekCelebrity?.avatar || defaultAvatar" alt="" />
+              <img class="top-avatar" :src="lastWeekCelebrity?.giftPicUrl || defaultAvatar" alt="" />
               <img class="avatar-frame" src="@/assets/activity/celebrityGifts/avatarFrame1.png" alt="" />
             </div>
             <div class="top-info">
-              <div class="top-name text-hide">{{ lastWeekCelebrity?.nick || "-" }}</div>
+              <div class="top-name text-hide">{{ lastWeekCelebrity?.giftName || "-" }}</div>
               <div class="top-score">{{ formatNumber(lastWeekCelebrity?.giftCount) }}</div>
             </div>
           </div>
