@@ -9,7 +9,7 @@
         </div>
         <div class="reward-list">
           <div class="reward-item" v-for="(item, index) in list" :key="index">
-            <div class="reward-rank">
+            <div class="reward-rank" :class="{ 'reward-rank-4': index >= 3 }">
               <span v-if="type === 1 && index === 0">{{ $t("celebrityGifts.weeklyTop1Reward") }}</span>
               <span v-else-if="type === 1 && index === 1">{{ $t("celebrityGifts.weeklyTop2Reward") }}</span>
               <span v-else-if="type === 1 && index === 2">{{ $t("celebrityGifts.weeklyTop3Reward") }}</span>
@@ -157,6 +157,11 @@ const closeModal = () => {
               background-clip: text;
               color: transparent;
             }
+          }
+          .reward-rank-4 {
+            width: 210px;
+            height: 38px;
+            background-size: 210px 38px;
           }
           .reward-gifts {
             display: flex;
