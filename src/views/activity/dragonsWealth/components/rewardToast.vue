@@ -19,7 +19,7 @@
               </div>
             </div>
           </div>
-          <div class="rule-text" :class="{ 'rule-text-ar': store.language === 'ar' }">
+          <div class="rule-text">
             <p>{{ $t("dragons.rule1") }}</p>
             <p>{{ $t("dragons.rule2") }}</p>
             <p>{{ $t("dragons.rule3") }}</p>
@@ -35,8 +35,6 @@
 import { ref, onMounted } from "vue";
 import { useMainStore } from "@/pinia/index.js";
 const store = useMainStore();
-
-import avatar from "@/assets/activity/dragonsWealth/avatar.png";
 
 const props = defineProps({
   isShow: {
@@ -95,110 +93,114 @@ const closeModal = () => {
   .toast-content {
     position: fixed;
     z-index: 10000;
-    width: 345px;
-    height: 576px;
-    top: 45%;
+    width: 354px;
+    height: 628px;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     .toast-close {
       position: absolute;
-      top: 0;
-      right: 0;
-      width: 34px;
-      height: 34px;
+      top: 15px;
+      right: 22px;
+      width: 33px;
+      height: 33px;
       background: url("@/assets/activity/dragonsWealth/toast-close.png") no-repeat center center;
       background-size: cover;
+      z-index: 1;
     }
     .content {
       position: absolute;
-      top: 40px;
+      top: 0;
       left: 0;
-      width: 345px;
-      height: 586px;
-      background: url("@/assets/activity/dragonsWealth/toast-bg1.png") no-repeat center center;
-      background-size: cover;
+      width: 354px;
+      height: 628px;
+      background: url("@/assets/activity/dragonsWealth/toast-bg2.png") no-repeat center center;
+      background-size: 354px 628px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
       .title {
-        margin: 19px auto 42px;
-        height: 22px;
+        margin: 12px auto 28.5px;
+        height: 26px;
         font-weight: bold;
         box-sizing: border-box;
-        padding-top: 3px;
-        font-size: 16px;
-        line-height: 22px;
+        font-size: 18px;
+        line-height: 26px;
         text-align: center;
-        background: linear-gradient(90deg, #f4f998 0%, #ffe721 100%);
-        -webkit-background-clip: text; /* Safari/Chrome 兼容 */
-        background-clip: text; /* 现代浏览器标准属性 */
-        color: transparent; /* 文字透明以显示背景渐变 */
-        display: inline-block; /* 必须为块级或行内块元素 [1][3][6] */
+        color: #ffce51;
+        text-shadow:
+          1px 1px 0px #2d0000,
+          -1px -1px 0px #2d0000,
+          -1px 1px 0px #2d0000,
+          1px -1px 0px #2d0000;
       }
       .reward-content {
-        height: 460px;
-        overflow-y: auto;
+        width: 320px;
+        height: 542px;
         .list {
           width: 100%;
-          box-sizing: border-box;
-          padding: 0 12px 0 20px;
+          height: 384px;
           display: flex;
           justify-content: flex-start;
           align-items: flex-start;
           flex-wrap: wrap;
+          gap: 0px 4px;
+          overflow-y: auto;
           .item {
-            width: 96px;
-            height: 124px;
-            margin-right: 8px;
+            width: 104px;
+            height: 117px;
+            flex-shrink: 0;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            margin-bottom: 16px;
+            gap: 7px;
             .reward-img {
-              width: 96px;
+              width: 104px;
               height: 96px;
               background: url("@/assets/activity/dragonsWealth/reward-bg.png") no-repeat center center;
               background-size: cover;
               display: flex;
               justify-content: center;
               align-items: center;
-              margin-bottom: 6px;
               > img {
                 width: 68px;
                 height: auto;
               }
             }
             .gift-name-number {
-              width: 96px;
-              height: 22px;
-              font-size: 14px;
-              line-height: 22px;
+              width: 104px;
+              height: 14px;
+              line-height: 14px;
+              font-size: 11px;
               .gift-name {
-                color: #ffe343;
+                // color: #ffe343;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                background: linear-gradient(180deg, #ffffff 0%, #d8b26d 100%);
+                -webkit-background-clip: text; /* Safari/Chrome 兼容 */
+                background-clip: text; /* 现代浏览器标准属性 */
+                color: transparent; /* 文字透明以显示背景渐变 */
+                display: inline-block; /* 必须为块级或行内块元素 [1][3][6] */
               }
             }
           }
         }
         .rule-text {
+          width: 314px;
+          height: 147px;
           margin-top: 8px;
-          width: 100%;
           box-sizing: border-box;
-          padding: 0 20px;
           font-size: 13px;
           color: #fff099;
-          line-height: 22px;
-          text-align: left;
+          line-height: 21px;
+          text-align: start;
+          overflow-y: auto;
           > p {
             margin-bottom: 8px;
           }
-        }
-        .rule-text-ar {
-          text-align: right;
         }
       }
     }

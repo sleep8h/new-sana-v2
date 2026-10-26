@@ -67,40 +67,44 @@ const closeModal = () => {
   .toast-content {
     position: fixed;
     z-index: 10000;
-    width: 345px;
-    height: 459px;
+    width: 360.5px;
+    height: 495px;
     top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     .toast-close {
       position: absolute;
-      top: 0;
-      right: 0;
-      width: 34px;
-      height: 34px;
+      top: 44px;
+      right: 27px;
+      width: 33px;
+      height: 33px;
       background: url("@/assets/activity/dragonsWealth/toast-close.png") no-repeat center center;
       background-size: cover;
+      z-index: 1;
     }
     .content {
       position: absolute;
-      top: 40px;
+      top: 0;
       left: 0;
-      width: 345px;
-      height: 419px;
-      background: url("@/assets/activity/dragonsWealth/toast-bg.png") no-repeat center center;
+      width: 360.5px;
+      height: 495px;
+      background: url("@/assets/activity/dragonsWealth/toast-bg1.png") no-repeat center center;
       background-size: cover;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
       .title {
-        margin: 19px auto 41px;
-        height: 22px;
+        margin: 93.5px auto 21px;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 44px;
+        line-height: 44px;
         font-weight: bold;
         box-sizing: border-box;
-        padding-top: 3px;
-        font-size: 16px;
-        line-height: 22px;
+        font-size: 33px;
         text-align: center;
         background: linear-gradient(90deg, #f4f998 0%, #ffe721 100%);
         -webkit-background-clip: text; /* Safari/Chrome 兼容 */
@@ -109,15 +113,14 @@ const closeModal = () => {
         display: inline-block; /* 必须为块级或行内块元素 [1][3][6] */
       }
       .rule-text {
-        width: 100%;
+        width: 242.5px;
         box-sizing: border-box;
-        padding: 0 20px;
-        height: 291px;
+        height: 271px;
         overflow-y: auto;
         font-size: 13px;
         color: #fff099;
         line-height: 22px;
-        text-align: left;
+        text-align: start;
         > p {
           margin-bottom: 12px;
         }

@@ -14,8 +14,6 @@
 </template>
 
 <script setup>
-import avatar from "@/assets/activity/dragonsWealth/avatar.png";
-
 const props = defineProps({
   isShow: {
     //是否显示
@@ -56,29 +54,28 @@ const closeModal = () => {
   .toast-content {
     position: fixed;
     z-index: 10000;
-    width: 345px;
-    height: 408px;
-    top: 45%;
+    width: 354px;
+    height: 539.5px;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background: url("@/assets/activity/dragonsWealth/toast-bg3.png") no-repeat center center;
+    background-size: cover;
     .toast-close {
       position: absolute;
-      top: 0;
-      right: 0;
-      width: 34px;
-      height: 34px;
+      top: 25.5px;
+      right: 25.5px;
+      width: 33px;
+      height: 33px;
       background: url("@/assets/activity/dragonsWealth/toast-close.png") no-repeat center center;
       background-size: cover;
     }
     .toast-title {
       position: absolute;
-      top: 10px;
+      top: 57px;
       left: 50%;
       transform: translateX(-50%);
-      width: 199px;
-      height: 115px;
-      background: url("@/assets/activity/dragonsWealth/text-bg.png") no-repeat center center;
-      background-size: cover;
+      height: 27px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -86,29 +83,33 @@ const closeModal = () => {
       > span {
         font-weight: bold;
         box-sizing: border-box;
-        padding-top: 3px;
-        font-size: 24px;
-        line-height: 33px;
+        font-size: 18px;
+        line-height: 27px;
         text-align: center;
-        color: #ffffff;
+        color: #ffce51;
+        text-shadow:
+          1px 1px 0px #a00000,
+          -1px -1px 0px #a00000,
+          -1px 1px 0px #a00000,
+          1px -1px 0px #a00000;
       }
     }
     .toast-not {
       position: absolute;
-      top: 146px;
+      top: 121.5px;
       left: 50%;
       transform: translateX(-50%);
-      width: 180px;
-      height: 180px;
+      width: 192px;
+      height: 194.5px;
       background: url("@/assets/activity/dragonsWealth/not-get.png") no-repeat center center;
       background-size: cover;
     }
     .toast-confirm {
       position: absolute;
-      top: 362px;
+      top: 387px;
       left: 50%;
       transform: translateX(-50%);
-      width: 120px;
+      width: 198px;
       height: 46px;
       background: url("@/assets/activity/dragonsWealth/toast-button.png") no-repeat center center;
       background-size: cover;
@@ -116,14 +117,14 @@ const closeModal = () => {
       justify-content: center;
       align-items: center;
       font-weight: bold;
-      font-size: 15px;
-      color: #ffe640;
+      font-size: 18px;
       line-height: 21px;
+      color: #ffce51;
       text-shadow:
-        1px 1px #572d00,
-        -1px -1px #572d00,
-        -1px 1px #572d00,
-        1px -1px #572d00;
+        1px 1px 0px #a00000,
+        -1px -1px 0px #a00000,
+        -1px 1px 0px #a00000,
+        1px -1px 0px #a00000;
     }
   }
 }

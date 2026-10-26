@@ -1,13 +1,13 @@
 <!-- 获得奖励弹窗 -->
 <template>
-  <div class="toast" v-if="isShow">
+  <div class="toast" v-if="!isShow">
     <div class="toast-mask" @click="closeModal"></div>
     <div class="toast-content" :class="{ 'toast-content-1': props.getRewardList.length === 1 }">
       <div class="toast-close" @click="closeModal"></div>
       <div class="toast-title">
         <span>{{ $t("dragons.rewardsObtained") }}</span>
       </div>
-      <div class="toast-list" :class="{ 'toast-list-1': props.getRewardList.length === 1 }">
+      <div class="toast-list">
         <div class="list">
           <div class="item" v-for="(item, index) in props.getRewardList" :key="index">
             <div class="reward-img">
@@ -32,7 +32,6 @@
 <script setup>
 import { useMainStore } from "@/pinia/index.js";
 const store = useMainStore();
-import avatar from "@/assets/activity/dragonsWealth/avatar.png";
 
 const props = defineProps({
   isShow: {
@@ -106,100 +105,100 @@ const closeModal = () => {
   .toast-content {
     position: fixed;
     z-index: 10000;
-    width: 345px;
-    height: 583px;
-    top: 45%;
+    width: 354px;
+    height: 539.5px;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background: url("@/assets/activity/dragonsWealth/toast-bg3.png") no-repeat center center;
+    background-size: cover;
     .toast-close {
       position: absolute;
-      top: 0;
-      right: 0;
-      width: 34px;
-      height: 34px;
+      top: 25.5px;
+      right: 25.5px;
+      width: 33px;
+      height: 33px;
       background: url("@/assets/activity/dragonsWealth/toast-close.png") no-repeat center center;
       background-size: cover;
     }
     .toast-title {
       position: absolute;
-      top: 14px;
+      top: 25.5px;
       left: 50%;
       transform: translateX(-50%);
-      width: 199px;
-      height: 115px;
-      background: url("@/assets/activity/dragonsWealth/text-bg.png") no-repeat center center;
-      background-size: cover;
+      height: 27px;
       display: flex;
       justify-content: center;
       align-items: center;
+      white-space: nowrap;
       > span {
-        color: #fff8a0;
         font-weight: bold;
         box-sizing: border-box;
-        padding-top: 3px;
-        font-size: 24px;
-        line-height: 33px;
+        font-size: 18px;
+        line-height: 27px;
         text-align: center;
-        background: linear-gradient(90deg, #f4f998 0%, #ffe721 100%);
-        -webkit-background-clip: text; /* Safari/Chrome 兼容 */
-        background-clip: text; /* 现代浏览器标准属性 */
-        color: transparent; /* 文字透明以显示背景渐变 */
-        display: inline-block; /* 必须为块级或行内块元素 [1][3][6] */
-        white-space: nowrap;
-      }
-    }
-    .toast-list-1 {
-      .list {
-        > .item {
-          margin: 0 !important;
-          margin-bottom: 20px !important;
-        }
+        color: #ffce51;
+        text-shadow:
+          1px 1px 0px #a00000,
+          -1px -1px 0px #a00000,
+          -1px 1px 0px #a00000,
+          1px -1px 0px #a00000;
       }
     }
     .toast-list {
       position: absolute;
-      top: 105px;
+      top: 82.5px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 1;
       width: 100%;
-      box-sizing: border-box;
-      padding: 0 12px 0 12px;
+      height: 430px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
       .list {
+        width: 331px;
+        max-height: 360px;
+        overflow-y: auto;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-wrap: wrap;
+        gap: 9px;
         .item {
-          width: 96px;
-          height: 124px;
-          margin-right: 8px;
+          width: 104px;
+          height: 114px;
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
           align-items: center;
-          margin-bottom: 16px;
+          gap: 5px;
           .reward-img {
-            width: 96px;
+            width: 104px;
             height: 96px;
-            background: url("@/assets/activity/dragonsWealth/reward-bg.png") no-repeat center center;
+            background: url("@/assets/activity/dragonsWealth/getRewardItemBg.png") no-repeat center center;
             background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 6px;
             > img {
               width: 68px;
               height: auto;
             }
           }
           .gift-name-number {
-            width: 96px;
-            height: 22px;
-            font-size: 14px;
-            line-height: 22px;
+            width: 104px;
+            height: 12px;
+            font-size: 10px;
+            line-height: 12px;
             .gift-name {
-              color: #ffe343;
+              background: linear-gradient(180deg, #ffffff 0%, #d8b26d 100%);
+              -webkit-background-clip: text; /* Safari/Chrome 兼容 */
+              background-clip: text; /* 现代浏览器标准属性 */
+              color: transparent; /* 文字透明以显示背景渐变 */
+              display: inline-block; /* 必须为块级或行内块元素 [1][3][6] */
               display: flex;
               justify-content: center;
               align-items: center;
@@ -208,23 +207,22 @@ const closeModal = () => {
         }
       }
       .toast-confirm {
-        width: 120px;
+        width: 198px;
         height: 46px;
-        margin: 0 auto;
         background: url("@/assets/activity/dragonsWealth/toast-button.png") no-repeat center center;
         background-size: cover;
         display: flex;
         justify-content: center;
         align-items: center;
         font-weight: bold;
-        font-size: 15px;
-        color: #ffe640;
+        font-size: 18px;
         line-height: 21px;
+        color: #ffce51;
         text-shadow:
-          1px 1px #572d00,
-          -1px -1px #572d00,
-          -1px 1px #572d00,
-          1px -1px #572d00;
+          1px 1px 0px #a00000,
+          -1px -1px 0px #a00000,
+          -1px 1px 0px #a00000,
+          1px -1px 0px #a00000;
       }
     }
   }
