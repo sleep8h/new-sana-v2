@@ -106,7 +106,7 @@
           <div class="col-name-userno">
             <div class="name">{{ celebrityName(item) }}</div>
             <div class="userno">
-              <span>{{ "123456" }}</span>
+              <span>{{ item.erbanNo }}</span>
             </div>
           </div>
           <div class="col-score">
@@ -127,7 +127,7 @@
         <div class="col-name-userno">
           <div class="name">{{ celebrityName(userInfo) }}</div>
           <div class="userno">
-            <span>{{ "123456" }}</span>
+            <span>{{ userInfo.erbanNo }}</span>
           </div>
         </div>
         <div class="col-number-score">
@@ -219,12 +219,12 @@ const tabList = [
 
 const celebrityList = ref([]);
 const userInfo = ref({
-  rank: 99,
+  rank: "99+",
   avatar: defaultRewardImg,
-  nick: "123456",
+  nick: "-",
   nickAr: "",
-  percent: 88,
-  integral: 88888,
+  percent: 0,
+  integral: 0,
 });
 const countdown = ref({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 let countdownTimer = null;
