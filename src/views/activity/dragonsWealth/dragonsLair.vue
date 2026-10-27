@@ -1,30 +1,23 @@
 <!-- 巨龙巢穴 -->
 <template>
   <div class="dragons-lair">
-    <div class="lair">
-      <div class="reward-btn" :class="{'reward-btn-ar': store.language === 'ar'}" @click="rewardShow = true">
-        <div class="gift"></div>
-        <div class="text">{{ $t("dragons.rewards") }}</div>
-      </div>
+    <div class="lair-top">
       <div class="gold">
-        <div class="gold-icon" :class="{'gold-icon-ar': store.language === 'ar'}"></div>
+        <div class="gold-icon"></div>
         <div class="gold-value">{{ formatWithRegex(weekPoolGold) }}</div>
       </div>
-      <div class="knight-dragon">
-        <div class="knight">
-          <img :src="knightImg" alt="" />
-          <span :data-text="$t('dragons.knight')">{{ $t("dragons.knight") }}</span>
-        </div>
-        <div class="dragon">
-          <img :src="dragonImg" alt="" />
-          <span :data-text="$t('dragons.dragon')">{{ $t("dragons.dragon") }}</span>
-        </div>
+      <div class="reward-btn" @click="rewardShow = true">
+        <div class="text">{{ $t("dragons.rewards") }}</div>
       </div>
       <div class="vs">
-        <div class="vs-left" :class="{'vs-left-ar': store.language === 'ar'}" :style="'width:' + widthFnA(info.teamATotalContribution, info.teamBTotalContribution)">{{ info.teamATotalContribution }}</div>
-        <div class="vs-icon" :class="{'vs-icon-ar': store.language === 'ar'}" :style="(store.language === 'ar'?'right: ':'left: ') + vsLeftFn(info.teamATotalContribution, info.teamBTotalContribution)"></div>
-        <div class="vs-right" :class="{'vs-right-ar': store.language === 'ar'}" :style="'width:' + widthFnB(info.teamATotalContribution, info.teamBTotalContribution)">{{ info.teamBTotalContribution }}</div>
+        <div class="vs-left" :style="'width:' + widthFnA(info.teamATotalContribution, info.teamBTotalContribution)">{{ info.teamATotalContribution }}</div>
+        <div class="vs-icon" :style="(store.language === 'ar'?'right: ':'left: ') + vsLeftFn(info.teamATotalContribution, info.teamBTotalContribution)">
+          <div></div>
+        </div>
+        <div class="vs-right" :style="'width:' + widthFnB(info.teamATotalContribution, info.teamBTotalContribution)">{{ info.teamBTotalContribution }}</div>
       </div>
+    </div>
+    <div class="lair-bottom">
       <div class="hall-of-fame">
         <div class="left" @click="hallFn(1)">
           <div class="list">
@@ -50,7 +43,7 @@
           @click="campFn(2)"
         >
           <div class="combat-icon"></div>
-          <div class="combat-value">1</div>
+          <div class="combat-value">*1</div>
         </div>
         <div
           class="button-right"
@@ -58,7 +51,7 @@
           @click="campFn(3)"
         >
           <div class="combat-icon"></div>
-          <div class="combat-value">10</div>
+          <div class="combat-value">*10</div>
         </div>
       </div>
       <div class="my-camp">
@@ -308,7 +301,7 @@ const getActivityCamp2026RankRewards = async () => {
     if (res && res.code === 200) {
       rewardList.value = Object.values(res.data)[0];
       rewardIdList.value = [];
-      rewardList.value.forEach((item)=>{
+      rewardList.value?.forEach((item)=>{
         rewardIdList.value.push(item.rewardRefId);
       })
     } else {
@@ -327,210 +320,101 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .dragons-lair {
-  margin-top: -42px;
   width: 100%;
-  height: 783px;
-
-  .lair {
+  min-height: 947px;
+  .lair-top{
     width: 100%;
-    height: 728px;
-    text-align: center;
-    background: url("@/assets/activity/dragonsWealth/dragonsLair/bg.png") no-repeat top center;
+    height: 461px;
+    background: url("@/assets/activity/dragonsWealth/dragonsLair/bg-top.png") no-repeat top center;
     background-size: cover;
-    box-sizing: border-box;
-    padding-top: 47px;
-    .reward-btn {
-      width: auto;
-      max-width: 100px;
-      box-sizing: border-box;
-      padding: 0 5px;
-      height: 30px;
-      background: rgba(255, 137, 86, 0.14);
-      border-radius: 0 33px 33px 0;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      top: 57px;
+    position: relative;
+    .lair-top-bg{
+      position: absolute;
+      top: 5px;
       left: 0;
-      z-index: 10;
-      .gift {
-        margin-right: 5px;
-        width: 20px;
-        height: 20px;
-        background: url("@/assets/activity/dragonsWealth/dragonsLair/gift.png") no-repeat top center;
-        background-size: cover;
-      }
-      > .text {
-        height: 20px;
-        font-weight: bold;
-        font-size: 14px;
-        color: #ffe502;
-        line-height: 20px;
-      }
-    }
-    .reward-btn-ar{
-      width: 75px;
-      position: relative;
-      top: 57px;
-      right: 0;
-      z-index: 10;
-      border-radius: 33px 0 0 33px;
-      >.gift{
-        margin-left: 5px;
-      }
+      width: 100%;
+      height: 456px;
+      background: url("@/assets/activity/dragonsWealth/dragonsLair/bg-top.png") no-repeat top center;
+      background-size: cover;
+      z-index: 1;
     }
     .gold {
-      width: 223px;
-      height: 42px;
-      border-radius: 21px;
-      border: 1px solid rgba(255, 211, 25, 0.59);
-      box-sizing: border-box;
-      padding: 0 26px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      justify-content: flex-start;
       align-items: center;
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 100%;
+      height: 62px;
       .gold-icon {
-        width: 25px;
-        height: 24px;
-        background: url("@/assets/activity/dragonsWealth/dragonsLair/gold.png") no-repeat top center;
-        background-size: cover;
-        margin-right: 5px;
-      }
-      .gold-icon-ar{
-        margin-left: 5px;
-        margin-right: 0;
+        width: 57px;
+        height: 62px;
+        background: url("@/assets/activity/dragonsWealth/dragonsLair/goldNumber.png") no-repeat top center;
+        background-size: 57px 62px;
       }
       .gold-value {
-        max-width: 141px;
-        height: 37px;
-        font-weight: bold;
-        font-size: 26px;
-        line-height: 37px;
-        text-align: left;
-        background: linear-gradient(180deg, #fbcd0c 0%, #fefcec 43%, #f3cf43 100%);
+        position: absolute;
+        top: 26px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 18px;
+        height: 60px;
+        line-height: 60px;
+        background: linear-gradient(141.8deg, #FFBD58 34.06%, #BE7E00 92.29%);
         -webkit-background-clip: text; /* Safari/Chrome 兼容 */
         background-clip: text; /* 现代浏览器标准属性 */
         color: transparent; /* 文字透明以显示背景渐变 */
-        display: inline-block; /* 必须为块级或行内块元素 [1][3][6] */
       }
     }
-    .knight-dragon {
-      width: 100%;
-      height: 259px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-sizing: border-box;
-      padding: 0 12px;
-      margin: 10px 0 0 0;
-      .knight,
-      .dragon {
-        width: 174px;
-        height: 259px;
-        position: relative;
-        > img {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 174px;
-          height: 259px;
-        }
-        > span {
-          position: absolute;
-          top: 186px;
-          left: 50%;
-          transform: translateX(-50%);
-          font-weight: bold;
-          font-size: 16px;
-          line-height: 16px;
-          &::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            color: #cdb67e;
-            text-shadow:
-              1px 1px 0px #052150,
-              -1px -1px 0px #052150,
-              -1px 1px 0px #052150,
-              1px -1px 0px #052150;
-          }
-          &::before {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, #ffeec2 0%, #a58948 100%);
-            color: transparent;
-            -webkit-background-clip: text;
-            z-index: 2;
-            background-clip: text;
-          }
-        }
-      }
-      .dragon {
-        > span {
-          &::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            text-shadow:
-              1px 1px 0px #500603,
-              -1px -1px 0px #500603,
-              -1px 1px 0px #500603,
-              1px -1px 0px #500603;
-          }
-          &::before {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, #ffeec2 0%, #a58948 100%);
-            color: transparent;
-            -webkit-background-clip: text;
-            z-index: 2;
-            background-clip: text;
-          }
-        }
+    .reward-btn {
+      position: absolute;
+      top: 5px;
+      right: -10px;
+      z-index: 3;
+      width: 92.5px;
+      height: 28px;
+      background: url("@/assets/activity/dragonsWealth/dragonsLair/reward.png") no-repeat top center;
+      background-size: cover;
+      > .text {
+        padding-inline-end: 10px;
+        direction: ltr;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 28px;
+        font-size: 14px;
+        color: #ffffff;
+        line-height: 14px;
+        text-align: center;
       }
     }
     .vs {
       width: 100%;
-      padding: 0 12px;
-      position: relative;
+      height: 18px;
+      position: absolute;
+      top: 434px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 21px;
-      margin-bottom: 12px;
       .vs-left,
       .vs-right {
         width: 175px;
         min-width: 51px;
-        height: 24px;
+        height: 18px;
         background: url("@/assets/activity/dragonsWealth/dragonsLair/lineLeft.png") no-repeat top center;
         background-size: cover;
         box-sizing: border-box;
-        padding-left: 7px;
+        padding-inline-start: 7px;
         font-weight: bold;
         font-size: 13px;
-        line-height: 24px;
-        text-align: left;
+        line-height: 18px;
+        text-align: start;
         color: #f0fb5d;
         text-shadow:
           1px 1px 0px #613c01,
@@ -538,41 +422,46 @@ onMounted(async () => {
           -1px 1px 0px #613c01,
           1px -1px 0px #613c01;
       }
-      .vs-left-ar{
-        text-align: right !important;
-        padding-right: 7px !important;
-      }
-      .vs-right-ar{
-        text-align: left !important;
-        padding-left: 7px !important;
-      }
       .vs-icon {
         position: absolute;
         left: calc(50% - 30.5px);
-        width: 61px;
-        height: 52px;
+        width: 103px;
+        height: 104px;
         background: url("@/assets/activity/dragonsWealth/dragonsLair/vs.png") no-repeat top center;
         background-size: cover;
         display: flex;
         justify-content: center;
         align-items: center;
+        >div{
+          width: 59.5px;
+          height: 57px;
+          background: url("@/assets/activity/dragonsWealth/dragonsLair/pk.png") no-repeat top center;
+          background-size: cover;
+        }
       }
       .vs-right {
         background: url("@/assets/activity/dragonsWealth/dragonsLair/lineRight.png") no-repeat top center;
         background-size: cover;
         box-sizing: border-box;
-        padding-right: 7px;
-        text-align: right;
+        padding-inline-end: 7px;
+        text-align: end;
       }
     }
+  }
+  .lair-bottom{
+    width: 100%;
+    height: 482px;
+    background: url("@/assets/activity/dragonsWealth/dragonsLair/bg-top.png") no-repeat top center;
+    background-size: cover;
+
     .hall-of-fame {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 13px;
+      margin-top: 12.5px;
       width: 100%;
       box-sizing: border-box;
-      padding: 0 13px;
+      padding: 0 7.5px;
       .left {
         width: 118px;
         height: 30px;
@@ -586,30 +475,29 @@ onMounted(async () => {
           .item {
             width: 30px;
             height: 30px;
-            border: 1px solid #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 50%;
             box-sizing: border-box;
-            margin-right: 2px;
+            margin-inline-end: 2px;
             overflow: hidden;
             > img {
-              width: 28px;
-              height: 28px;
+              width: 30px;
+              height: 30px;
             }
           }
         }
         .icon {
-          margin-left: 4px;
-          width: 18px;
-          height: 18px;
+          margin-inline-start: 4px;
+          width: 24px;
+          height: 24px;
           background: url("@/assets/activity/dragonsWealth/dragonsLair/right.png") no-repeat top center;
           background-size: cover;
         }
         .icon-ar{
-          margin-right: 4px;
-          margin-left: 0;
+          margin-inline-end: 4px;
+          margin-inline-start: 0;
           transform: rotate(180deg);
         }
       }
@@ -620,15 +508,15 @@ onMounted(async () => {
         justify-content: flex-end;
         align-items: center;
         .icon {
-          margin-right: 4px;
-          width: 18px;
-          height: 18px;
+          margin-inline-end: 4px;
+          width: 24px;
+          height: 24px;
           background: url("@/assets/activity/dragonsWealth/dragonsLair/left.png") no-repeat top center;
           background-size: cover;
         }
         .icon-ar{
-          margin-left: 4px;
-          margin-right: 0;
+          margin-inline-end: 4px;
+          margin-inline-start: 0;
           transform: rotate(180deg);
         }
         .list {
@@ -638,17 +526,16 @@ onMounted(async () => {
           .item {
             width: 30px;
             height: 30px;
-            border: 1px solid #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 50%;
             box-sizing: border-box;
-            margin-right: 2px;
+            margin-inline-end: 2px;
             overflow: hidden;
             > img {
-              width: 28px;
-              height: 28px;
+              width: 30px;
+            height: 30px;
             }
           }
         }
@@ -657,68 +544,37 @@ onMounted(async () => {
     .button {
       width: 100%;
       box-sizing: border-box;
-      padding: 0 27px 0 33px;
-      height: 48px;
-      margin-top: 20px;
-      margin-bottom: 14px;
+      padding: 0 8px 0 8px;
+      height: 37px;
+      margin-top: 8px;
+      margin-bottom: 22px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       .button-disable {
         filter: grayscale(100%);
       }
-      .button-left {
-        width: 140px;
-        height: 48px;
-        background: url("@/assets/activity/dragonsWealth/dragonsLair/buttonLeft.png") no-repeat top center;
-        background-size: cover;
+      .button-left,.button-right {
+        min-width:90px;
+        height: 37px;
+        background: linear-gradient(180deg, rgba(147, 55, 55, 0.66) 0%, rgba(150, 45, 45, 0.66) 50%, rgba(45, 17, 17, 0.66) 100%);
+        border: 2px solid #FFFFFF;
+        border-radius: 6px;
         display: flex;
         justify-content: center;
         align-items: center;
         .combat-icon {
-          width: 18px;
-          height: 18px;
+          width: 28px;
+          height: 28px;
           background: url("@/assets/activity/dragonsWealth/dragonsLair/combat.png") no-repeat top center;
           background-size: cover;
-          margin-right: 5px;
+          margin-inline-end: 5px;
         }
         .combat-value {
           font-weight: bold;
-          font-size: 16px;
+          font-size: 22px;
           line-height: 22px;
-          color: #f0fb5d;
-          text-shadow:
-            1px 1px 0px #613c01,
-            -1px -1px 0px #613c01,
-            -1px 1px 0px #613c01,
-            1px -1px 0px #613c01;
-        }
-      }
-      .button-right {
-        width: 140px;
-        height: 48px;
-        background: url("@/assets/activity/dragonsWealth/dragonsLair/buttonRight.png") no-repeat top center;
-        background-size: cover;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        .combat-icon {
-          width: 18px;
-          height: 18px;
-          background: url("@/assets/activity/dragonsWealth/dragonsLair/combat.png") no-repeat top center;
-          background-size: cover;
-          margin-right: 5px;
-        }
-        .combat-value {
-          font-weight: bold;
-          font-size: 16px;
-          line-height: 22px;
-          color: #f0fb5d;
-          text-shadow:
-            1px 1px 0px #023768,
-            -1px -1px 0px #023768,
-            -1px 1px 0px #023768,
-            1px -1px 0px #023768;
+          color: #FFFFFF;
         }
       }
     }
@@ -745,9 +601,6 @@ onMounted(async () => {
       line-height: 17px;
       text-align: left;
       margin: 0 auto;
-    }
-    .tip-ar{
-      text-align: right;
     }
   }
   .info-my {
@@ -849,10 +702,6 @@ onMounted(async () => {
         }
       }
     }
-  }
-  .info-my-ar{
-    padding-right: 5px;
-    padding-left: 16px;
   }
 }
 </style>

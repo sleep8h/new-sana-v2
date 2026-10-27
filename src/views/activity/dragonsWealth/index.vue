@@ -1,23 +1,20 @@
 <!-- 主页 -->
 <template>
   <div class="page">
-    <div class="nav-div">
-      <div class="nav-back" :class="{ 'nav-back-ar': store.language === 'ar' }" @click="back">
-        <img v-if="store.language !== 'ar'" src="@/assets/common/left-black-icon@2x.png" alt="" />
-        <img v-else src="@/assets/common/right-black-icon@2x.png" alt="" />
-      </div>
-      <div class="nav-title">
-        {{ $t("dragons.title") }}
-      </div>
+    <div class="nav-back" :class="{ 'nav-back-ar': store.language === 'ar' }" @click="back">
+      <img v-if="store.language !== 'ar'" src="@/assets/common/left-black-icon@2x.png" alt="" />
+      <img v-else src="@/assets/common/right-black-icon@2x.png" alt="" />
     </div>
     <div class="page-content">
       <div class="bg-top">
-        <div class="bg-title">
-          <img v-if="store.language === 'ar'" :src="titleAr" alt="" />
-          <img v-else :src="titleEn" alt="" />
+        <div class="bg-img">
+          <div :class="store.language === 'ar' ? 'bg-img1-ar' : 'bg-img1'"></div>
+          <div class="bg-img2"></div>
+          <div class="bg-img3"></div>
+          <div class="bg-gradient"></div>
         </div>
         <div class="time">
-          <CountDownDragon :time="countDownTime || 0" :key="countDownTime" format="DD:HH:MM" />
+          <CountDownDragon :time="countDownTime || 0" :key="countDownTime" format="DD:HH:MM:SS" />
         </div>
         <div class="tab-list">
           <div
@@ -51,8 +48,6 @@ import { showToast } from "vant";
 import "vant/es/toast/style"; // 关键：单独引入样式
 
 // 图片资源
-import titleAr from "@/assets/activity/dragonsWealth/gameRank/titleAr.png";
-import titleEn from "@/assets/activity/dragonsWealth/gameRank/titleEn.png";
 
 // 模块
 // 游戏排名
@@ -152,7 +147,6 @@ onMounted(() => {
   height: 100vh;
   // overflow-y: auto;
   box-sizing: border-box;
-  padding-top: 94px;
   background: transparent;
   font-family:
     PingFangSC,
@@ -161,130 +155,150 @@ onMounted(() => {
     Helvetica,
     Arial,
     sans-serif;
-  .nav-div {
-    width: 100%;
-    height: 94px;
+  .nav-back {
+    position: fixed;
+    z-index: 1000;
+    top: 53px;
+    inset-inline-start: 16px;
+    width: 32px;
+    height: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-sizing: border-box;
-    padding: 44px 16px 0 16px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 9999;
-    background: transparent;
-    .nav-back {
-      position: absolute;
-      top: 53px;
-      left: 16px;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      > img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .nav-back-ar {
-      right: 16px;
-      left: 0;
-    }
-    .nav-title {
-      width: calc(100vw - 96px);
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
+    > img {
+      width: 100%;
+      height: 100%;
     }
   }
   .page-content {
     width: 100%;
-    height: calc(100vh - 94px);
+    height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
-    background: #210502;
+    background: #000000;
     .bg-top {
       width: 375px;
-      height: 628px;
+      height: 400.5px;
       background: url("@/assets/activity/dragonsWealth/gameRank/topBg.png") no-repeat top center;
-      background-size: 375px 628px;
-      background-color: #210502;
+      background-size: 375px 400.5px;
+      background: #000000;
       position: relative;
-      .bg-title {
+      .bg-img {
         position: absolute;
-        top: 15px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 329px;
-        height: 133px;
-        > img {
+        top: 0;
+        inset-inline-start: 0;
+        width: 100%;
+        height: 268px;
+        .bg-img1 {
+          position: absolute;
+          top: 0;
+          inset-inline-start: 0;
           width: 100%;
+          height: 250px;
+          background: url("@/assets/activity/dragonsWealth/gameRank/topBg.png") no-repeat top center;
+          background-size: cover;
+          z-index: 1;
+        }
+        .bg-img1-ar {
+          position: absolute;
+          top: 0;
+          inset-inline-start: 0;
+          width: 100%;
+          height: 250px;
+          background: url("@/assets/activity/dragonsWealth/gameRank/topBgAr.png") no-repeat top center;
+          background-size: cover;
+          z-index: 1;
+        }
+        .bg-img2 {
+          position: absolute;
+          bottom: 0;
+          inset-inline-start: 0;
+          width: 100%;
+          height: 73px;
+          background: url("@/assets/activity/dragonsWealth/gameRank/bgImg2.png") no-repeat top center;
+          background-size: cover;
+          z-index: 2;
+        }
+        .bg-img3 {
+          position: absolute;
+          bottom: 1px;
+          inset-inline-start: 50%;
+          margin-inline-start: -23px;
+          width: 46px;
+          height: 43px;
+          background: url("@/assets/activity/dragonsWealth/gameRank/bgImg3.png") no-repeat top center;
+          background-size: cover;
+          z-index: 3;
+        }
+        .bg-gradient {
+          position: absolute;
+          top: 0;
+          inset-inline-start: 0;
+          width: 100%;
+          height: 39px;
+          background: linear-gradient(180deg, #1b0000 0%, rgba(30, 0, 0, 0) 100%);
+          z-index: 4;
+          pointer-events: none;
         }
       }
       .time {
         position: absolute;
-        top: 498px;
-        width: 275px;
-        height: 67px;
+        top: 272px;
+        width: 272px;
+        height: 68px;
         left: 50%;
         transform: translateX(-50%);
       }
       .tab-list {
         width: 100%;
-        padding: 0 6px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         position: absolute;
-        top: 579px;
+        top: 351.5px;
         left: 0;
         .tab-item {
-          width: 119px;
-          height: 84px;
+          width: 124px;
+          height: 33.5px;
           display: flex;
           justify-content: center;
           align-items: center;
           background: url("@/assets/activity/dragonsWealth/gameRank/homeTabHide.png") no-repeat top center;
           background-size: cover;
           > span {
-            display: inline-block;
             width: 100%;
-            box-sizing: border-box;
-            padding: 0 12px;
             text-align: center;
             font-weight: bold;
-            color: #cb4ff7;
-            font-size: 16px;
-            line-height: 16px;
+            font-size: 14px;
+            line-height: 14px;
+            background: linear-gradient(180deg, #ffffff 0%, #d8b26d 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
           }
         }
         .tab-item-show {
           background: url("@/assets/activity/dragonsWealth/gameRank/homeTabShow.png") no-repeat top center;
           background-size: cover;
-          > span {
-            color: #fff8a0;
-          }
         }
       }
       .rules {
         position: absolute;
-        top: 391px;
-        left: 0;
-        width: 76px;
-        height: 34px;
+        top: 235px;
+        inset-inline-start: -10px;
+        z-index: 5;
+        width: 92.5px;
+        height: 32px;
+        line-height: 32px;
         background: url("@/assets/activity/dragonsWealth/gameRank/rule.png") no-repeat top center;
         background-size: cover;
         box-sizing: border-box;
-        padding: 0 8px 0 0;
-        font-weight: bold;
-        font-size: 18px;
+        padding: 0 0 0 10px;
+        font-size: 14px;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #ffe502;
-        line-height: 25px;
+        color: #ffffff;
       }
     }
     .content {

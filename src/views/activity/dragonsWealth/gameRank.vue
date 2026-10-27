@@ -1,61 +1,51 @@
 <!-- 游戏排名 -->
 <template>
   <div class="game-rank">
-    <div class="tab" :class="{ 'tab-ar': store.language === 'ar' }">
-      <div class="tab-list">
-        <div
-          :class="['tab-item', { 'tab-item-show': curTab === item.value }]"
-          @click="tabChange(item)"
-          v-for="(item, index) in tabList"
-          :key="index"
-        >
-          <span>{{ item.text }}</span>
-        </div>
+    <div class="tab-list">
+      <div
+        :class="['tab-item', { 'tab-item-show': curTab === item.value }]"
+        @click="tabChange(item)"
+        v-for="(item, index) in tabList"
+        :key="index"
+      >
+        <span>{{ item.text }}</span>
       </div>
     </div>
     <div class="list">
-      <div class="top">
-        <div class="top1" v-if="top1Info">
-          <img class="avatar" :src="top1Info.avatar" alt="" />
-          <div class="avatar-bg"></div>
-          <div class="name text-hide">{{ top1Info.nick }}</div>
-          <div class="number">{{ formatNumber(top1Info.integral) }}</div>
-        </div>
-        <div class="top2" v-if="top2Info">
-          <img class="avatar" :src="top2Info.avatar" alt="" />
-          <div class="avatar-bg"></div>
-          <div class="name text-hide">{{ top2Info.nick }}</div>
-          <div class="number">{{ formatNumber(top2Info.integral) }}</div>
-        </div>
-        <div class="top3" v-if="top3Info">
-          <img class="avatar" :src="top3Info.avatar" alt="" />
-          <div class="avatar-bg"></div>
-          <div class="name text-hide">{{ top3Info.nick }}</div>
-          <div class="number">{{ formatNumber(top3Info.integral) }}</div>
-        </div>
-      </div>
-      <div class="rank-list">
-        <div class="rank-item" v-for="(item, index) in rankList.slice(3)" :key="index">
-          <div class="sort">{{ item.index }}</div>
-          <div class="avatar" :class="{ 'avatar-ar': store.language === 'ar' }">
-            <img :src="item.avatar" alt="" />
-          </div>
-          <div class="name text-hide" :class="{ 'name-ar': store.language === 'ar' }">{{ item.nick }}</div>
-          <div class="number" :class="{ 'number-ar': store.language === 'ar' }">{{ formatNumber(item.integral) }}</div>
-        </div>
-      </div>
       <div class="not-rank" v-if="rankList.length === 0">
         <img :src="notRank" alt="" />
         <span>{{ $t("dragons.notRank") }}</span>
       </div>
+      <div class="rank-list" v-else>
+        <div class="rank-item" v-for="(item, index) in rankList" :key="index">
+          <div class="sort">{{ item.index }}</div>
+          <div class="avatar">
+            <img :src="item.avatar" alt="" />
+          </div>
+          <div class="name-userno">
+            <div class="name text-hide">{{ item.nick }}</div>
+            <div class="erbanNo text-hide">{{ `ID: ${item.erbanNo}` }}</div>
+          </div>
+          <div class="number">
+            <span>{{ formatNumber(item.integral) }}</span>
+            <div class="goldIcon"></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="rank-my" v-if="myInfo">
       <div class="sort">{{ myInfo.index === 0 ? "99+" : myInfo.index }}</div>
-      <div class="avatar" :class="{ 'avatar-ar': store.language === 'ar' }">
+      <div class="avatar" v-if="myInfo.avatar">
         <img :src="myInfo.avatar" alt="" />
       </div>
-      <div class="name text-hide" :class="{ 'name-ar': store.language === 'ar' }">{{ myInfo.nick }}</div>
-      <div class="number" :class="{ 'number-ar': store.language === 'ar' }">{{ formatNumber(myInfo.integral) }}</div>
+      <div class="name-userno">
+        <div class="name text-hide">{{ myInfo.nick }}</div>
+        <div class="erbanNo text-hide">{{ `ID: ${myInfo.erbanNo}` }}</div>
+      </div>
+      <div class="number">
+        <span>{{ formatNumber(myInfo.integral) }}</span>
+        <div class="goldIcon"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -67,7 +57,7 @@ import { showToast } from "vant";
 import { get, postFormData } from "@/utils/http.js";
 import { useMainStore } from "@/pinia/index.js";
 
-import notRank from "@/assets/activity/dragonsWealth/not-rank.png";
+import notRank from "@/assets/activity/dragonsWealth/not-get.png";
 
 const { t } = useI18n();
 const store = useMainStore();
@@ -162,302 +152,151 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .game-rank {
   width: 100%;
-  height: 1178px;
+  height: auto;
   box-sizing: border-box;
-  margin: 38px 0 30px 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   text-align: center;
-  background: url("@/assets/activity/dragonsWealth/gameRank/rankBg.png") no-repeat top center;
-  background-size: cover;
-  .tab {
-    width: calc(100% - 60px);
-    height: 46px;
-    margin-top: 97px;
-    margin-left: 30px;
-    overflow-x: auto;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    .tab-list {
-      width: auto;
-      height: 46px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
 
-      .tab-item {
-        width: 120px;
-        height: 46px;
-        background: url("@/assets/activity/dragonsWealth/gameRank/tabHide.png") no-repeat top center;
-        background-size: cover;
-        margin-right: 9px;
-        flex-shrink: 0;
+  .tab-list {
+    width: 355px;
+    height: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .tab-item {
+      width: 86.5px;
+      height: 25px;
+      background: url("@/assets/activity/dragonsWealth/gameRank/tabHide.png") no-repeat top center;
+      background-size: 86.5px 25px;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 0 5px;
+      opacity: 0.7;
+      > span {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        box-sizing: border-box;
-        padding: 0 5px;
-        > span {
-          font-weight: bold;
-          font-size: 15px;
-          line-height: 15px;
-          color: #d4b320;
-          text-shadow:
-            1px 1px 0px #805600,
-            -1px -1px 0px #805600,
-            -1px 1px 0px #805600,
-            1px -1px 0px #805600;
-        }
-      }
-      .tab-item-show {
-        background: url("@/assets/activity/dragonsWealth/gameRank/tabShow.png") no-repeat top center;
-        background-size: cover;
-        > span {
-          color: #ffe640;
-          text-shadow:
-            1px 1px 0px #572d00,
-            -1px -1px 0px #572d00,
-            -1px 1px 0px #572d00,
-            1px -1px 0px #572d00;
-        }
+        font-weight: bold;
+        font-size: 12px;
+        line-height: 10px;
+        background: linear-gradient(180deg, #ffffff 0%, #d8b26d 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
       }
     }
-  }
-  .tab-ar {
-    width: calc(100% - 60px);
-    height: 46px;
-    margin-top: 97px;
-    margin-right: 26px;
-    margin-left: 0;
+    .tab-item-show {
+      opacity: 1;
+      background: url("@/assets/activity/dragonsWealth/gameRank/tabShow.png") no-repeat top center;
+      background-size: 86.5px 25px;
+    }
   }
   .list {
-    width: 100%;
-    height: 927px;
-    position: relative;
-    .top {
-      width: 100%;
-      height: 488px;
-      margin-top: 27px;
-      position: absolute;
-      .top1 {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 190px;
-        height: 246px;
-        .avatar {
-          width: 114px;
-          height: 114px;
-          position: absolute;
-          top: 38px;
-          left: 50%;
-          transform: translateX(-50%);
-          z-index: 1;
-          border-radius: 50%;
-        }
-        .avatar-bg {
-          width: 190px;
-          height: 190px;
-          background: url("@/assets/activity/dragonsWealth/gameRank/top1.png") no-repeat top center;
-          background-size: cover;
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          z-index: 2;
-        }
-        .name {
-          width: 190px;
-          height: 20px;
-          font-weight: bold;
-          font-size: 14px;
-          color: #ffffff;
-          line-height: 20px;
-          text-align: center;
-          position: absolute;
-          top: 191px;
-        }
-        .number {
-          position: absolute;
-          top: 212px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 102px;
-          height: 34px;
-          background: url("@/assets/activity/dragonsWealth/gameRank/bgNumber.png") no-repeat top center;
-          background-size: cover;
-          font-weight: bold;
-          font-size: 16px;
-          line-height: 16px;
-          text-align: center;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          box-sizing: border-box;
-          padding-top: 5px;
-          color: #f0fb5d;
-          text-shadow:
-            1px 1px 0px #613c01,
-            -1px -1px 0px #613c01,
-            -1px 1px 0px #613c01,
-            1px -1px 0px #613c01;
-        }
-      }
-      .top2,
-      .top3 {
-        position: absolute;
-        top: 259px;
-        width: 152px;
-        height: 208px;
-        .avatar {
-          width: 84px;
-          height: 84px;
-          position: absolute;
-          top: 34px;
-          left: 50%;
-          transform: translateX(-50%);
-          z-index: 1;
-          border-radius: 50%;
-        }
-        .avatar-bg {
-          width: 152px;
-          height: 152px;
-          background: url("@/assets/activity/dragonsWealth/gameRank/top2.png") no-repeat top center;
-          background-size: cover;
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          z-index: 2;
-        }
-        .name {
-          width: 152px;
-          height: 20px;
-          font-weight: bold;
-          font-size: 14px;
-          color: #ffffff;
-          line-height: 20px;
-          text-align: center;
-          position: absolute;
-          top: 153px;
-        }
-        .number {
-          position: absolute;
-          top: 174px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 102px;
-          height: 34px;
-          background: url("@/assets/activity/dragonsWealth/gameRank/bgNumber.png") no-repeat top center;
-          background-size: cover;
-          font-weight: bold;
-          font-size: 16px;
-          line-height: 16px;
-          text-align: center;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          box-sizing: border-box;
-          padding-top: 5px;
-          color: #f0fb5d;
-          text-shadow:
-            1px 1px 0px #613c01,
-            -1px -1px 0px #613c01,
-            -1px 1px 0px #613c01,
-            1px -1px 0px #613c01;
-        }
-      }
-      .top2 {
-        position: absolute;
-        left: 28px;
-      }
-      .top3 {
-        position: absolute;
-        right: 28px;
-        .avatar-bg {
-          background: url("@/assets/activity/dragonsWealth/gameRank/top3.png") no-repeat top center;
-          background-size: cover;
-        }
-      }
-    }
+    margin: 13.5px auto 91px;
+    width: 360.5px;
+    height: 813px;
+    box-sizing: border-box;
+    padding: 78px 23px 61px;
+    background: url("@/assets/activity/dragonsWealth/gameRank/rankBg.png") no-repeat top center;
+    background-size: cover;
     .rank-list {
       width: 100%;
-      height: 412px;
-      position: absolute;
-      top: 508px;
+      height: 100%;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
+      gap: 5.5px;
       .rank-item {
-        width: 323px;
-        height: 61px;
-        margin-bottom: 8px;
+        width: 314.5px;
+        height: 62.5px;
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        background: url("@/assets/activity/dragonsWealth/gameRank/itemBg.png") no-repeat top center;
-        background-size: cover;
+        background: url("@/assets/activity/dragonsWealth/gameRank/topItem.png") no-repeat top center;
+        background-size: 314.5px 62.5px;
         flex-shrink: 0;
-        &:last-child {
-          margin-bottom: 0;
+        &:nth-child(1) {
+          background: url("@/assets/activity/dragonsWealth/gameRank/top1.png") no-repeat top center;
+          background-size: 314.5px 62.5px;
+        }
+        &:nth-child(2) {
+          background: url("@/assets/activity/dragonsWealth/gameRank/top2.png") no-repeat top center;
+          background-size: 314.5px 62.5px;
+        }
+        &:nth-child(3) {
+          background: url("@/assets/activity/dragonsWealth/gameRank/top3.png") no-repeat top center;
+          background-size: 314.5px 62.5px;
         }
         .sort {
-          width: 32px;
-          height: 32px;
-          background: url("@/assets/activity/dragonsWealth/gameRank/index.png") no-repeat top center;
-          background-size: cover;
+          width: 18px;
+          height: 18px;
           font-weight: bold;
-          font-size: 13px;
+          font-size: 16px;
           line-height: 18px;
-          text-align: center;
-          color: #fcf860;
+          text-align: start;
           display: flex;
           justify-content: center;
           align-items: center;
-          text-shadow:
-            1px 1px 0px #4c2200,
-            -1px -1px 0px #4c2200,
-            -1px 1px 0px #4c2200,
-            1px -1px 0px #4c2200;
-          margin: 0 6px 0 7px;
+          background: linear-gradient(89.97deg, #ffd663 2.43%, #fffba2 50.3%, #ffc01e 98.17%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          margin-inline-start: 7px;
+          margin-inline-end: 7px;
         }
         .avatar {
-          width: 38px;
-          height: 38px;
-          background: #d8d8d8;
-          border: 1px solid #eff4a9;
+          width: 52px;
+          height: 52px;
+          border: 1px solid linear-gradient(180deg, #370006 0%, #ffe5ee 100%);
           border-radius: 50%;
           display: flex;
           justify-content: center;
           align-items: center;
-          margin-right: 6px;
+          margin-inline-end: 10px;
           > img {
-            width: 36px;
-            height: 36px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
           }
         }
-        .avatar-ar {
-          margin-right: 0;
-          margin-left: 6px;
-        }
-        .name {
-          width: 134px;
-          height: 20px;
-          font-weight: bold;
-          font-size: 14px;
-          color: #ffe4c1;
-          line-height: 20px;
-          text-align: left;
-        }
-        .name-ar {
-          text-align: right;
+        .name-userno {
+          width: 129px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          .name {
+            width: 129px;
+            height: 20px;
+            line-height: 20px;
+            font-weight: bold;
+            font-size: 16px;
+            background: linear-gradient(89.97deg, #ffd663 2.43%, #fffba2 50.3%, #ffc01e 98.17%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: start;
+          }
+          .erbanNo {
+            width: 129px;
+            height: 20px;
+            line-height: 20px;
+            font-weight: bold;
+            font-size: 12px;
+            color: #ffffff;
+            text-align: start;
+          }
         }
         .number {
           width: 82px;
@@ -466,25 +305,31 @@ onMounted(async () => {
           font-size: 15px;
           color: #fcf860;
           line-height: 21px;
-          text-align: right;
-        }
-        .number-ar {
-          text-align: left;
+          text-align: end;
+          margin-inline-end: 11px;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 5px;
+          > .goldIcon {
+            width: 23.5px;
+            height: 22px;
+            background: url("@/assets/activity/dragonsWealth/gameRank/goldIcon.png") no-repeat top center;
+            background-size: 23.5px 22px;
+          }
         }
       }
     }
     .not-rank {
-      position: absolute;
-      top: 535px;
-      left: 50%;
-      transform: translateX(-50%);
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       > img {
-        width: 83px;
-        height: 83px;
+        width: 197px;
+        height: 194.5px;
         margin-bottom: 1px;
       }
       > span {
@@ -502,76 +347,95 @@ onMounted(async () => {
     }
   }
   .rank-my {
-    width: 355px;
-    height: 67px;
+    position: absolute;
+    bottom: 0;
+    inset-inline-start: 0;
+    width: 100%;
+    height: 91px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    background: url("@/assets/activity/dragonsWealth/gameRank/bgMy.png") no-repeat top center;
+    background: url("@/assets/activity/dragonsWealth/gameRank/rankSelftBg.png") no-repeat top center;
     background-size: cover;
     .sort {
-      width: 32px;
-      height: 32px;
-      background: url("@/assets/activity/dragonsWealth/gameRank/index.png") no-repeat top center;
-      background-size: cover;
+      min-width: 38px;
+      height: 38px;
       font-weight: bold;
-      font-size: 13px;
-      line-height: 18px;
-      text-align: center;
-      color: #fcf860;
+      font-size: 19px;
+      line-height: 38px;
+      text-align: start;
       display: flex;
       justify-content: center;
       align-items: center;
-      text-shadow:
-        1px 1px 0px #4c2200,
-        -1px -1px 0px #4c2200,
-        -1px 1px 0px #4c2200,
-        1px -1px 0px #4c2200;
-      margin: 0 6px 0 7px;
+      background: linear-gradient(89.97deg, #ffd663 2.43%, #fffba2 50.3%, #ffc01e 98.17%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-inline-start: 7px;
     }
     .avatar {
-      width: 38px;
-      height: 38px;
-      background: #d8d8d8;
-      border: 1px solid #eff4a9;
+      width: 62px;
+      height: 62px;
+      border: 1px solid linear-gradient(180deg, #370006 0%, #ffe5ee 100%);
       border-radius: 50%;
-      margin-right: 6px;
+      margin-inline-start: 10px;
+      margin-inline-end: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
       > img {
-        width: 36px;
-        height: 36px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
       }
     }
-    .avatar-ar {
-      margin-right: 0;
-      margin-left: 6px;
-    }
-    .name {
-      width: 167px;
-      height: 20px;
-      font-weight: bold;
-      font-size: 14px;
-      color: #ffe4c1;
-      line-height: 20px;
-      text-align: left;
-    }
-    .name-ar {
-      text-align: right;
+    .name-userno {
+      width: 129px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      .name {
+        width: 129px;
+        height: 20px;
+        line-height: 20px;
+        font-weight: bold;
+        font-size: 16px;
+        background: linear-gradient(89.97deg, #ffd663 2.43%, #fffba2 50.3%, #ffc01e 98.17%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-align: start;
+      }
+      .erbanNo {
+        width: 129px;
+        height: 20px;
+        line-height: 20px;
+        font-weight: bold;
+        font-size: 12px;
+        color: #ffffff;
+        text-align: start;
+      }
     }
     .number {
-      width: 82px;
+      width: 102px;
       height: 21px;
       font-weight: bold;
       font-size: 15px;
       color: #fcf860;
       line-height: 21px;
-      text-align: right;
-    }
-    .number-ar {
-      text-align: left;
+      text-align: end;
+      margin-inline-end: 16px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 5px;
+      > .goldIcon {
+        width: 23.5px;
+        height: 22px;
+        background: url("@/assets/activity/dragonsWealth/gameRank/goldIcon.png") no-repeat top center;
+        background-size: 23.5px 22px;
+      }
     }
   }
 }

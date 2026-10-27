@@ -1,11 +1,11 @@
 <!-- 获得奖励弹窗 -->
 <template>
-  <div class="toast" v-if="!isShow">
+  <div class="toast" v-if="isShow">
     <div class="toast-mask" @click="closeModal"></div>
     <div class="toast-content" :class="{ 'toast-content-1': props.getRewardList.length === 1 }">
       <div class="toast-close" @click="closeModal"></div>
       <div class="toast-title">
-        <span>{{ $t("dragons.rewardsObtained") }}</span>
+        <span>{{ $t("dragons.rewardsObtained") }}</span>w
       </div>
       <div class="toast-list">
         <div class="list">
