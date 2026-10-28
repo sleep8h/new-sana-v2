@@ -321,7 +321,7 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .dragons-lair {
   width: 100%;
-  min-height: 947px;
+  min-height: 805px;
   .lair-top{
     width: 100%;
     height: 461px;
@@ -450,10 +450,10 @@ onMounted(async () => {
   }
   .lair-bottom{
     width: 100%;
-    height: 482px;
-    background: url("@/assets/activity/dragonsWealth/dragonsLair/bg-top.png") no-repeat top center;
+    // height: 482px;
+    height: 344px;
+    background: url("@/assets/activity/dragonsWealth/dragonsLair/bg-bottom.png") no-repeat top center;
     background-size: cover;
-
     .hall-of-fame {
       display: flex;
       justify-content: space-between;
@@ -579,60 +579,56 @@ onMounted(async () => {
       }
     }
     .my-camp {
-      width: 200px;
-      height: 20px;
-      line-height: 20px;
-      font-size: 14px;
-      color: #fcf860;
+      min-width: 200px;
+      height: 21px;
+      line-height: 21px;
+      font-size: 15px;
+      color: #FFFFFF;
       font-weight: bold;
       text-align: center;
-      margin: 14px auto 20px;
+      margin: 0 auto 21px;
     }
     .tip {
-      width: 351px;
-      height: 103px;
-      background: rgba(255, 137, 86, 0.14);
-      border-radius: 12px;
-      box-sizing: border-box;
-      padding: 10px 12px 8px 12px;
+      width: 335px;
+      height: 105px;
+      color: #FFFFFF;
       overflow-y: auto;
-      font-size: 12px;
-      color: #d1b893;
-      line-height: 17px;
-      text-align: left;
+      font-size: 11px;
+      line-height: 21px;
+      text-align: start;
       margin: 0 auto;
     }
   }
   .info-my {
-    width: 375px;
-    height: 65px;
+    width: 365px;
+    height: 80px;
     position: fixed;
     bottom: 0;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 11;
     background: url("@/assets/activity/dragonsWealth/dragonsLair/bgMy.png") no-repeat top center;
     background-size: cover;
     box-sizing: border-box;
-    padding-top: 7px;
-    padding-right: 16px;
+    padding-top: 10px;
+    padding-inline-start: 30px;
+    padding-inline-end: 30px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     .avatar {
-      width: 37px;
-      height: 37px;
+      width: 60px;
+      height: 60px;
       display: flex;
       justify-content: center;
       align-items: center;
-      border: 1px solid #eff4a9;
-      border-radius: 50%;
-      margin-left: 14px;
-      margin-right: 7px;
+      border: 1px solid linear-gradient(180deg, #FBDB9B 4.97%, #FFFDF2 40.31%, #FFECBB 92.76%, #FFD686 147.83%);
+      margin-inline-end: 9px;
       border-radius: 50%;
       overflow: hidden;
       > img {
-        width: 36px;
-        height: 36px;
+        width: 58px;
+        height: 58px;
         border-radius: 50%;
       }
     }
@@ -652,9 +648,12 @@ onMounted(async () => {
           max-width: 180px;
           font-weight: bold;
           font-size: 12px;
-          color: #ffffff;
-          line-height: 17px;
-          text-align: left;
+          background: linear-gradient(180deg, #E4BE6E 19.05%, #ECB25F 85.71%);
+          webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          line-height: 21px;
+          text-align: start;
           margin-bottom: 2px;
         }
         .prop {
@@ -671,7 +670,7 @@ onMounted(async () => {
             height: 21px;
             font-weight: bold;
             font-size: 15px;
-            color: #fcf860;
+            color: #ffffff;
             line-height: 21px;
             text-align: left;
           }

@@ -2,33 +2,32 @@
 <template>
   <div class="post">
     <div class="item-new" :class="item.winTeam === 1 ? 'knight-new' : 'dragons-new'" v-for="(item, index) in list">
-      <!-- <div class="title">{{ `${item.stageStartDate}-${item.stageEndDate}` }}</div> -->
+      <div class="knight-logo" v-if="item.winTeam === 1"></div>
+      <div class="dragons-logo" v-if="item.winTeam === 2"></div>
       <div class="title">
         {{
           `${item.stageStartDate.slice(5, 7)}${item.stageStartDate.slice(8, 10)} - ${item.stageEndDate.slice(5, 7)}${item.stageEndDate.slice(8, 10)}`
         }}
       </div>
-      <div :class="'top' + (indexs + 1)" v-for="(items, indexs) in item.contributors.slice(0, 3)">
+      <div class="top" v-for="(items, indexs) in item.contributors.slice(0, 3)">
+        <div :class="'sort' + indexs"></div>
         <div class="avatar">
-          <div class="avatar-icon">
-            <img :src="items.avatar" alt="" />
-          </div>
-          <div class="avatar-bg"></div>
+          <img :src="items.avatar" alt="" />
         </div>
         <div class="name text-hide">{{ items.nick }}</div>
         <div class="hot-gold">
-          <div class="hot">
-            <div class="icon"></div>
-            <div class="value">{{ items.contribution }}</div>
-          </div>
           <div class="gold">
             <div class="icon"></div>
             <div class="value">{{ items.shareGold }}</div>
           </div>
+          <div class="hot">
+            <div class="icon"></div>
+            <div class="value">{{ items.contribution }}</div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="not-rank" :class="{ 'not-rank-ar': store.language === 'ar' }" v-if="list.length === 0">
+    <div class="not-rank" v-if="list.length === 0">
       <img :src="notRank" alt="" />
       <span>{{ $t("dragons.notRank") }}</span>
     </div>
@@ -96,7 +95,7 @@ onMounted(async () => {
   min-height: 482px;
   // min-height: 1182px;
   box-sizing: border-box;
-  padding: 30px 0 35px 0;
+  padding: 0 0 35px 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -105,84 +104,98 @@ onMounted(async () => {
   .item-new,
   .knight-new,
   .dragons-new {
-    width: 100%;
-    height: 536px;
-    background: url("@/assets/activity/dragonsWealth/post/bg1.png") no-repeat top center;
+    width: 360.5px;
+    height: 495px;
+    background: url("@/assets/activity/dragonsWealth/post/bg.png") no-repeat top center;
     background-size: cover;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     .title {
-      position: absolute;
-      top: 82px;
-      left: 50%;
-      transform: translateX(-50%);
+      margin-top: 80px;
+      margin-bottom: 22px;
       width: 187px;
       height: 22px;
-      font-weight: bold;
-      font-size: 16px;
-      color: #fff8a0;
+      font-size: 22px;
       line-height: 22px;
+      font-weight: bold;
+      background: linear-gradient(180deg, #ffffff 0%, #d8b26d 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
       text-align: center;
       white-space: nowrap;
     }
-    .top1,
-    .top2,
-    .top3 {
-      position: absolute;
-      top: 147px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 340px;
-      height: 110px;
-      margin-bottom: 6px;
+    .top {
+      width: 319px;
+      height: 87px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      background: url("@/assets/activity/dragonsWealth/post/item1.png") no-repeat top center;
-      background-size: cover;
+      background: url("@/assets/activity/dragonsWealth/post/item.png") no-repeat top center;
+      background-size: 319px 87px;
+      .sort0,
+      .sort1,
+      .sort2 {
+        width: 52px;
+        height: 50px;
+        margin-inline-start: 2.5px;
+        margin-inline-end: 7px;
+      }
+      .sort0 {
+        background: url("@/assets/activity/dragonsWealth/post/top1.png") no-repeat top center;
+        background-size: cover;
+      }
+      .sort1 {
+        background: url("@/assets/activity/dragonsWealth/post/top2.png") no-repeat top center;
+        background-size: cover;
+      }
+      .sort2 {
+        background: url("@/assets/activity/dragonsWealth/post/top3.png") no-repeat top center;
+        background-size: cover;
+      }
       .avatar {
-        width: 80px;
-        height: 80px;
-        position: relative;
-        margin: 0 11px 0 18px;
-        .avatar-icon {
-          width: 50px;
-          height: 50px;
-          position: absolute;
-          z-index: 1;
-          top: 14px;
-          left: 14px;
-          overflow: hidden;
-          > img {
-            width: 50px;
-            height: 50px;
-          }
-        }
-        .avatar-bg {
-          width: 80px;
-          height: 80px;
-          position: absolute;
-          z-index: 2;
-          top: 0;
-          left: 0;
-          background: url("@/assets/activity/dragonsWealth/post/top1.png") no-repeat top center;
-          background-size: cover;
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(
+          90.99deg,
+          #fcdeae 8.22%,
+          #fff3db 26.02%,
+          #e5c28a 47.62%,
+          #9d7449 69.41%,
+          #daae79 95.87%
+        );
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        > img {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
         }
       }
       .name {
         width: 130px;
-        margin-right: 5px;
+        margin-inline-start: 5px;
+        margin-inline-end: 5px;
         height: 22px;
         font-weight: bold;
-        font-size: 16px;
-        color: #e7da53;
+        font-size: 14px;
+        color: #ffe1a2;
         line-height: 22px;
-        text-align: left;
+        text-align: start;
       }
       .hot-gold {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: flex-start;
+        margin-inline-end: 9px;
         .hot,
         .gold {
           min-width: 69px;
@@ -190,33 +203,31 @@ onMounted(async () => {
           box-sizing: border-box;
           padding: 0 5px;
           height: 22px;
-          background: linear-gradient(180deg, #9a3f09 0%, #b86400 100%);
-          box-shadow: inset 0px 2px 6px 0px rgba(255, 255, 255, 0.26);
           border-radius: 11px;
           display: flex;
-          justify-content: center;
+          justify-content: flex-end;
           align-items: center;
           .icon {
-            width: 16px;
-            height: 16px;
+            width: 19px;
+            height: 19px;
             background: url("@/assets/activity/dragonsWealth/post/hot.png") no-repeat top center;
             background-size: cover;
-            margin-right: 3px;
-            margin-left: 3px;
+            margin-inline-end: 3px;
           }
           .value {
             font-weight: bold;
-            font-size: 13px;
-            color: #fcf860;
+            font-size: 14px;
+            color: #fff8f8;
             line-height: 18px;
-            text-align: left;
-            margin-right: 3px;
-            margin-left: 3px;
+            text-align: start;
+            margin-inline-start: 3px;
           }
         }
         .gold {
           margin-top: 7px;
           .icon {
+            width: 12px;
+            height: 14px;
             background: url("@/assets/activity/dragonsWealth/post/gold.png") no-repeat top center;
             background-size: cover;
           }
@@ -262,11 +273,32 @@ onMounted(async () => {
       }
     }
   }
-  .dragons {
-    width: 100%;
-    height: 536px;
-    background: url("@/assets/activity/dragonsWealth/post/bg2.png") no-repeat top center;
-    background-size: cover;
+
+  .knight-new {
+    margin-top: 86.5px;
+    position: relative;
+    .knight-logo {
+      position: absolute;
+      top: -86.5px;
+      left: -12.5px;
+      width: 138.5px;
+      height: 208px;
+      background: url("@/assets/activity/dragonsWealth/post/knight.png") no-repeat top center;
+      background-size: cover;
+    }
+  }
+  .dragons-new {
+    margin-top: 35px;
+    position: relative;
+    .dragons-logo {
+      position: absolute;
+      top: -35px;
+      right: -44.5px;
+      width: 195px;
+      height: 230px;
+      background: url("@/assets/activity/dragonsWealth/post/dragons.png") no-repeat top center;
+      background-size: cover;
+    }
   }
   .not-rank {
     position: absolute;
@@ -294,12 +326,6 @@ onMounted(async () => {
         -1px 1px 0px #613c01,
         1px -1px 0px #613c01;
     }
-  }
-  .not-rank-ar {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
   .more {
     width: 102px;
