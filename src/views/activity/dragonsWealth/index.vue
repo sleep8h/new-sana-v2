@@ -2,8 +2,8 @@
 <template>
   <div class="page">
     <div class="nav-back" :class="{ 'nav-back-ar': store.language === 'ar' }" @click="back">
-      <img v-if="store.language !== 'ar'" src="@/assets/common/left-black-icon@2x.png" alt="" />
-      <img v-else src="@/assets/common/right-black-icon@2x.png" alt="" />
+      <img v-if="store.language !== 'ar'" src="@/assets/common/left-icon@2x.png" alt="" />
+      <img v-else src="@/assets/common/right-icon@2x.png" alt="" />
     </div>
     <div class="page-content">
       <div class="bg-top">

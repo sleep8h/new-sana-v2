@@ -26,11 +26,12 @@
               <div class="record-amount" dir="ltr" :class="item.purpleDiamondNum < 0 ? 'positive' : 'negative'">
                 {{ item.purpleDiamondNum < 0 ? "-" : "+" }}{{ formatNumber(item.purpleDiamondNum) || 0 }}
               </div>
-              <!-- 可撤销时显示撤销按钮，否则显示已撤销文字 -->
-              <div v-if="item.recordType === 1 && item.status === 1" class="cancel-btn" @click="showCancelDialog(item)">
+              <!-- 创建后 5 分钟内且未撤销时显示撤销按钮 -->
+              <div v-if="canCancel(item)" class="cancel-btn" @click="showCancelDialog(item)">
                 {{ t("coinAgent.cancelTrade") }}
               </div>
-              <div v-else class="text-btn">{{ t("coinAgent.cancelled") }}</div>
+              <!-- 已撤销的记录显示已撤销文字 -->
+              <div v-else-if="item.status !== 1" class="text-btn">{{ t("coinAgent.cancelled") }}</div>
             </div>
           </div>
         </van-list>
@@ -56,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { postForm } from "@/utils/http.js";
 import { useMainStore } from "@/pinia/index.js";
@@ -87,6 +88,13 @@ const dialogType = ref("");
 // 当前选中的记录项
 const currentItem = ref({});
 
+// 撤销时限：交易创建后 5 分钟内可撤销
+const CANCEL_EXPIRE_MS = 5 * 60 * 1000;
+
+// 当前时间，用于定时判断撤销按钮是否超时
+const now = ref(Date.now());
+let expireTimer = null;
+
 // ==================== 方法 ====================
 /**
  * 格式化数字为千分位字符串
@@ -98,6 +106,32 @@ const formatNumber = (num) => {
   const n = Number(String(num).replace(/,/g, ""));
   if (isNaN(n)) return "";
   return n.toLocaleString("en-US");
+};
+
+/**
+ * 将时间戳（秒级/毫秒级）或时间字符串统一转为毫秒时间戳
+ * @param {number|string} time - createTime 字段
+ * @returns {number} 毫秒时间戳，无法解析时返回 NaN
+ */
+const toTimeMs = (time) => {
+  if (time instanceof Date) return time.getTime();
+  if (typeof time === "number" || /^\d+$/.test(String(time))) {
+    const n = Number(time);
+    return String(n).length === 10 ? n * 1000 : n;
+  }
+  return new Date(String(time)).getTime();
+};
+
+/**
+ * 是否显示撤销按钮：记录类型为 1、未撤销，且创建时间在 5 分钟内
+ * @param {Object} item - 记录项
+ * @returns {boolean}
+ */
+const canCancel = (item) => {
+  if (item.recordType !== 1 || item.status !== 1) return false;
+  const created = toTimeMs(item.createTime);
+  if (isNaN(created)) return false;
+  return now.value - created < CANCEL_EXPIRE_MS;
 };
 
 /**
@@ -203,6 +237,14 @@ const confirmCancel = async () => {
 // ==================== 生命周期 ====================
 onMounted(() => {
   fetchRecords(true);
+  // 定时刷新当前时间，超过 5 分钟后自动隐藏撤销按钮
+  expireTimer = setInterval(() => {
+    now.value = Date.now();
+  }, 30 * 1000);
+});
+
+onUnmounted(() => {
+  if (expireTimer) clearInterval(expireTimer);
 });
 </script>
 
