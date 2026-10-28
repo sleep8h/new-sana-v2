@@ -234,44 +234,7 @@ onMounted(async () => {
         }
       }
     }
-    .top2 {
-      position: absolute;
-      top: 263px;
-      background: url("@/assets/activity/dragonsWealth/post/item2.png") no-repeat top center;
-      background-size: cover;
-      .avatar {
-        .avatar-bg {
-          background: url("@/assets/activity/dragonsWealth/post/top2.png") no-repeat top center;
-          background-size: cover;
-        }
-      }
-      .hot-gold {
-        .hot,
-        .gold {
-          background: linear-gradient(180deg, #005b99 0%, #0277b8 100%);
-          box-shadow: inset 0px 2px 6px 0px rgba(255, 255, 255, 0.26);
-        }
-      }
-    }
-    .top3 {
-      position: absolute;
-      top: 379px;
-      background: url("@/assets/activity/dragonsWealth/post/item3.png") no-repeat top center;
-      background-size: cover;
-      .avatar {
-        .avatar-bg {
-          background: url("@/assets/activity/dragonsWealth/post/top3.png") no-repeat top center;
-          background-size: cover;
-        }
-      }
-      .hot-gold {
-        .hot,
-        .gold {
-          background: linear-gradient(180deg, #1f7413 0%, #408417 100%);
-          box-shadow: inset 0px 2px 6px 0px rgba(255, 255, 255, 0.26);
-        }
-      }
-    }
+    
   }
 
   .knight-new {
