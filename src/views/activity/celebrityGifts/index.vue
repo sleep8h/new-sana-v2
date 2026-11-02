@@ -1,6 +1,10 @@
 <!-- Celebrity Gift Battle 活动主页 -->
 <template>
   <div class="page">
+    <div class="nav-back" :class="{ 'nav-back-ar': store.language === 'ar' }" @click="back">
+      <img v-if="store.language !== 'ar'" src="@/assets/common/left-icon@2x.png" alt="" />
+      <img v-else src="@/assets/common/right-icon@2x.png" alt="" />
+    </div>
     <div class="page-content">
       <!-- 头图区域 -->
       <div class="bg-top">
@@ -130,6 +134,17 @@ const tabChange = (item) => {
   curTab.value = item.value;
 };
 
+// 返回上一页
+const back = () => {
+  if (store.os === "android") {
+    WebViewJavascriptBridge.backToFront(null, null);
+  } else if (store.os === "ios") {
+    window.webkit.messageHandlers.backToFront.postMessage(null);
+  } else {
+    console.error("未知平台，无法返回");
+  }
+};
+
 const formatNumber = (num) => {
   return String(Number(num || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
@@ -173,6 +188,22 @@ onMounted(() => {
     Helvetica,
     Arial,
     sans-serif;
+
+  .nav-back {
+    position: fixed;
+    z-index: 1000;
+    top: 53px;
+    inset-inline-start: 16px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    > img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 
   .page-content {
     position: relative;

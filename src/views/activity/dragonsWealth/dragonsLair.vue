@@ -193,11 +193,14 @@ const widthFnB = (widthA, widthB) => {
 }
 
 const vsLeftFn = (widthA, widthB) => {
-  let total = widthA + widthB;
+  // .vs-icon 宽度 103px，居中需要向左偏移半宽
+  const VS_HALF = 51.5;
+  const total = widthA + widthB;
+  if (total === 0) return `calc(50% - ${VS_HALF}px)`;
   let scale = widthA / total;
-  if(scale < 0.20) return `calc(20% - 42.5px)`;
-  if(scale > 0.80) return `calc(80% - 42.5px)`;
-  return `calc(${scale * 100}% - 42.5px)`;
+  if(scale < 0.20) return `calc(20% - ${VS_HALF}px)`;
+  if(scale > 0.80) return `calc(80% - ${VS_HALF}px)`;
+  return `calc(${scale * 100}% - ${VS_HALF}px)`;
 }
 
 const formatWithRegex = (num) => {
@@ -424,7 +427,7 @@ onMounted(async () => {
       }
       .vs-icon {
         position: absolute;
-        left: calc(50% - 30.5px);
+        left: calc(50% - 51.5px);
         width: 103px;
         height: 104px;
         background: url("@/assets/activity/dragonsWealth/dragonsLair/vs.png") no-repeat top center;

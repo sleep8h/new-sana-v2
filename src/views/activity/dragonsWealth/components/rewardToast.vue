@@ -12,11 +12,9 @@
               <div class="reward-img">
                 <img :src="item.rewardUrl" alt="" />
               </div>
-              <div class="gift-name-number">
-                <sanaAutoText class="gift-name" :key="new Date().getTime()">
-                  {{ `${store.language === "ar" ? item.rewardNameAr : item.rewardName} *${item.rewardValue}` }}
-                </sanaAutoText>
-              </div>
+              <sanaAutoText class="gift-name" :key="new Date().getTime()">
+                {{ `${store.language === "ar" ? item.rewardNameAr : item.rewardName} *${item.rewardValue}` }}
+              </sanaAutoText>
             </div>
           </div>
           <div class="rule-text">
@@ -156,6 +154,7 @@ const closeModal = () => {
             justify-content: flex-start;
             align-items: center;
             gap: 7px;
+            margin-bottom: 10px;
             .reward-img {
               width: 104px;
               height: 96px;
@@ -169,21 +168,17 @@ const closeModal = () => {
                 height: auto;
               }
             }
-            .gift-name-number {
-              width: 104px;
-              height: 14px;
-              line-height: 14px;
+            .gift-name {
+              width: 94px;
+              height: 16px;
+              line-height: 16px;
               font-size: 11px;
-              .gift-name {
-                // color: #ffe343;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+              line-height: 16px;
+              ::v-deep(> span) {
                 background: linear-gradient(180deg, #ffffff 0%, #d8b26d 100%);
                 -webkit-background-clip: text; /* Safari/Chrome 兼容 */
                 background-clip: text; /* 现代浏览器标准属性 */
                 color: transparent; /* 文字透明以显示背景渐变 */
-                display: inline-block; /* 必须为块级或行内块元素 [1][3][6] */
               }
             }
           }
