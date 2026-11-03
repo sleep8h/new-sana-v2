@@ -13,7 +13,7 @@
                 <img :src="item.rewardUrl" alt="" />
               </div>
               <sanaAutoText class="gift-name" :key="new Date().getTime()">
-                {{ `${store.language === "ar" ? item.rewardNameAr : item.rewardName} *${item.rewardValue}` }}
+                {{ `${store.language === "ar" ? item.rewardNameAr : item.rewardName} *${rewardNumFn(item)}` }}
               </sanaAutoText>
             </div>
           </div>
@@ -60,6 +60,12 @@ onMounted(async () => {
     });
   }, 1000);
 });
+
+// 奖励类型不等于 11、12 时，数量后面加 D
+const rewardNumFn = (item) => {
+  const type = Number(item.rewardType);
+  return type !== 11 && type !== 12 ? `${item.rewardValue}D` : `${item.rewardValue}`;
+};
 
 const closeModal = () => {
   emit("update:isShow", false);

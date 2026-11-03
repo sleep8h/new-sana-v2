@@ -2,7 +2,7 @@
 <template>
   <div class="toast" v-if="isShow">
     <div class="toast-mask" @click="closeModal"></div>
-    <div class="toast-content" :class="{ 'toast-content-1': props.getRewardList.length === 1 }">
+    <div class="toast-content">
       <div class="toast-close" @click="closeModal"></div>
       <div class="toast-title">
         <span>{{ $t("dragons.rewardsObtained") }}</span>
@@ -14,7 +14,8 @@
               <img :src="rewardUrlFn(item.giftId)" alt="" />
             </div>
             <sanaAutoText class="gift-name">
-              {{ `${store.language === "ar" ? item.rewardNameAr : item.rewardName} *${item.rewardValue}` }}
+              {{ `${rewardNameFn(item.giftId)} *${rewardNumFn(item)}` }}
+              <!-- {{ `${store.language === "ar" ? item.rewardNameAr : item.rewardName} *${item.rewardValue}` }} -->
             </sanaAutoText>
           </div>
         </div>
@@ -55,6 +56,21 @@ const rewardUrlFn = (giftId) => {
   return props.rewardList.find((item) => item.rewardRefId === giftId).rewardUrl;
 };
 
+const rewardNameFn = (giftId) => {
+  if (store.language === "ar") {
+    return props.rewardList.find((item) => item.rewardRefId === giftId).rewardNameAr;
+  } else {
+    return props.rewardList.find((item) => item.rewardRefId === giftId).rewardName;
+  }
+};
+
+// 奖励类型不等于 11、12 时，数量后面加 D
+const rewardNumFn = (item) => {
+  const reward = props.rewardList.find((r) => r.rewardRefId === item.giftId);
+  const type = Number(item.rewardType ?? reward?.rewardType);
+  return type !== 11 && type !== 12 ? `${item.giftNum}D` : `${item.giftNum}`;
+};
+
 const closeModal = () => {
   emit("update:isShow", false);
   emit("close");
@@ -81,24 +97,6 @@ const closeModal = () => {
     top: 0;
     left: 0;
     z-index: 9999;
-  }
-  .toast-content-1 {
-    position: fixed;
-    z-index: 10000;
-    width: 345px;
-    height: 305px !important;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    .toast-list {
-      top: 62px;
-      height: calc(100% - 72px);
-      gap: 16px;
-      .list {
-        max-height: none;
-        overflow: visible;
-      }
-    }
   }
   .toast-content {
     position: fixed;
