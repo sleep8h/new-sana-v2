@@ -9,15 +9,9 @@
           <div
             class="item"
             :class="props.campType === 1 ? 'item-knight' : 'item-dragon'"
-            v-for="(item, index) in 3"
-            :key="index"
-          >
-            <!-- <div
-            class="item"
-            :class="props.campType === 1 ? 'item-knight' : 'item-dragon'"
             v-for="(item, index) in campList"
             :key="index"
-          > -->
+          >
             <img v-if="index === 0" :src="top1" alt="" />
             <img v-if="index === 1" :src="top2" alt="" />
             <img v-if="index === 2" :src="top3" alt="" />
