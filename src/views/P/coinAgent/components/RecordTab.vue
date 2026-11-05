@@ -22,9 +22,13 @@
               </div>
             </div>
             <div class="record-right">
-              <!-- 交易金额，正数为绿色，负数为红色 -->
-              <div class="record-amount" dir="ltr" :class="item.purpleDiamondNum < 0 ? 'positive' : 'negative'">
-                {{ item.purpleDiamondNum < 0 ? "-" : "+" }}{{ formatNumber(item.purpleDiamondNum) || 0 }}
+              <!-- 交易金额：正数及 0 为红色，负数为绿色，0 不显示正负号 -->
+              <div
+                class="record-amount"
+                dir="ltr"
+                :class="item.purpleDiamondNum < 0 ? 'negative' : 'positive'"
+              >
+                {{ item.purpleDiamondNum > 0 ? "+" : item.purpleDiamondNum < 0 ? "-" : "" }}{{ formatNumber(Math.abs(item.purpleDiamondNum)) || 0 }}
               </div>
               <!-- 创建后 5 分钟内且未撤销时显示撤销按钮 -->
               <div v-if="canCancel(item)" class="cancel-btn" @click="showCancelDialog(item)">
@@ -309,11 +313,11 @@ onUnmounted(() => {
             font-size: 24px;
             text-align: end;
             &.positive {
-              color: #219653;
+              color: #eb5757;
             }
 
             &.negative {
-              color: #eb5757;
+              color: #219653;
             }
           }
 
