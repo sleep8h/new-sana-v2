@@ -24,8 +24,8 @@
               :placeholder="t('coinAgent.accountPlaceholder')"
               @keydown="onAccountKeydown"
               @input="onAccountInput"
+              @blur="onAccountBlur"
             />
-            <!-- @blur="onAccountBlur" -->
             <img
               v-if="form.account"
               class="clear-icon"
@@ -395,19 +395,14 @@ const onAccountInput = (e) => {
 };
 
 /**
- * 账号输入框失去焦点时校验
- * 必须为7位数字才查询用户信息
+ * 账号输入框失去焦点时查询用户信息
+ * 输入非空即请求接口，不再仅限输入满7位时查询
  */
-const onAccountBlur = async () => {
+const onAccountBlur = () => {
   const raw = parseNumber(form.value.account);
   form.value.account = raw;
-  console.log(raw, form.value.account, "raw");
-  if (raw.length !== 7) {
-    // return showToast(t("coinAgent.accountLengthError"));
-    return false;
-  } else {
-    await fetchUserInfo(raw);
-  }
+  if (!raw) return;
+  fetchUserInfo(raw);
 };
 
 // ==================== 接口调用 ====================
