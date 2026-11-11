@@ -95,16 +95,17 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/swiper-bundle.css'
 import { get, postFormData } from '@/utils/http.js'
 import { useMainStore } from '@/pinia/index.js'
-import treasureboxhide1 from '@/assets/activity/recharge/reward/treasure-box-hide1.png'
-import treasureboxhide2 from '@/assets/activity/recharge/reward/treasure-box-hide2.png'
-import treasureboxhide3 from '@/assets/activity/recharge/reward/treasure-box-hide3.png'
-import treasureboxhide4 from '@/assets/activity/recharge/reward/treasure-box-hide4.png'
-import treasureboxhide5 from '@/assets/activity/recharge/reward/treasure-box-hide5.png'
-import treasureboxshow1 from '@/assets/activity/recharge/reward/treasure-box-show1.png'
-import treasureboxshow2 from '@/assets/activity/recharge/reward/treasure-box-show2.png'
-import treasureboxshow3 from '@/assets/activity/recharge/reward/treasure-box-show3.png'
-import treasureboxshow4 from '@/assets/activity/recharge/reward/treasure-box-show4.png'
-import treasureboxshow5 from '@/assets/activity/recharge/reward/treasure-box-show5.png'
+// 换皮中：以下宝箱图片已删除，待补新图后恢复
+// import treasureboxhide1 from '@/assets/activity/recharge/reward/treasure-box-hide1.png'
+// import treasureboxhide2 from '@/assets/activity/recharge/reward/treasure-box-hide2.png'
+// import treasureboxhide3 from '@/assets/activity/recharge/reward/treasure-box-hide3.png'
+// import treasureboxhide4 from '@/assets/activity/recharge/reward/treasure-box-hide4.png'
+// import treasureboxhide5 from '@/assets/activity/recharge/reward/treasure-box-hide5.png'
+// import treasureboxshow1 from '@/assets/activity/recharge/reward/treasure-box-show1.png'
+// import treasureboxshow2 from '@/assets/activity/recharge/reward/treasure-box-show2.png'
+// import treasureboxshow3 from '@/assets/activity/recharge/reward/treasure-box-show3.png'
+// import treasureboxshow4 from '@/assets/activity/recharge/reward/treasure-box-show4.png'
+// import treasureboxshow5 from '@/assets/activity/recharge/reward/treasure-box-show5.png'
 
 // 定义emit
 const emit = defineEmits(['timeChange'])
@@ -205,37 +206,10 @@ const handleBoxClick = (index) => {
   }
 }
 
-const getTreasureboxhideImageUrl = (index) => {
-  if (index === 0) {
-    return treasureboxhide1
-  } else if (index === 1) {
-    return treasureboxhide2
-  } else if (index === 2) {
-    return treasureboxhide3
-  } else if (index === 3) {
-    return treasureboxhide4
-  } else if (index === 4) {
-    return treasureboxhide5
-  } else {
-    return treasureboxhide5
-  }
-}
+// 换皮中：宝箱图片已删除，暂返回空（Vue 会移除 src 属性），待补新图后恢复
+const getTreasureboxhideImageUrl = () => undefined
 
-const getTreasureboxshowImageUrl = (index) => {
-  if (index === 0) {
-    return treasureboxshow1
-  } else if (index === 1) {
-    return treasureboxshow2
-  } else if (index === 2) {
-    return treasureboxshow3
-  } else if (index === 3) {
-    return treasureboxshow4
-  } else if (index === 4) {
-    return treasureboxshow5
-  } else {
-    return treasureboxshow5
-  }
-}
+const getTreasureboxshowImageUrl = () => undefined
 
 // 去充值
 const getRechargePage = () =>{
@@ -355,12 +329,14 @@ onMounted(() => {
       text-shadow: 0px 1px 2px #A74700;
       padding: 21px 0 17px 0;
       text-align: center;
-      background: url('@/assets/activity/recharge/reward/tabHide.png') no-repeat center center;
+      // 换皮中：待补新图
+      // background: url('@/assets/activity/recharge/reward/tabHide.png') no-repeat center center;
       background-size: cover;
     }
     >.tab-show{
       padding: 25px 0 13px 0;
-      background: url('@/assets/activity/recharge/reward/tabShow.png') no-repeat center center;
+      // 换皮中：待补新图
+      // background: url('@/assets/activity/recharge/reward/tabShow.png') no-repeat center center;
       background-size: cover;
     }
   }
@@ -395,7 +371,8 @@ onMounted(() => {
       height: 97px;
       box-sizing: border-box;
       padding: 30px 6px 26px 26px;
-      background: url('@/assets/activity/recharge/reward/userBg.png') no-repeat center center;
+      // 换皮中：待补新图
+      // background: url('@/assets/activity/recharge/reward/userBg.png') no-repeat center center;
       background-size: cover;
       display: flex;
       justify-content: flex-start;
@@ -460,7 +437,8 @@ onMounted(() => {
         color: #913000;
         line-height: 19px;
         text-align: center;
-        background: url('@/assets/activity/recharge/reward/rechargeBth.png') no-repeat center center;
+        // 换皮中：待补新图
+        // background: url('@/assets/activity/recharge/reward/rechargeBth.png') no-repeat center center;
         background-size: cover;
       }
     }
@@ -468,7 +446,8 @@ onMounted(() => {
       margin-top: 6px;
       width: 300px;
       height: 79px;
-      background: url('@/assets/activity/recharge/reward/rechargeBg1.png') no-repeat center center;
+      // 换皮中：待补新图
+      // background: url('@/assets/activity/recharge/reward/rechargeBg1.png') no-repeat center center;
       background-size: cover;
       position: relative;
       .treasure-box-progress{
@@ -517,7 +496,8 @@ onMounted(() => {
               padding: 0 5px;
               height: 16px;
               margin-top: -1px;
-              background: url('@/assets/activity/recharge/reward/textBg1.png') no-repeat center center;
+              // 换皮中：待补新图
+              // background: url('@/assets/activity/recharge/reward/textBg1.png') no-repeat center center;
               background-size: 100% 100%;
               font-weight: bold;
               font-size: 9px;
@@ -542,7 +522,8 @@ onMounted(() => {
             z-index: 2;
             width: calc(v-bind(boxMaxNum) * 39px + (v-bind(boxMaxNum) - 1) * 16px - 18px);
             height: 12px;
-            background: url('@/assets/activity/recharge/reward/progressBarHide.png') no-repeat center left, ;
+            // 换皮中：待补新图
+            // background: url('@/assets/activity/recharge/reward/progressBarHide.png') no-repeat center left, ;
             background-size: 100% 100%;
           }
           .treasure-box-list-show{
@@ -551,7 +532,8 @@ onMounted(() => {
             z-index: 3;
             width: calc(v-bind(boxLv) * 39px + (v-bind(boxLv) - 1) * 16px - 24px);
             height: 8px;
-            background: url('@/assets/activity/recharge/reward/progressBarShow.png') no-repeat center left;
+            // 换皮中：待补新图
+            // background: url('@/assets/activity/recharge/reward/progressBarShow.png') no-repeat center left;
             background-size: 100% 100%; /* 避免横向变形 */
           }
         }
@@ -599,7 +581,8 @@ onMounted(() => {
               width: 81px;
               height: 77px;
               margin-top: 20px;
-              background: url('@/assets/activity/recharge/reward/rechargeBoxBg.png') no-repeat center center;
+              // 换皮中：待补新图
+              // background: url('@/assets/activity/recharge/reward/rechargeBoxBg.png') no-repeat center center;
               background-size: cover;
               display: flex;
               justify-content: center;
@@ -625,7 +608,8 @@ onMounted(() => {
               color: #FFFFFF;
               line-height: 15px;
               text-align: center;
-              background: url('@/assets/activity/recharge/reward/textBg2.png') no-repeat center center;
+              // 换皮中：待补新图
+              // background: url('@/assets/activity/recharge/reward/textBg2.png') no-repeat center center;
               background-size: cover;
               display: flex;
               justify-content: center;
@@ -642,7 +626,8 @@ onMounted(() => {
       margin-top: 12px;
       width: 301px;
       height: 160px;
-      background: url('@/assets/activity/recharge/reward/rechargeBg3.png') no-repeat center center;
+      // 换皮中：待补新图
+      // background: url('@/assets/activity/recharge/reward/rechargeBg3.png') no-repeat center center;
       background-size: cover;
       .recharge-ranking-list{
         position: relative;
@@ -654,7 +639,8 @@ onMounted(() => {
           justify-content: flex-start;
           align-items: center;
           .recharge-ranking-item-name{
-            background: url('@/assets/activity/recharge/reward/textBg3.png') no-repeat center center;
+            // 换皮中：待补新图
+            // background: url('@/assets/activity/recharge/reward/textBg3.png') no-repeat center center;
             background-size: cover;
             width: 89px;
             height: 24px;

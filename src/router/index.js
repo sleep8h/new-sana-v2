@@ -6,7 +6,8 @@ const routes = [
     name: "Home",
     // component: () => import('../views/home/index.vue')
     // component: () => import("../views/activity/celebrityGifts/index.vue"),
-    component: () => import("../views/activity/dragonsWealth/index.vue"),
+    // component: () => import("../views/activity/dragonsWealth/index.vue"),
+    component: () => import("../views/activity/recharge/index.vue"),
   },
   {
     path: "/:pathMatch(.*)*",

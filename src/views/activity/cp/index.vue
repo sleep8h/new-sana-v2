@@ -63,15 +63,12 @@ import { showToast } from "vant";
 import "vant/es/toast/style"; // 关键：单独引入样式
 
 // 图片资源
-import bgTop from "@/assets/activity/recharge/reward/bgTop.png";
-import title from "@/assets/activity/recharge/rank/rechargeActivity.png";
-import titleAr from "@/assets/activity/recharge/rank/rechargeActivity1.png";
-import homeTab1Hide from "@/assets/activity/recharge/reward/home-tab1-hide.png";
-import homeTab2Hide from "@/assets/activity/recharge/reward/home-tab2-hide.png";
-import homeTab3Hide from "@/assets/activity/recharge/reward/home-tab3-hide.png";
-import homeTab1Show from "@/assets/activity/recharge/reward/home-tab1-show.png";
-import homeTab2Show from "@/assets/activity/recharge/reward/home-tab2-show.png";
-import homeTab3Show from "@/assets/activity/recharge/reward/home-tab3-show.png";
+import homeTab1Hide from "@/assets/activity/rechargeOld/reward/home-tab1-hide.png";
+import homeTab2Hide from "@/assets/activity/rechargeOld/reward/home-tab2-hide.png";
+import homeTab3Hide from "@/assets/activity/rechargeOld/reward/home-tab3-hide.png";
+import homeTab1Show from "@/assets/activity/rechargeOld/reward/home-tab1-show.png";
+import homeTab2Show from "@/assets/activity/rechargeOld/reward/home-tab2-show.png";
+import homeTab3Show from "@/assets/activity/rechargeOld/reward/home-tab3-show.png";
 
 // 模块
 import Week from "@/views/activity/cp/week.vue";

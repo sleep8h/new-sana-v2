@@ -1,31 +1,22 @@
 <!-- 主页 -->
 <template>
   <div class="page">
-    <div
-      class="nav-container"
-      :class="store.language != 'ar' ? 'nav-container-left' : 'nav-container-right'"
-      @click="back"
-    >
+    <div class="nav-container" @click="back">
       <img v-if="store.language != 'ar'" src="@/assets/common/left-icon@2x.png" alt="" />
       <img v-else src="@/assets/common/right-icon@2x.png" alt="" />
     </div>
     <div class="bg-top">
-      <img v-if="store.language === 'ar'" :src="titleAr" alt="" class="title-img" />
-      <img v-else :src="title" alt="" class="title-img" />
       <div class="tab-list">
         <div
-          :class="['tab-item', { 'tab-item-show': curTab === item.value }]"
+          :class="['tab-item' + index, { 'tab-item-show': curTab === item.value }]"
           @click="tabChange(item)"
           v-for="(item, index) in tabList"
           :key="index"
         >
           <img v-if="curTab === item.value" :src="item.imgShow" alt="" />
           <img v-else :src="item.imgHide" alt="" />
-          <span>{{ item.text }}</span>
+          <div>{{ item.text }}</div>
         </div>
-      </div>
-      <div class="time">
-        <CountDownBox :time="countDownTime || 0" :key="countDownTime" format="DD:HH:MM:SS" />
       </div>
       <div class="rules" @click="rulesShow = true">{{ $t("recharge.rules") }}</div>
     </div>
@@ -61,9 +52,6 @@ import { showToast } from "vant";
 import "vant/es/toast/style"; // 关键：单独引入样式
 
 // 图片资源
-import bgTop from "@/assets/activity/recharge/reward/bgTop.png";
-import title from "@/assets/activity/recharge/rank/rechargeActivity.png";
-import titleAr from "@/assets/activity/recharge/rank/rechargeActivity1.png";
 import homeTab1Hide from "@/assets/activity/recharge/reward/home-tab1-hide.png";
 import homeTab2Hide from "@/assets/activity/recharge/reward/home-tab2-hide.png";
 import homeTab3Hide from "@/assets/activity/recharge/reward/home-tab3-hide.png";
@@ -148,8 +136,8 @@ onMounted(() => {
   overflow-y: auto;
   font-family: LogoSCUnboundedSans, system-ui, Avenir, Helvetica, Arial, sans-serif;
   .nav-container {
-    width: 16px;
-    height: 16px;
+    width: 32px;
+    height: 32px;
     box-sizing: border-box;
     background: none;
     color: transparent;
@@ -157,66 +145,119 @@ onMounted(() => {
     z-index: 999;
     /* 增加点击区域 */
     touch-action: manipulation;
+    top: 52px;
+    inset-inline-start: 24px;
     > img {
-      width: 16px;
-      height: 16px;
+      width: 32px;
+      height: 32px;
     }
   }
-  .nav-container-left {
-    top: 52px;
-    left: 24px;
-  }
-  .nav-container-right {
-    top: 52px;
-    right: 24px;
-  }
   .bg-top {
-    background: url("@/assets/activity/recharge/reward/bgTop.png") no-repeat center center;
+    background: url("@/assets/activity/recharge/reward/bg1.png") no-repeat center center;
     background-size: 100% 100%;
     width: 100%;
-    height: 592px;
+    height: 811px;
     position: relative;
     top: 0;
     left: 0;
     z-index: 1;
-    .title-img {
-      position: absolute;
-      width: 228px;
-      height: 34px;
-      top: 194px;
-      left: 75px;
-    }
     .tab-list {
       position: absolute;
-      width: 325px;
-      top: 507px;
+      width: 100%;
+      bottom: -18px;
       left: 50%;
       transform: translateX(-50%);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .tab-item {
-        width: 91px;
-        height: 91px;
-        position: relative;
-        &:nth-child(2) {
-          margin-top: -15px;
-        }
+      .tab-item0 {
+        width: 116.5px;
+        height: 102px;
+        position: absolute;
+        top: 0;
+        inset-inline-start: 8.5px;
         > img {
-          width: 91px;
-          height: 91px;
+          width: 116.5px;
+          height: 102px;
         }
-        > span {
+        > div {
           position: absolute;
-          top: 64px;
-          left: 50%;
-          width: 53px;
-          height: 15px;
-          font-size: 9px;
-          color: rgba(#ffe400, 0.8) !important;
-          line-height: 8px;
+          top: 92.5px;
+          inset-inline-start: 22px;
+          font-weight: bold;
+          font-size: 10px;
+          line-height: 10px;
+          color: #fff;
+          width: 80.5px;
+          height: 31px;
+          background: none;
+          background: url("@/assets/activity/recharge/reward/tabBtnBg.png") no-repeat center center;
+          background-size: cover;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           text-align: center;
-          transform: translateX(-50%);
+          box-sizing: border-box;
+          padding-inline-end: 5px;
+        }
+      }
+      .tab-item1 {
+        width: 116.5px;
+        height: 102px;
+        position: absolute;
+        top: 31px;
+        inset-inline-start: 128.5px;
+        > img {
+          width: 116.5px;
+          height: 102px;
+        }
+        > div {
+          position: absolute;
+          top: 92px;
+          inset-inline-start: 20.5px;
+          font-weight: bold;
+          font-size: 10px;
+          line-height: 10px;
+          color: #fff;
+          width: 80.5px;
+          height: 31px;
+          background: none;
+          background: url("@/assets/activity/recharge/reward/tabBtnBg.png") no-repeat center center;
+          background-size: cover;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          box-sizing: border-box;
+          padding-inline-end: 5px;
+        }
+      }
+      .tab-item2 {
+        width: 109.5px;
+        height: 83px;
+        position: absolute;
+        top: 17px;
+        inset-inline-end: 12.5px;
+        > img {
+          width: 109.5px;
+          height: 83px;
+        }
+        > div {
+          position: absolute;
+          top: 75.5px;
+          inset-inline-start: 18px;
+          font-weight: bold;
+          font-size: 10px;
+          line-height: 10px;
+          color: #fff;
+          width: 80.5px;
+          height: 31px;
+          background: none;
+          background: url("@/assets/activity/recharge/reward/tabBtnBg.png") no-repeat center center;
+          background-size: cover;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          box-sizing: border-box;
+          padding-inline-end: 5px;
         }
       }
       .tab-item-show {
@@ -225,12 +266,6 @@ onMounted(() => {
         }
       }
     }
-    .time {
-      position: absolute;
-      top: 417px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
   }
   .rules {
     position: fixed;
@@ -238,7 +273,7 @@ onMounted(() => {
     right: 0;
     width: 60px;
     height: 31px;
-    background: url("@/assets/activity/recharge/rank/rules.png") no-repeat center center;
+    // background: url("@/assets/activity/recharge/rank/rules.png") no-repeat center center;
     background-size: cover;
     font-family: PingFang-SC, PingFang-SC, system-ui, Avenir, Helvetica, Arial, sans-serif;
     font-weight: bold;
@@ -252,6 +287,7 @@ onMounted(() => {
   .content {
     width: 100%;
     height: auto;
+    background: #4e0708;
   }
   .rules-toast {
     position: fixed;
@@ -277,7 +313,7 @@ onMounted(() => {
       z-index: 1002;
       box-sizing: border-box;
       padding: 54px 42px 48px;
-      background: url("@/assets/activity/recharge/reward/rulesBg.png") no-repeat center center;
+      // background: url("@/assets/activity/recharge/reward/rulesBg.png") no-repeat center center;
       background-size: cover;
       .rules-title {
         font-family: PingFang-SC, PingFang-SC;

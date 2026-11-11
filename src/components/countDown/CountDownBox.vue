@@ -174,7 +174,7 @@ onBeforeUnmount(() => {
         align-items: center;
         justify-content: center;
         box-sizing: border-box;
-        background: url("@/assets/activity/recharge/reward/timeBg.png") no-repeat center center;
+        background: url("@/assets/activity/rechargeOld/reward/timeBg.png") no-repeat center center;
         background-size: cover;
         background-size: 100% 100%;
         > span {
