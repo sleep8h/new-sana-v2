@@ -326,6 +326,8 @@
     "weeklyRanking": "周榜",
     "monthlyRanking": "月榜",
     "ranking": "排行榜",
+    "rank": "排名",
+    "gapToPrev": "距离上一名：{gap}",
     "lastWeek": "上周",
     "lastMonth": "上月",
     "more": "更多",

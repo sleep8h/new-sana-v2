@@ -161,6 +161,18 @@ onMounted(() => {
     top: 0;
     left: 0;
     z-index: 1;
+    // 与下方 content 的背景重叠 2px，只画 bg1 的最后 2px，避免拼接处露细缝且不影响布局
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 100%;
+      height: 2px;
+      background: url("@/assets/activity/recharge/reward/bg1.png") no-repeat center bottom;
+      background-size: 100% 811px;
+      pointer-events: none;
+    }
     .tab-list {
       position: absolute;
       width: 100%;

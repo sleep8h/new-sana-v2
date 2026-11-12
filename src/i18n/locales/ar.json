@@ -326,6 +326,8 @@
     "weeklyRanking": "التصنيف الأسبوعي",
     "monthlyRanking": "التصنيف الشهري",
     "ranking": "التصنيف",
+    "rank": "الترتيب",
+    "gapToPrev": "المسافة إلى السابق: {gap}",
     "lastWeek": "الأسبوع الماضي",
     "lastMonth": "الشهر الماضي",
     "more": "المزيد",

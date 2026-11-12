@@ -326,6 +326,8 @@
     "weeklyRanking": "Weekly Ranking",
     "monthlyRanking": "Monthly Ranking",
     "ranking": "Ranking",
+    "rank": "Ranking",
+    "gapToPrev": "Distance to previous: {gap}",
     "lastWeek": "Last Week",
     "lastMonth": "last Month",
     "more": "More",

@@ -326,6 +326,8 @@
     "weeklyRanking": "Weekly Ranking",
     "monthlyRanking": "Monthly Ranking",
     "ranking": "Ranking",
+    "rank": "Sıralama",
+    "gapToPrev": "Öncekine mesafe: {gap}",
     "lastWeek": "Last Week",
     "lastMonth": "last Month",
     "more": "More",

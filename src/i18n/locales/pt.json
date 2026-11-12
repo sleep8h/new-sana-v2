@@ -326,6 +326,8 @@
     "weeklyRanking": "Classificação Semanal",
     "monthlyRanking": "Classificação Mensal",
     "ranking": "Classificação",
+    "rank": "Classificação",
+    "gapToPrev": "Distância para o anterior: {gap}",
     "lastWeek": "Semana Passada",
     "lastMonth": "Mês Passado",
     "more": "Mais",
