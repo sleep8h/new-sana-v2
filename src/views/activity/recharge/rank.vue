@@ -232,8 +232,6 @@ import "swiper/swiper-bundle.css";
 import { get, postFormData } from "@/utils/http.js";
 import { useMainStore } from "@/pinia/index.js";
 import { useI18n } from "vue-i18n";
-// 换皮临时假数据用的头像，去掉假数据后可一并删除
-import mockAvatar from "@/assets/common/logo.png";
 
 // 定义emit
 const emit = defineEmits(["timeChange"]);
@@ -449,8 +447,6 @@ const getActivityRechargeList = async () => {
   } catch (error) {
     console.error("Error fetching anchor info:", error);
   }
-  // 换皮临时：每次拉完榜单都补上「上周 / 上月」Top3 假数据
-  if (USE_LAST_MOCK) applyLastMock();
 };
 
 const getActivityRechargeGetGifts = async (type) => {
@@ -475,25 +471,6 @@ const getActivityRechargeGetGifts = async (type) => {
     console.error("Error fetching anchor info:", error);
   }
 };
-
-// ===== 换皮临时假数据：仅「上周 / 上月」Top3，USE_LAST_MOCK 改 false 即可关闭 =====
-const USE_LAST_MOCK = true;
-const MOCK_LAST_NICKS = ["KnightOfDawn", "小甜甜", "DragonSlayer", "夜行客", "StarLord", "月下独酌"];
-const mockLastTop3 = (offset) =>
-  Array.from({ length: 3 }, (_, i) => ({
-    avatar: mockAvatar,
-    nick: MOCK_LAST_NICKS[(offset + i) % MOCK_LAST_NICKS.length],
-    integral: 980000 - (offset + i) * 76000,
-  }));
-
-const applyLastMock = () => {
-  listData.value = {
-    ...listData.value,
-    weekTop3: { listLast: mockLastTop3(0), listLastTwo: mockLastTop3(3) },
-    monthTop3: { listLast: mockLastTop3(1), listLastTwo: mockLastTop3(4) },
-  };
-};
-// ===== 假数据结束 =====
 
 onMounted(async () => {
   getActivityRechargeRank();

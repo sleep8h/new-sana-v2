@@ -353,7 +353,8 @@
     "October": "أكتوبر",
     "November": "نوفمبر",
     "December": "ديسمبر",
-    "Award": "جائزة"
+    "Award": "جائزة",
+    "awardTitle": "مكافآت إعادة شحن {amount}"
   },
   "cp": {
     "Day": "Day",

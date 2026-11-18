@@ -19,6 +19,19 @@
         </div>
       </div>
       <div class="rules" @click="rulesShow = true">{{ $t("recharge.rules") }}</div>
+      <!-- 周第一 -->
+      <div class="week-first">
+        <div class="week-first-frame">
+          <img :src="weekFirst.avatar || DEFAULT_AVATAR" alt="" />
+        </div>
+        <div class="week-first-plate" v-if="weekFirst.nick">
+          <div class="week-first-name">{{ weekFirst.nick }}</div>
+          <div class="week-first-value">
+            <span>{{ weekFirst.integral }}</span>
+            <i class="week-first-gold"></i>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="content">
       <Reward v-if="curTab === 1" @timeChange="timeChanges" />
@@ -58,6 +71,7 @@ import homeTab3Hide from "@/assets/activity/recharge/reward/home-tab3-hide.png";
 import homeTab1Show from "@/assets/activity/recharge/reward/home-tab1-show.png";
 import homeTab2Show from "@/assets/activity/recharge/reward/home-tab2-show.png";
 import homeTab3Show from "@/assets/activity/recharge/reward/home-tab3-show.png";
+import DEFAULT_AVATAR from "@/assets/common/user-avatar-default.png";
 
 // 模块
 import Reward from "@/views/activity/recharge/reward.vue";
@@ -71,6 +85,32 @@ const { t } = useI18n();
 const curTab = ref(1);
 const countDownTime = ref(0);
 const rulesShow = ref(false);
+// 周榜第一名
+const weekFirst = reactive({
+  avatar: "",
+  nick: "",
+  integral: "",
+});
+
+const getWeekFirst = async () => {
+  try {
+    const res = await postFormData("/h5doings/activity/recharge/list", {
+      uid: store.uid,
+      ticket: store.ticket,
+      language: store.language,
+    });
+    if (res && res.code === 200) {
+      const first = res.data?.weekTop3?.listNow?.[0];
+      if (first) {
+        weekFirst.avatar = first.avatar || "";
+        weekFirst.nick = first.nick || "";
+        weekFirst.integral = first.integral ?? "";
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching week first:", error);
+  }
+};
 const tabList = [
   {
     imgHide: homeTab1Hide,
@@ -123,8 +163,7 @@ const back = () => {
 };
 
 onMounted(() => {
-  // getAnchorInfo()
-  // getAnchorReward()
+  getWeekFirst();
 });
 </script>
 
@@ -172,6 +211,83 @@ onMounted(() => {
       background: url("@/assets/activity/recharge/reward/bg1.png") no-repeat center bottom;
       background-size: 100% 811px;
       pointer-events: none;
+    }
+    // 周第一（数值为设计稿 750 宽 ÷ 2）
+    .week-first {
+      position: absolute;
+      top: 620px;
+      inset-inline-start: 96px;
+      width: 188px;
+      z-index: 2;
+      .week-first-frame {
+        position: relative;
+        width: 188px;
+        height: 181px;
+        > img {
+          position: absolute;
+          // 头像 132×132，相对头像框 left 28 / top 25
+          top: 25px;
+          inset-inline-start: 28px;
+          width: 132px;
+          height: 132px;
+          object-fit: cover;
+          z-index: 0;
+        }
+        // 头像框盖在头像上面，中间镂空区域露出头像
+        &::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: url("@/assets/activity/recharge/reward/bgTopBg.png") no-repeat center center;
+          background-size: 100% 100%;
+          z-index: 1;
+          pointer-events: none;
+        }
+      }
+      .week-first-plate {
+        width: 160px;
+        height: 63px;
+        // 文字背景 top 789 = 头像框底 801 再往上叠 12px，水平居中
+        margin: -12px auto 0;
+        padding: 6px 0;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.9;
+        background: url("@/assets/activity/recharge/reward/bgTopTextBg.png") no-repeat center center;
+        background-size: 100% 100%;
+        .week-first-name {
+          width: 100%;
+          font-family: "Readex Pro", LogoSCUnboundedSans, system-ui, sans-serif;
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 14px;
+          text-align: center;
+          text-transform: uppercase;
+          color: #ffe1a2;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .week-first-value {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 11px;
+          line-height: 20px;
+          color: #ffffff;
+          .week-first-gold {
+            width: 16px;
+            height: 12px;
+            margin-inline-start: 4px;
+            background: url("@/assets/activity/recharge/reward/gold.png") no-repeat center center;
+            background-size: cover;
+          }
+        }
+      }
     }
     .tab-list {
       position: absolute;

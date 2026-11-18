@@ -353,7 +353,8 @@
     "October": "outubro",
     "November": "novembro",
     "December": "dezembro",
-    "Award": "prémio"
+    "Award": "prémio",
+    "awardTitle": "Recompensas por recarregar {amount}"
   },
   "cp": {
     "Day": "Day",

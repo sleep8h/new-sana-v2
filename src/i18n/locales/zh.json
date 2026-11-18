@@ -353,7 +353,8 @@
     "October": "十月",
     "November": "十一月",
     "December": "十二月",
-    "Award": "奖励"
+    "Award": "奖励",
+    "awardTitle": "充值{amount}的奖励"
   },
   "cp": {
     "Day": "Day",
