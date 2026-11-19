@@ -1,6 +1,6 @@
 <!-- 榜单 -->
 <template>
-  <div class="reward" :class="({ reward3: curTabTime === 2 }, { 'reward-show': rewardShow })">
+  <div class="reward" :class="{ reward3: curTabTime === 2 }">
     <div class="tab-list">
       <div
         :class="['tab-item', { 'tab-show': curTab === item.value }]"
@@ -54,7 +54,7 @@
         <span>{{ $t("recharge.more") }}</span>
       </div>
     </div>
-    <div class="rank" v-if="!rewardShow">
+    <div class="rank">
       <div class="rank-title">{{ $t("recharge.rank") }}</div>
       <div class="tab-time-list">
         <div
@@ -165,7 +165,7 @@
         </div>
       </div>
     </div>
-    <div class="user-info" v-if="curTabTime !== 2 && !rewardShow">
+    <div class="user-info" v-if="curTabTime !== 2">
       <div class="user-main">
         <div class="sort">
           <span>{{ selfData.index === 0 || selfData.index > 99 ? "99+" : selfData.index }}</span>
@@ -187,41 +187,13 @@
         {{ $t("recharge.gapToPrev", { gap: gapToPrev }) }}
       </div>
     </div>
-    <div class="reward-box" v-if="rewardShow">
-      <div class="back" @click="rewardShow = false">{{ $t("recharge.back") }}</div>
-      <div class="reward-box-banner"></div>
-      <div class="reward-box-content">
-        <div class="reward-box-title">
-          {{ curTab === 2 ? $t("recharge.weeklyRankingReward") : $t("recharge.monthlyRankingReward") }}
-        </div>
-        <div class="reward-box-list">
-          <div class="reward-box-item" v-for="(item, index) in rankRewardList">
-            <div class="item-title" v-if="index === 0">{{ $t("recharge.top1") }}</div>
-            <div class="item-title" v-if="index === 1">{{ $t("recharge.top2") }}</div>
-            <div class="item-title" v-if="index === 2">{{ $t("recharge.top3") }}</div>
-            <div class="item-content">
-              <div class="list">
-                <div class="item" v-for="(items, indexs) in item">
-                  <div class="reward-img">
-                    <div class="reward-img-box">
-                      <img :src="items.rewardUrl" alt="" />
-                    </div>
-                  </div>
-                  <sanaAutoText class="reward-text" v-if="items.rewardName">
-                    {{
-                      `${store.language === "ar" ? items.rewardNameAr : items.rewardName} ${items.rewardValue ? " * " + items.rewardValue : ""}`
-                    }}
-                  </sanaAutoText>
-                  <sanaAutoText class="reward-text" v-else>
-                    {{ `${items.rewardValue}` }}
-                  </sanaAutoText>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- 榜单奖励详情弹窗：独立组件，不占据页面内联空间 -->
+    <RankRewardModal
+      :show="rewardShow"
+      :rank-reward-list="rankRewardList"
+      :cur-tab="curTab"
+      @close="rewardShow = false"
+    />
   </div>
 </template>
 
@@ -232,6 +204,7 @@ import "swiper/swiper-bundle.css";
 import { get, postFormData } from "@/utils/http.js";
 import { useMainStore } from "@/pinia/index.js";
 import { useI18n } from "vue-i18n";
+import RankRewardModal from "./components/RankRewardModal.vue";
 
 // 定义emit
 const emit = defineEmits(["timeChange"]);
@@ -1426,168 +1399,11 @@ onMounted(async () => {
       text-align: start;
     }
   }
-  > .reward-box {
-    width: 355px;
-    margin: -25px auto 0;
-    height: 733px;
-    background: url("@/assets/activity/recharge/rank/rewardBoxBg.png") no-repeat top center;
-    background-size: 100% 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    position: relative;
-    .back {
-      width: 63px;
-      height: 29px;
-      position: absolute;
-      right: 23px;
-      top: 74px;
-      padding: 3px 6px 3px 0px;
-      box-sizing: border-box;
-      text-align: right;
-      font-family: PingFang-SC, PingFang-SC, system-ui, Avenir, Helvetica, Arial, sans-serif;
-      font-weight: bold;
-      font-size: 15px;
-      color: #ffeb0d;
-      line-height: 21px;
-      background: url("@/assets/activity/recharge/rank/more.png") no-repeat top center;
-      background-size: 100% 100%;
-      transition: transform 0.12s ease;
-      // 点击按压效果
-      &:active {
-        transform: scale(0.92);
-      }
-    }
-    .reward-box-banner {
-      width: 275px;
-      height: 97px;
-      background: url("@/assets/activity/recharge/rank/banner.png") no-repeat top center;
-      background-size: 100% 100%;
-      margin: 97px auto 16px;
-    }
-    .reward-box-content {
-      width: 301px;
-      height: 501px;
-      margin: 0 auto;
-      background: url("@/assets/activity/recharge/rank/rewardBg.png") no-repeat top center;
-      background-size: 100% 100%;
-      .reward-box-title {
-        width: 153px;
-        height: 21px;
-        font-family: LogoSCUnboundedSans, system-ui, Avenir, Helvetica, Arial, sans-serif;
-        font-weight: 400;
-        font-size: 12px;
-        color: #8b0303;
-        line-height: 11px;
-        text-align: center;
-        margin: 34px auto 13px;
-      }
-      .reward-box-list {
-        height: 420px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        overflow-y: auto;
-        &::-webkit-scrollbar {
-          display: none;
-        }
-        .reward-box-item {
-          width: 264px;
-          height: auto;
-          margin-bottom: 18px;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: center;
-          &:last-child {
-            margin-bottom: 0;
-          }
-          .item-title {
-            width: 100%;
-            height: 19px;
-            font-family: PingFang-SC, PingFang-SC, system-ui, Avenir, Helvetica, Arial, sans-serif;
-            font-weight: bold;
-            font-size: 13px;
-            color: #fffe85;
-            line-height: 19px;
-            text-align: center;
-          }
-          .item-content {
-            width: 100%;
-            height: auto;
-            &::-webkit-scrollbar {
-              display: none;
-            }
-            .list {
-              width: auto;
-              min-height: 109px;
-              display: flex;
-              justify-content: flex-start;
-              align-items: center;
-              flex-wrap: wrap;
-              .item {
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: center;
-                .reward-img {
-                  width: 81px;
-                  height: 77px;
-                  background: url("@/assets/activity/recharge/rank/rewardImg.png") no-repeat top center;
-                  background-size: 100% 100%;
-                  margin: 5px auto 4px;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  box-sizing: border-box;
-                  padding-top: 1px;
-                  > .reward-img-box {
-                    width: 60px;
-                    height: 60px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    > img {
-                      width: 60px;
-                    }
-                  }
-                }
-                .reward-text {
-                  width: 88px;
-                  height: 22px;
-                  background: url("@/assets/activity/recharge/rank/rewardText.png") no-repeat top center;
-                  background-size: 100% 100%;
-                  text-align: center;
-                  font-family:
-                    DINAlternate, DINAlternate, PingFang-SC, PingFang-SC, system-ui, Avenir, Helvetica, Arial,
-                    sans-serif;
-                  font-weight: bold;
-                  font-size: 13px;
-                  color: #ffffff;
-                  line-height: 15px;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  white-space: nowrap;
-                  overflow: hidden;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 .reward3 {
   // height: 1396px;
   // height: 1272px;
   height: 1417px;
-}
-.reward-show {
-  height: 866px;
 }
 </style>

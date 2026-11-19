@@ -396,20 +396,21 @@ onMounted(() => {
     }
   }
   .rules {
-    position: fixed;
-    top: 270px;
-    right: 0;
-    width: 60px;
-    height: 31px;
-    // background: url("@/assets/activity/recharge/rank/rules.png") no-repeat center center;
-    background-size: cover;
+    position: absolute;
+    top: 350px;
+    inset-inline-end: -60px;
+    padding-inline-end: 30px;
+    width: 168px;
+    height: 47px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url("@/assets/activity/recharge/rulesBtnBg.png") no-repeat center center;
+    background-size: 100% 100%;
     font-family: PingFang-SC, PingFang-SC, system-ui, Avenir, Helvetica, Arial, sans-serif;
     font-weight: bold;
     font-size: 16px;
     color: #f8e378;
-    padding: 3px 4px 5px 0;
-    line-height: 23px;
-    text-align: right;
     text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
   }
   .content {
@@ -433,33 +434,71 @@ onMounted(() => {
     }
     .rules-content {
       position: fixed;
-      width: 355px;
-      height: 271px;
+      width: 375px;
+      height: 635px;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1002;
       box-sizing: border-box;
-      padding: 54px 42px 48px;
-      // background: url("@/assets/activity/recharge/reward/rulesBg.png") no-repeat center center;
-      background-size: cover;
+      // 顶层背景（上半部分 + 顶部皇冠框）：751×892，left 1
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        inset-inline-start: 0px;
+        width: 375px;
+        height: 446px;
+        background: url("@/assets/activity/recharge/reward/ruleBgTop.png") no-repeat center center;
+        background-size: 100% 100%;
+        z-index: -2;
+        pointer-events: none;
+      }
+      // 底层背景（下半部分 + 底部宝石框，与顶层重叠融合）：767×754，top 515 / left -15
+      &::after {
+        content: "";
+        position: absolute;
+        top: 288px;
+        inset-inline-start: -0.5px;
+        width: 376px;
+        height: 377px;
+        background: url("@/assets/activity/recharge/reward/ruleBgBottom.png") no-repeat center center;
+        background-size: 100% 100%;
+        z-index: -2;
+        pointer-events: none;
+      }
       .rules-title {
-        font-family: PingFang-SC, PingFang-SC;
-        font-size: 15px;
-        color: #ffffff;
-        line-height: 18px;
+        position: absolute;
+        top: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 58px;
+        height: 27px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-weight: bold;
+        font-size: 22px;
+        line-height: 27px;
         text-align: center;
-        margin-bottom: 5px;
+        background: linear-gradient(89.97deg, #ffd663 2.43%, #fffba2 50.3%, #ffc01e 98.17%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        filter: drop-shadow(0 2px 2px #320000fc);
       }
       .rules-sec {
-        width: 100%;
-        height: calc(100% - 23px);
+        position: absolute;
+        top: 104.5px;
+        bottom: 50px;
+        inset-inline-start: 36px;
+        inset-inline-end: 36px;
         overflow-y: auto;
-        font-family: PingFang-SC, PingFang-SC;
-        font-size: 12px;
-        color: #ffffff;
-        line-height: 18px;
+        font-size: 17px;
+        line-height: 20px;
+        color: #f6e7b5;
+        text-align: center;
         &::-webkit-scrollbar {
           display: none;
         }
