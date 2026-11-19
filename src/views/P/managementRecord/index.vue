@@ -53,7 +53,7 @@
               :key="index"
             >
               <div class="table-td">{{ item.operatorErBanNo }}</div>
-              <div class="table-td">{{ item.targetErBanNo }}</div>
+              <div class="table-td">{{ item.object || item.targetErBanNo }}</div>
               <div class="table-td">
                 <span v-if="store.language === 'ar'">{{ item.kickTypeDescAr }}</span>
                 <span v-else-if="store.language === 'zh'">{{ item.kickTypeDesc }}</span>
