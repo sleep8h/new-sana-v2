@@ -27,7 +27,7 @@
         <div class="week-first-plate" v-if="weekFirst.nick">
           <div class="week-first-name">{{ weekFirst.nick }}</div>
           <div class="week-first-value">
-            <span>{{ weekFirst.integral }}</span>
+            <span>{{ formatNumber(weekFirst.integral) }}</span>
             <i class="week-first-gold"></i>
           </div>
         </div>
@@ -81,6 +81,18 @@ import Rank from "@/views/activity/recharge/rank.vue";
 const store = useMainStore();
 const router = useRouter();
 const { t } = useI18n();
+
+// 数字格式化：千转K，百万转M
+const formatNumber = (num) => {
+  if (!num || isNaN(num)) return "0";
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(2) + "M";
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(2) + "K";
+  }
+  return num.toString();
+};
 
 const curTab = ref(1);
 const countDownTime = ref(0);

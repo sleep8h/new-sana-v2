@@ -1,6 +1,6 @@
 <!-- 榜单 -->
 <template>
-  <div class="reward" :class="{ reward3: curTabTime === 2 }">
+  <div class="reward">
     <div class="tab-list">
       <div
         :class="['tab-item', { 'tab-show': curTab === item.value }]"
@@ -75,7 +75,7 @@
               <div class="rank-top-name">{{ rankData[0].nick }}</div>
               <div class="rank-top-number">
                 <div class="gold"></div>
-                <span>{{ rankData[0].integral }}</span>
+                <span>{{ formatNumber(rankData[0].integral) }}</span>
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@
               <div class="rank-top-name">{{ rankData[1].nick }}</div>
               <div class="rank-top-number">
                 <div class="gold"></div>
-                <span>{{ rankData[1].integral }}</span>
+                <span>{{ formatNumber(rankData[1].integral) }}</span>
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@
               <div class="rank-top-name">{{ rankData[2].nick }}</div>
               <div class="rank-top-number">
                 <div class="gold"></div>
-                <span>{{ rankData[2].integral }}</span>
+                <span>{{ formatNumber(rankData[2].integral) }}</span>
               </div>
             </div>
           </div>
@@ -117,7 +117,7 @@
             </div>
             <div class="number">
               <img src="@/assets/activity/recharge/reward/gold.png" alt="" class="diamond" />
-              <span>{{ item.integral }}</span>
+              <span>{{ formatNumber(item.integral) }}</span>
             </div>
           </div>
         </div>
@@ -135,7 +135,7 @@
                 <div class="rank-top-name">{{ item[0]?.nick }}</div>
                 <div class="rank-top-number">
                   <div class="gold"></div>
-                  <span>{{ item[0]?.integral }}</span>
+                  <span>{{ formatNumber(item[0]?.integral) }}</span>
                 </div>
               </div>
             </div>
@@ -146,7 +146,7 @@
                 <div class="rank-top-name">{{ item[1]?.nick }}</div>
                 <div class="rank-top-number">
                   <div class="gold"></div>
-                  <span>{{ item[1]?.integral }}</span>
+                  <span>{{ formatNumber(item[1]?.integral) }}</span>
                 </div>
               </div>
             </div>
@@ -157,7 +157,7 @@
                 <div class="rank-top-name">{{ item[2]?.nick }}</div>
                 <div class="rank-top-number">
                   <div class="gold"></div>
-                  <span>{{ item[2]?.integral }}</span>
+                  <span>{{ formatNumber(item[2]?.integral) }}</span>
                 </div>
               </div>
             </div>
@@ -178,13 +178,13 @@
           <div class="name">{{ selfData.nick }}</div>
           <div class="value">
             <i class="coin"></i>
-            <span>{{ selfData.integral }}</span>
+            <span>{{ formatNumber(selfData.integral) }}</span>
           </div>
         </div>
       </div>
       <div class="recharge-btn" @click="getRechargePage">{{ $t("recharge.recharge") }}</div>
-      <div class="gap" v-if="gapToPrev > 0">
-        {{ $t("recharge.gapToPrev", { gap: gapToPrev }) }}
+      <div class="gap" v-if="selfData.index !== 1 && gapToPrev > 0">
+        {{ $t("recharge.gapToPrev", { gap: formatNumber(gapToPrev) }) }}
       </div>
     </div>
     <!-- 榜单奖励详情弹窗：独立组件，不占据页面内联空间 -->
@@ -276,6 +276,18 @@ const lastList = computed(() => {
 
 // 与上一名的差距，直接用接口返回的 selfData.integralSub
 const gapToPrev = computed(() => Number(selfData.value?.integralSub) || 0);
+
+// 数字格式化：千转K，百万转M
+const formatNumber = (num) => {
+  if (!num || isNaN(num)) return "0";
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(2) + "M";
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(2) + "K";
+  }
+  return num.toString();
+};
 
 const titleFilter = (index) => {
   const now = new Date();
@@ -1399,11 +1411,5 @@ onMounted(async () => {
       text-align: start;
     }
   }
-}
-
-.reward3 {
-  // height: 1396px;
-  // height: 1272px;
-  height: 1417px;
 }
 </style>

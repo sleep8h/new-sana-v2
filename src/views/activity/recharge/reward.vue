@@ -23,32 +23,34 @@
           <div class="recharge" v-if="curTab === 1">
             <span class="label">{{ $t("recharge.mydailyRecharge", { number: "" }) }}</span>
             <i class="coin"></i>
-            <span class="amount">{{ amountFilter(listData.dayGold) }}</span>
+            <span class="amount">{{ formatNumber(listData.dayGold) }}</span>
           </div>
           <div class="recharge" v-if="curTab === 2">
             <span class="label">{{ $t("recharge.myWeeklyRecharge", { number: "" }) }}</span>
             <i class="coin"></i>
-            <span class="amount">{{ amountFilter(listData.weekGold) }}</span>
+            <span class="amount">{{ formatNumber(listData.weekGold) }}</span>
           </div>
           <div class="recharge" v-if="curTab === 3">
             <span class="label">{{ $t("recharge.myMonthlyRecharge", { number: "" }) }}</span>
             <i class="coin"></i>
-            <span class="amount">{{ amountFilter(listData.monthGold) }}</span>
+            <span class="amount">{{ formatNumber(listData.monthGold) }}</span>
           </div>
         </div>
       </div>
       <div class="recharge-btn">
-        <div class="title" v-if="curTab === 1">{{ $t("recharge.monthlyProgress") }}</div>
+        <div class="title" v-if="curTab === 1">{{ $t("recharge.dailyProgress") }}</div>
         <div class="title" v-if="curTab === 2">{{ $t("recharge.weekProgress") }}</div>
-        <div class="title" v-if="curTab === 3">{{ $t("recharge.dailyProgress") }}</div>
+        <div class="title" v-if="curTab === 3">{{ $t("recharge.monthlyProgress") }}</div>
         <div class="btn" @click="getRechargePage">
           <span>{{ $t("recharge.recharge") }}</span>
         </div>
       </div>
       <div class="treasure-box">
-        <!-- <div class="treasure-box-progress"></div> -->
         <div class="treasure-box-sec">
           <div class="treasure-box-list">
+            <div class="treasure-box-track">
+              <div class="treasure-box-progress" :style="{ width: boxProgressWidth }"></div>
+            </div>
             <div class="treasure-box-item" v-for="(item, index) in boxList" @click="handleBoxClick(index)" :key="index">
               <img v-if="boxLv > index" :style="boxSize(index)" :src="getTreasureboxshowImageUrl(index)" alt="" />
               <img v-else class="is-lock" :style="boxSize(index)" :src="getTreasureboxhideImageUrl(index)" alt="" />
@@ -63,6 +65,7 @@
         </div>
         <div class="recharge-box-sec">
           <Swiper
+            :key="curTab"
             :initial-slide="index"
             :slides-per-view="1"
             ref="mySwiper"
@@ -105,7 +108,7 @@
             <div class="recharge-ranking-item-name">{{ item.nick }}</div>
             <div class="recharge-ranking-item-value">
               <i class="coin"></i>
-              <span>{{ item.integral }}</span>
+              <span>{{ formatNumber(item.integral) }}</span>
             </div>
           </div>
         </div>
@@ -115,7 +118,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/swiper-bundle.css";
@@ -138,6 +141,7 @@ const rankData = ref([]);
 const listData = ref({});
 const selfData = ref({});
 const boxList = ref([]);
+const boxAmountList = ref([]);
 const index = ref(0);
 const activeIndex = ref(0);
 const curTab = ref(1);
@@ -172,12 +176,19 @@ const boxLv = computed(() => {
   if (curTab.value === 1) {
     return listData?.value?.boxDayLv || 0;
   }
+  // 现有接口字段为交叉映射：boxMonthLv 对应周榜，boxWeekLv 对应月榜
   if (curTab.value === 2) {
     return listData?.value?.boxMonthLv || 0;
   }
   if (curTab.value === 3) {
     return listData?.value?.boxWeekLv || 0;
   }
+});
+
+const boxProgressWidth = computed(() => {
+  const total = boxList.value.length;
+  if (!total || boxLv.value <= 0) return "0%";
+  return `${(Math.min(boxLv.value, total) / total) * 100}%`;
 });
 
 const amountFilter = (amount, forceUnit = true) => {
@@ -189,7 +200,23 @@ const amountFilter = (amount, forceUnit = true) => {
   return sign + value.toFixed(2) + "M";
 };
 
+// 实际充值和榜单金额：千转K，百万转M；宝箱挡位仍使用 amountFilter 固定显示M
+const formatNumber = (num) => {
+  if (!num || isNaN(num)) return "0";
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(2) + "M";
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(2) + "K";
+  }
+  return num.toString();
+};
+
 const mapBoxAmount = (index) => {
+  const apiAmount = Number(boxAmountList.value[index]);
+  if (boxAmountList.value[index] != null && Number.isFinite(apiAmount) && apiAmount > 0) {
+    return amountFilter(apiAmount);
+  }
   let day = [500000, 2500000, 5000000, 15000000, 25000000, 50000000, 150000000];
   let week = [5000000, 25000000, 50000000, 100000000, 150000000, 250000000];
   let month = [40000000, 60000000, 100000000, 150000000, 250000000, 400000000, 600000000, 800000000, 1250000000];
@@ -206,7 +233,11 @@ const mapBoxAmount = (index) => {
 
 // 方法定义
 const tabChange = (value) => {
+  if (curTab.value === value) return;
   curTab.value = value;
+  index.value = 0;
+  boxList.value = [];
+  boxAmountList.value = [];
   getActivityRechargeRank();
   getActivityRechargeList();
   getActivityRechargeGetGifts(curTab.value - 1);
@@ -215,6 +246,18 @@ const tabChange = (value) => {
 // 切换swiper
 const onSwiperChange = (swiper) => {
   index.value = swiper.activeIndex;
+};
+
+// 默认定位到「下一个待解锁」的宝箱：已完成的等级数即对应下标，全部完成后停在最后一档
+const setDefaultIndex = async () => {
+  await nextTick();
+  const target = Math.min(boxLv.value, Math.max(boxList.value.length - 1, 0));
+  index.value = target;
+  const swiper = mySwiper.value?.$el?.swiper;
+  if (swiper) {
+    swiper.update();
+    swiper.slideTo(target, 0);
+  }
 };
 
 const handleBoxClick = (index) => {
@@ -290,6 +333,7 @@ const getActivityRechargeList = async () => {
         curTab: curTab.value,
       };
       emit("timeChange", timeData);
+      setDefaultIndex();
     } else {
       console.error("Failed to fetch anchor info:", res.message);
     }
@@ -307,14 +351,20 @@ const getActivityRechargeGetGifts = async (type) => {
       language: store.language,
     });
     if (res && res.code === 200) {
+      // 快速切换 tab 时，丢弃上一个 tab 的过期响应
+      if (type !== curTab.value - 1) return;
       const obj = res.data;
       const result = [];
+      const amounts = [];
       for (let key in obj) {
-        // result.push(obj[key]);
         result.push(obj[key]);
+        const amount = Number(key);
+        amounts.push(Number.isFinite(amount) && amount > 0 ? amount : null);
       }
+      boxAmountList.value = amounts;
       boxList.value = result || [];
       boxMaxNum.value = result.length || 0;
+      setDefaultIndex();
     } else {
       console.error("Failed to fetch anchor info:", res.message);
     }
@@ -508,16 +558,23 @@ onMounted(() => {
     .recharge-btn {
       width: 100%;
       margin-top: 50px;
+      padding: 0 20px;
+      box-sizing: border-box;
       height: 32px;
       display: flex;
       justify-content: center;
       align-items: center;
       .title {
-        height: 32px;
+        flex: 1;
+        min-width: 0;
+        min-height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-family: "Readex Pro", LogoSCUnboundedSans, system-ui, sans-serif;
         font-weight: bold;
-        font-size: 18px;
-        line-height: 32px;
+        font-size: 16px;
+        line-height: 20px;
         text-align: center;
         margin-inline-end: 3px;
         // 金色渐变文字
@@ -536,6 +593,7 @@ onMounted(() => {
         filter: drop-shadow(0px 2px 2px #0000008c);
       }
       .btn {
+        flex-shrink: 0;
         width: 110px;
         height: 32px;
         box-sizing: border-box;
@@ -572,13 +630,6 @@ onMounted(() => {
       height: 90px;
       background-size: cover;
       position: relative;
-      .treasure-box-progress {
-        position: absolute;
-        top: 27px;
-        left: 29px;
-        width: 241px;
-        height: 12px;
-      }
       .treasure-box-sec {
         width: 287px;
         z-index: 2;
@@ -589,6 +640,7 @@ onMounted(() => {
           display: none;
         }
         .treasure-box-list {
+          position: relative;
           width: max-content;
           min-width: 287px;
           height: 54px;
@@ -598,17 +650,31 @@ onMounted(() => {
           gap: 8px;
           padding: 0 6px 0 10px;
           box-sizing: border-box;
-          // 轨道 + 进度条：两层背景，进度宽度随 boxLv 变化，不用绝对定位
-          background-image:
-            url("@/assets/activity/recharge/reward/progressBar.png"),
-            url("@/assets/activity/recharge/reward/rechargeBg1.png");
-          background-repeat: no-repeat, no-repeat;
-          background-position:
-            12px 17px,
-            0 17px;
-          background-size:
-            calc(v-bind(boxLv) * 56px - 22px) 14px,
-            100% 14px;
+          .treasure-box-track {
+            position: absolute;
+            top: 17px;
+            inset-inline-start: 0;
+            z-index: 1;
+            width: 100%;
+            height: 14px;
+            box-sizing: border-box;
+            background-image: url("@/assets/activity/recharge/reward/rechargeBg1.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 100% 100%;
+            pointer-events: none;
+            border-radius: 20.5px;
+            overflow: hidden;
+            .treasure-box-progress {
+              width: 0;
+              height: 18px;
+              background-image: url("@/assets/activity/recharge/reward/progressBar.png");
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: 100% 100%;
+              border-radius: 20.5px;
+            }
+          }
           .treasure-box-item {
             display: flex;
             flex-direction: column;
@@ -754,6 +820,7 @@ onMounted(() => {
         align-items: flex-start;
         padding: 26px 10px 0;
         box-sizing: border-box;
+        position: relative;
         .recharge-ranking-item {
           display: flex;
           flex-direction: column;
@@ -818,6 +885,9 @@ onMounted(() => {
           }
         }
         .recharge-ranking-top2 {
+          position: absolute;
+          top: 210px;
+          inset-inline-start: 0;
           width: 50%;
           margin-top: 14px;
           .recharge-ranking-item-avatar {
@@ -826,6 +896,9 @@ onMounted(() => {
           }
         }
         .recharge-ranking-top3 {
+          position: absolute;
+          top: 210px;
+          inset-inline-end: 0;
           width: 50%;
           margin-top: 14px;
           .recharge-ranking-item-avatar {
