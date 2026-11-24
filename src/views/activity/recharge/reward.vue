@@ -141,7 +141,6 @@ const rankData = ref([]);
 const listData = ref({});
 const selfData = ref({});
 const boxList = ref([]);
-const boxAmountList = ref([]);
 const index = ref(0);
 const activeIndex = ref(0);
 const curTab = ref(1);
@@ -213,10 +212,6 @@ const formatNumber = (num) => {
 };
 
 const mapBoxAmount = (index) => {
-  const apiAmount = Number(boxAmountList.value[index]);
-  if (boxAmountList.value[index] != null && Number.isFinite(apiAmount) && apiAmount > 0) {
-    return amountFilter(apiAmount);
-  }
   let day = [500000, 2500000, 5000000, 15000000, 25000000, 50000000, 150000000];
   let week = [5000000, 25000000, 50000000, 100000000, 150000000, 250000000];
   let month = [40000000, 60000000, 100000000, 150000000, 250000000, 400000000, 600000000, 800000000, 1250000000];
@@ -237,7 +232,6 @@ const tabChange = (value) => {
   curTab.value = value;
   index.value = 0;
   boxList.value = [];
-  boxAmountList.value = [];
   getActivityRechargeRank();
   getActivityRechargeList();
   getActivityRechargeGetGifts(curTab.value - 1);
@@ -355,13 +349,9 @@ const getActivityRechargeGetGifts = async (type) => {
       if (type !== curTab.value - 1) return;
       const obj = res.data;
       const result = [];
-      const amounts = [];
       for (let key in obj) {
         result.push(obj[key]);
-        const amount = Number(key);
-        amounts.push(Number.isFinite(amount) && amount > 0 ? amount : null);
       }
-      boxAmountList.value = amounts;
       boxList.value = result || [];
       boxMaxNum.value = result.length || 0;
       setDefaultIndex();
