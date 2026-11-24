@@ -5,7 +5,7 @@
       <img v-if="store.language != 'ar'" src="@/assets/common/left-icon@2x.png" alt="" />
       <img v-else src="@/assets/common/right-icon@2x.png" alt="" />
     </div>
-    <div class="bg-top">
+    <div class="bg-top" :class="{ 'bg-top-ar': store.language === 'ar' }">
       <div class="tab-list">
         <div
           :class="['tab-item' + index, { 'tab-item-show': curTab === item.value }]"
@@ -13,9 +13,11 @@
           v-for="(item, index) in tabList"
           :key="index"
         >
-          <img v-if="curTab === item.value" :src="item.imgShow" alt="" />
-          <img v-else :src="item.imgHide" alt="" />
-          <div>{{ item.text }}</div>
+          <img class="tab-img" :class="{ 'tab-img-active': curTab !== item.value }" :src="item.imgHide" alt="" />
+          <img class="tab-img" :class="{ 'tab-img-active': curTab === item.value }" :src="item.imgShow" alt="" />
+          <div class="tab-label">
+            <span>{{ item.text }}</span>
+          </div>
         </div>
       </div>
       <div class="rules" @click="rulesShow = true">{{ $t("recharge.rules") }}</div>
@@ -212,6 +214,47 @@ onMounted(() => {
     top: 0;
     left: 0;
     z-index: 1;
+    // 阿拉伯语头图
+    &.bg-top-ar {
+      background-image: url("@/assets/activity/recharge/reward/bg1-ar.png");
+      &::after {
+        background-image: url("@/assets/activity/recharge/reward/bg1-ar.png");
+      }
+      // 阿拉伯语下三个 tab 定位单独设置（默认按 LTR 镜像，可在此单独微调）
+      .tab-item0 {
+        inset-inline-start: auto;
+        right: 8.5px;
+      }
+      .tab-item1 {
+        inset-inline-start: auto;
+        right: 128.5px;
+      }
+      .tab-item2 {
+        inset-inline-end: auto;
+        left: 12.5px;
+      }
+      // AR 下三个 tab 文字底图定位单独设置（按需微调）
+      .tab-item0 > .tab-label {
+        left: 17px;
+        margin-left: 0;
+      }
+      .tab-item1 > .tab-label {
+        left: 16px;
+        margin-left: 0;
+      }
+      .tab-item2 > .tab-label {
+        left: 12px;
+        margin-left: 0;
+      }
+      // 阿语下文字底图水平翻转，文字再翻回来保持正常阅读方向
+      .tab-label {
+        transform: scaleX(-1);
+        > span {
+          display: inline-block;
+          transform: scaleX(-1);
+        }
+      }
+    }
     // 与下方 content 的背景重叠 2px，只画 bg1 的最后 2px，避免拼接处露细缝且不影响布局
     &::after {
       content: "";
@@ -320,7 +363,8 @@ onMounted(() => {
         > div {
           position: absolute;
           top: 92.5px;
-          inset-inline-start: 22px;
+          left: 50%;
+          margin-left: -36px;
           font-weight: bold;
           font-size: 10px;
           line-height: 10px;
@@ -335,7 +379,7 @@ onMounted(() => {
           align-items: center;
           text-align: center;
           box-sizing: border-box;
-          padding-inline-end: 5px;
+          padding-right: 5px;
         }
       }
       .tab-item1 {
@@ -351,7 +395,8 @@ onMounted(() => {
         > div {
           position: absolute;
           top: 92px;
-          inset-inline-start: 20.5px;
+          left: 50%;
+          margin-left: -37px;
           font-weight: bold;
           font-size: 10px;
           line-height: 10px;
@@ -366,7 +411,7 @@ onMounted(() => {
           align-items: center;
           text-align: center;
           box-sizing: border-box;
-          padding-inline-end: 5px;
+          padding-right: 5px;
         }
       }
       .tab-item2 {
@@ -382,7 +427,8 @@ onMounted(() => {
         > div {
           position: absolute;
           top: 75.5px;
-          inset-inline-start: 18px;
+          left: 50%;
+          margin-left: -36px;
           font-weight: bold;
           font-size: 10px;
           line-height: 10px;
@@ -397,13 +443,22 @@ onMounted(() => {
           align-items: center;
           text-align: center;
           box-sizing: border-box;
-          padding-inline-end: 5px;
+          padding-right: 5px;
         }
       }
       .tab-item-show {
         > span {
           color: #ffe400;
         }
+      }
+      // 选中/未选中两张图同时渲染，用透明度切换，避免切换时 img 节点重建导致闪烁
+      .tab-img {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+      }
+      .tab-img-active {
+        opacity: 1;
       }
     }
   }
