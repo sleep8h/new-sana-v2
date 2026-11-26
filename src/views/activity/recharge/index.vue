@@ -21,6 +21,10 @@
         </div>
       </div>
       <div class="rules" @click="rulesShow = true">{{ $t("recharge.rules") }}</div>
+      <!-- 倒计时 -->
+      <div class="time">
+        <CountDownRecharge :time="countDownTime || 0" :key="countDownTime" format="DD:HH:MM:SS" />
+      </div>
       <!-- 周第一 -->
       <div class="week-first">
         <div class="week-first-frame">
@@ -62,7 +66,7 @@ import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { get, postFormData } from "@/utils/http.js";
 import { useMainStore } from "@/pinia/index.js";
-import CountDownBox from "@/components/countDown/CountDownBox.vue";
+import CountDownRecharge from "@/components/countDown/CountDownRecharge.vue";
 import { showToast } from "vant";
 import "vant/es/toast/style"; // 关键：单独引入样式
 
@@ -153,16 +157,16 @@ const tabChange = (item) => {
   curTab.value = item.value;
 };
 
+// 充值奖励：日/周/月 tab → 对应倒计时；充值榜单：周榜(2)/月榜(3) → 周/月倒计时
 const timeChanges = (timeData) => {
-  console.log(timeData, "timeData");
   if (timeData.curTab === 1) {
-    countDownTime.value = timeData.timeOutDay;
+    countDownTime.value = timeData.timeOutDay || 0;
   }
   if (timeData.curTab === 2) {
-    countDownTime.value = timeData.weekTimeOut;
+    countDownTime.value = timeData.timeOutWeek || 0;
   }
   if (timeData.curTab === 3) {
-    countDownTime.value = timeData.monthTimeOut;
+    countDownTime.value = timeData.timeOutMonth || 0;
   }
 };
 
@@ -214,6 +218,16 @@ onMounted(() => {
     top: 0;
     left: 0;
     z-index: 1;
+    // 倒计时
+    .time {
+      position: absolute;
+      top: 480px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 272px;
+      height: 68px;
+      z-index: 2;
+    }
     // 阿拉伯语头图
     &.bg-top-ar {
       background-image: url("@/assets/activity/recharge/reward/bg1-ar.png");
@@ -247,8 +261,7 @@ onMounted(() => {
         margin-left: 0;
       }
       // 阿语下文字底图水平翻转，文字再翻回来保持正常阅读方向
-      .tab-label {
-        transform: scaleX(-1);
+      .tab-label {        transform: scaleX(-1);
         > span {
           display: inline-block;
           transform: scaleX(-1);

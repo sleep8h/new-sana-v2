@@ -70,6 +70,8 @@
         <div class="rank-top">
           <div class="rank-top-1" v-if="rankData?.length > 0">
             <div class="rank-top-avatar"></div>
+            <!-- TOP1 徽章：叠在相框底部、名字牌上沿 -->
+            <div class="rank-top-badge"></div>
             <img class="rank-top-head" :src="rankData[0].avatar" alt="" />
             <div class="rank-top-text">
               <div class="rank-top-name">{{ rankData[0].nick }}</div>
@@ -421,8 +423,8 @@ const getActivityRechargeList = async () => {
       listData.value = res.data || {};
       let timeData = {
         timeOutDay: listData.value.timeOutDay,
-        weekTimeOut: listData.value.weekTimeOut,
-        monthTimeOut: listData.value.monthTimeOut,
+        timeOutWeek: listData.value.timeOutWeek,
+        timeOutMonth: listData.value.timeOutMonth,
         curTab: curTab.value,
       };
       emit("timeChange", timeData);
@@ -795,6 +797,18 @@ onMounted(async () => {
             background-size: cover;
             z-index: 10;
           }
+          .rank-top-badge {
+            position: absolute;
+            width: 70px;
+            height: 38.5px;
+            top: 145px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: url("@/assets/activity/recharge/reward/top1Number.png") no-repeat center center;
+            background-size: cover;
+            // 层级：头像(9) < 头像框(10) < TOP1徽章(11) < 名字牌(12)
+            z-index: 11;
+          }
           .rank-top-head {
             position: absolute;
             width: 116px;
@@ -872,7 +886,8 @@ onMounted(async () => {
             height: 73px;
             background: url("@/assets/activity/recharge/reward/bgTopTextBg.png") no-repeat center center;
             background-size: cover;
-            z-index: 11;
+            // 名字牌压在 TOP1 徽章之上
+            z-index: 12;
             display: flex;
             flex-direction: column;
             justify-content: center;

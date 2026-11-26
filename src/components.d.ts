@@ -18,6 +18,7 @@ declare module 'vue' {
     CountDownBoxRamadan: typeof import('./components/countDown/CountDownBoxRamadan.vue')['default']
     CountDownCp: typeof import('./components/countDown/CountDownCp.vue')['default']
     CountDownDragon: typeof import('./components/countDown/CountDownDragon.vue')['default']
+    CountDownRecharge: typeof import('./components/countDown/CountDownRecharge.vue')['default']
     CustomTable: typeof import('./components/customTable/customTable.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     ImagePreview: typeof import('./components/ImagePreview/ImagePreview.vue')['default']

@@ -322,8 +322,8 @@ const getActivityRechargeList = async () => {
       listData.value = res.data || {};
       let timeData = {
         timeOutDay: listData.value.timeOutDay,
-        weekTimeOut: listData.value.weekTimeOut,
-        monthTimeOut: listData.value.monthTimeOut,
+        timeOutWeek: listData.value.timeOutWeek,
+        timeOutMonth: listData.value.timeOutMonth,
         curTab: curTab.value,
       };
       emit("timeChange", timeData);
@@ -407,7 +407,7 @@ onMounted(() => {
       font-family: "Noto Sans", PingFang-SC, system-ui, Avenir, Helvetica, Arial, sans-serif;
       font-weight: 800;
       font-size: 22px;
-      line-height: 100%;
+      line-height: 51px;
       text-align: center;
       background: url("@/assets/activity/recharge/reward/timeHide.png") no-repeat center center;
       background-size: 100% 100%;
