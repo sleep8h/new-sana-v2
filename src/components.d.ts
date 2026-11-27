@@ -28,8 +28,5 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SanaAutoText: typeof import('./components/sanaAutoText/index.vue')['default']
-    VanCountDown: typeof import('vant/es')['CountDown']
-    VanList: typeof import('vant/es')['List']
-    VanPullRefresh: typeof import('vant/es')['PullRefresh']
   }
 }

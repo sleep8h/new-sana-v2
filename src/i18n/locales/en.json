@@ -8,7 +8,11 @@
     "record": "Record",
     "requestFail": "Request failed, please try again later",
     "loadingText": "Loading...",
-    "finishedText": "No more data"
+    "finishedText": "No more data",
+    "day": "Day",
+    "hour": "Hour",
+    "min": "Min",
+    "sec": "Sec"
   },
   "calendar": {
     "sun": "SUN",

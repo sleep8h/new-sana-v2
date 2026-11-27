@@ -8,7 +8,11 @@
     "record": "Record",
     "requestFail": "İstek başarısız oldu, lütfen daha sonra tekrar deneyin",
     "loadingText": "Yükleniyor...",
-    "finishedText": "Daha fazla yok"
+    "finishedText": "Daha fazla yok",
+    "day": "Gün",
+    "hour": "Saat",
+    "min": "Dak",
+    "sec": "San"
   },
   "calendar": {
     "sun": "PAZ",

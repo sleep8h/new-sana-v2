@@ -8,7 +8,11 @@
     "record": "记录",
     "requestFail": "请求失败，请稍后重试",
     "loadingText": "加载中...",
-    "finishedText": "没有更多了"
+    "finishedText": "没有更多了",
+    "day": "天",
+    "hour": "时",
+    "min": "分",
+    "sec": "秒"
   },
   "calendar": {
     "sun": "日",

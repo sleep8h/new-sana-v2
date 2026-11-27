@@ -11,6 +11,9 @@
 
 <script setup>
 import { ref, computed, watch, onBeforeUnmount } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
   time: {
@@ -36,14 +39,14 @@ let timer = null;
 
 // 根据 format 生成展示项：Day 用数字，Hour/Min/Sec 用补零字符串
 const timeList = computed(() => {
-  const labels =
+  const labelKeys =
     props.format === "DD:HH:MM:SS"
-      ? ["Day", "Hour", "Min", "Sec"]
+      ? ["day", "hour", "min", "sec"]
       : props.format === "DD:HH:MM"
-        ? ["Day", "Hour", "Min"]
-        : ["Hour", "Min", "Sec"];
-  const values = { Day: day.value, Hour: hours.value, Min: minutes.value, Sec: seconds.value };
-  return labels.map((text) => ({ text, value: values[text] }));
+        ? ["day", "hour", "min"]
+        : ["hour", "min", "sec"];
+  const values = { day: day.value, hour: hours.value, min: minutes.value, sec: seconds.value };
+  return labelKeys.map((key) => ({ text: t(`common.${key}`), value: values[key] }));
 });
 
 function startCountdown() {

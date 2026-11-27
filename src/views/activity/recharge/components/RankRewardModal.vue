@@ -152,8 +152,8 @@ const onMaskClick = () => emit("close");
         display: none;
       }
       .reward-box-banner {
-        width: 275px;
-        height: 97px;
+        width: 305px;
+        height: 100px;
         background: url("@/assets/activity/recharge/rank/banner.png") no-repeat top center;
         background-size: 100% 100%;
         margin: 0 auto 16px;

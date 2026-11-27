@@ -8,7 +8,11 @@
     "record": "Registro",
     "requestFail": "Falha na solicitação, por favor tente novamente mais tarde",
     "loadingText": "Carregando...",
-    "finishedText": "Não há mais"
+    "finishedText": "Não há mais",
+    "day": "Dia",
+    "hour": "Hora",
+    "min": "Min",
+    "sec": "Seg"
   },
   "calendar": {
     "sun": "DOM",

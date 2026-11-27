@@ -33,8 +33,8 @@
         <div class="week-first-plate" v-if="weekFirst.nick">
           <div class="week-first-name">{{ weekFirst.nick }}</div>
           <div class="week-first-value">
-            <span>{{ formatNumber(weekFirst.integral) }}</span>
             <i class="week-first-gold"></i>
+            <span>{{ formatNumber(weekFirst.integral) }}</span>
           </div>
         </div>
       </div>
@@ -112,13 +112,15 @@ const weekFirst = reactive({
 
 const getWeekFirst = async () => {
   try {
-    const res = await postFormData("/h5doings/activity/recharge/list", {
+    const res = await get("/h5doings/activity/recharge/rank", {
       uid: store.uid,
+      size: 1,
+      type: 2, // 周榜
       ticket: store.ticket,
       language: store.language,
     });
     if (res && res.code === 200) {
-      const first = res.data?.weekTop3?.listNow?.[0];
+      const first = res.data?.list?.[0];
       if (first) {
         weekFirst.avatar = first.avatar || "";
         weekFirst.nick = first.nick || "";
@@ -163,10 +165,10 @@ const timeChanges = (timeData) => {
     countDownTime.value = timeData.timeOutDay || 0;
   }
   if (timeData.curTab === 2) {
-    countDownTime.value = timeData.timeOutWeek || 0;
+    countDownTime.value = timeData.weekTimeOut || 0;
   }
   if (timeData.curTab === 3) {
-    countDownTime.value = timeData.timeOutMonth || 0;
+    countDownTime.value = timeData.monthTimeOut || 0;
   }
 };
 
@@ -313,6 +315,8 @@ onMounted(() => {
         }
       }
       .week-first-plate {
+        position: relative;
+        z-index: 3;
         width: 160px;
         height: 63px;
         // 文字背景 top 789 = 头像框底 801 再往上叠 12px，水平居中
@@ -350,7 +354,7 @@ onMounted(() => {
           .week-first-gold {
             width: 16px;
             height: 12px;
-            margin-inline-start: 4px;
+            margin-inline-end: 4px;
             background: url("@/assets/activity/recharge/reward/gold.png") no-repeat center center;
             background-size: cover;
           }

@@ -423,8 +423,8 @@ const getActivityRechargeList = async () => {
       listData.value = res.data || {};
       let timeData = {
         timeOutDay: listData.value.timeOutDay,
-        timeOutWeek: listData.value.timeOutWeek,
-        timeOutMonth: listData.value.timeOutMonth,
+        weekTimeOut: listData.value.weekTimeOut,
+        monthTimeOut: listData.value.monthTimeOut,
         curTab: curTab.value,
       };
       emit("timeChange", timeData);
